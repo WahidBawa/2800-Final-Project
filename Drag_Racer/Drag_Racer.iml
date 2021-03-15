@@ -9,5 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Jars4Java3D" level="project" />
     <orderEntry type="library" name="j3dexamples" level="project" />
+    <orderEntry type="library" name="j3dcore" level="application" />
   </component>
 </module>
