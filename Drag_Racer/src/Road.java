@@ -32,4 +32,28 @@ public class Road {
         return exponentialFog;
     }
 
+    public static BranchGroup createScene() {
+        int n = 6; // pass in n for cube(n < 3) or n = 6 for pavillion as a hexagon
+        BranchGroup sceneBG = new BranchGroup();             // create 'objsBG' for content
+        TransformGroup sceneTG = new TransformGroup();       // create a TransformGroup (TG)
+        sceneBG.addChild(sceneTG);                           // add TG to the scene BranchGroup
+//        sceneBG.addChild(CommonsKL.rotateBehavior(10000, sceneTG));
+        // make sceneTG continuously rotating
+        createLight(sceneBG);
+//        sceneTG.addChild(createBase(0.6f));
+        sceneBG.addChild(createFog(new Color3f(0.5f, 0.5f, 0.5f), new BoundingSphere(new Point3d(0f, 0f,0f), 100)));
+
+        sceneBG.compile(); // optimize objsBG
+        return sceneBG;
+    }
+
+    public static void main(String[] args) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                Commons.setEye(new Point3d(2, 2, 6));
+                new Commons.MyGUI(createScene(), "Drag Racing Game");
+            }
+        });
+    }
+
 }
