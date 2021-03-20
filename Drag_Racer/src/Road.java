@@ -45,7 +45,7 @@ public class Road {
 
         Appearance app = shape.getAppearance();
         ColoringAttributes ca = new ColoringAttributes();
-        ca.setColor(1f, 1f, 1f); // set column's color and make changeable
+        ca.setColor(0.6f, 0.3f, 0.0f); // set column's color and make changeable
         app.setCapability(Appearance.ALLOW_COLORING_ATTRIBUTES_WRITE);
         app.setColoringAttributes(ca);
 
@@ -68,7 +68,7 @@ public class Road {
         TransformGroup transCube = new TransformGroup(t);
         ColorCube colorCube = new ColorCube();
         Appearance app = new Appearance(); // create new appearance
-        app.setCapability(Appearance.ALLOW_TRANSPARENCY_ATTRIBUTES_WRITE); // set transparency attributes to write
+        app.setCapability(Appearance.ALLOW_COLORING_ATTRIBUTES_WRITE); // set transparency attributes to write
         colorCube.setAppearance(app); // set colorCube appearance
         CrashingBoundaries tcdc = new CrashingBoundaries(colorCube); // create a Transparent collisionn detection for columns
         tcdc.setSchedulingBounds(new BoundingSphere(pt_zero, 10d)); // set scheduling bounds with bounding sphere using pt_zero and radius of 10d
