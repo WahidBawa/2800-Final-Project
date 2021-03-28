@@ -28,7 +28,7 @@ public class CrashingBoundaries extends Behavior {
     }
 
     public void processStimulus(Iterator<WakeupCriterion> criteria) {
-        Color3f hilightClr = Commons.Green;
+        Color3f hilightClr = Commons.Red;
         ColoringAttributes highlight = new ColoringAttributes(hilightClr, ColoringAttributes.SHADE_GOURAUD);
         inCollision = !inCollision; // collision has taken place
 

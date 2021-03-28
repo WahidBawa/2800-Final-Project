@@ -102,8 +102,8 @@ public class SoundCube extends JPanel {
     /* a function to build the content branch and attach to 'scene' */
     private void createScene(BranchGroup scene) {
         TransformGroup content_TG = new TransformGroup();    // create a TransformGroup (TG)
-        content_TG.addChild(new ColorCube(0.4));             // attach a ColorCube to TG
-        content_TG.addChild(pointSound());	                 // attach a PointSound to TG
+        content_TG.addChild(Road.texturePlane("road",0,0));             // attach a ColorCube to TG
+        content_TG.addChild(Road.xyzAxis(Commons.Cyan, 1));
         scene.addChild(content_TG);	                         // add TG to the scene BranchGroup
         scene.addChild(rotateBehavior(content_TG));          // make TG continuously rotating
     }
