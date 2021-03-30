@@ -31,7 +31,7 @@ public class Road {
     private static Background createBkground(Color3f clr, BoundingSphere bounds) {
         //creating the background using background attribute
         Background bg = new Background();
-        bg.setImage(new TextureLoader("2800-Final-Project/Drag_Racer/Resources/textures/neon.jpg", null).getImage()); //filename here
+        bg.setImage(new TextureLoader("Resources/textures/neon.jpg", null).getImage()); //filename here
 
         bg.setImageScaleMode(Background.SCALE_NONE_CENTER);
         bg.setApplicationBounds(bounds);
@@ -129,7 +129,7 @@ public class Road {
     }
 
     public static Texture texturedApp(String name) {
-        String filename = "2800-Final-Project/Drag_Racer/Resources/textures/"+name+".jpg";
+        String filename = "Resources/textures/"+name+".jpg";
         TextureLoader loader = new TextureLoader(filename, null); //loads the image
         ImageComponent2D image = loader.getImage();
         if (image == null) {
