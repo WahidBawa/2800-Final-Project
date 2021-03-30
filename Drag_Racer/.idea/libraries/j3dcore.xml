@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="j3dcore">
     <CLASSES>
-      <root url="jar://$USER_HOME$/Downloads/tmp/j3dcore.jar!/" />
-      <root url="jar://$USER_HOME$/Downloads/tmp/j3dexamples.jar!/" />
-      <root url="jar://$USER_HOME$/Downloads/tmp/j3dutils.jar!/" />
-      <root url="jar://$USER_HOME$/Downloads/tmp/jogamp-fat.jar!/" />
-      <root url="jar://$USER_HOME$/Downloads/tmp/vecmath.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Libs/j3dcore.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Libs/j3dexamples.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Libs/j3dutils.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Libs/jogamp-fat.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Libs/vecmath.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
