@@ -316,7 +316,7 @@ public class Road {
         scene.addChild(xyzAxis(Commons.Blue, 1));       //xyz axis added
         TransformGroup sceneTG = new TransformGroup();       // create a TransformGroup (TG)
         scene.addChild(sceneTG);	                         // add TG to the scene BranchGroup
-
+        sceneTG.addChild(GroundAndBackground.generateGround(4, 0.1001f));
         wallsBarriersRoadLamps(sceneTG);
         scene.compile(); // optimize scene BG
 
