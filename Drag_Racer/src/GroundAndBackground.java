@@ -11,42 +11,49 @@ import java.util.Iterator;
 
 public class GroundAndBackground{
     public static TransformGroup generateCylinder(int size, String file){
+        //Transform the object to the correct location
         Transform3D transform3D = new Transform3D();
-        transform3D.setTranslation(new Vector3f(0,1.5f,-10));
+        transform3D.setTranslation(new Vector3f(0,1.5f,-15));
         TransformGroup scene_TG = new TransformGroup(transform3D);
 
+        //Create the banner to hold the text image
         TransformGroup banner = new TransformGroup(transform3D);
-        Cylinder c = new Cylinder(size, 0.5f, Primitive.GENERATE_TEXTURE_COORDS, setApp("Text"));
+        Cylinder c = new Cylinder(size, 0.5f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY, setApp("Text"));
         banner.addChild(c);
         scene_TG.addChild(banner);
 
+        //Add the rotation behavior
         scene_TG.addChild(Commons.rotateBehavior(10000, banner));
 
+        //Connect the border to the text image
         baseCylinder(size, scene_TG);
 
+        //Return to create scene
         return scene_TG;
     }
     private static void baseCylinder(int size, TransformGroup scene){
-
-
+        //Create the bases and translate to the correct location
         Transform3D transform3D = new Transform3D();
         transform3D.setTranslation(new Vector3f(0,0.2f,0));
         TransformGroup botBase = new TransformGroup(transform3D);
         transform3D.setTranslation(new Vector3f(0,-0.2f,0));
         TransformGroup topBase = new TransformGroup(transform3D);
 
+        //Create the object and rotate
         TransformGroup rotation = new TransformGroup();
-        Cylinder c = new Cylinder(size*1.05f, 0.1f, Primitive.GENERATE_TEXTURE_COORDS, setApp("neon"));
+        Cylinder c = new Cylinder(size*1.05f, 0.1f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY, setApp("neon"));
         rotation.addChild(c);
         botBase.addChild(rotation);
         botBase.addChild(Commons.rotateBehavior(10000, rotation));
 
+        //Create the object and rotate
         rotation = new TransformGroup();
-        c = new Cylinder(size*1.05f, 0.1f, Primitive.GENERATE_TEXTURE_COORDS, setApp("neon"));
+        c = new Cylinder(size*1.05f, 0.1f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY, setApp("neon"));
         rotation.addChild(c);
         topBase.addChild(rotation);
         topBase.addChild(Commons.rotateBehavior(10000, rotation));
 
+        //Add to the outer scene
         scene.addChild(topBase);
         scene.addChild(botBase);
     }
@@ -58,8 +65,8 @@ public class GroundAndBackground{
             scene_TG.addChild(ground(new Vector3f(5f, h, 5f), -(i*10), -10));
             scene_TG.addChild(ground(new Vector3f(5f, h, 5f), -(i*10), 10));
             scene_TG.addChild(ground(new Vector3f(5f, h, 5f), -(i*10), 0));
-            scene_TG.addChild(sphere(8, 30, 10, -(i*10)));
-            scene_TG.addChild(sphere(8, 30, -10, -(i*10)));
+            scene_TG.addChild(sphere(8, 60, 10, -(i*10)));
+            scene_TG.addChild(sphere(8, 60, -10, -(i*10)));
         }
         return scene_TG;
     }
@@ -81,7 +88,9 @@ public class GroundAndBackground{
         square.setCoordinate(3, new Point3d(-1 * scale.x + w, -1 * scale.y, 1 * scale.z + pos));
         square.setTextureCoordinate(0, 3, uv3);
 
-        return new Shape3D(square, setApp("grid"));
+        Shape3D flatGround = new Shape3D(square);
+        flatGround.setAppearance(setApp("grid"));
+        return flatGround;
     }
     private static TransformGroup sphere(int n, int d, float x, float z){
         //set the sphere to the correct location
@@ -125,20 +134,17 @@ public class GroundAndBackground{
         return texture;
     }
 
-    private static Material setMaterial(){
-        Material newMaterial = new Material();
-        //Gray color
-        newMaterial.setAmbientColor(new Color3f(0.6f, 0.6f, 0.6f));
-        //Black color
-        newMaterial.setEmissiveColor(new Color3f(0, 0,0));
-        //Gray
-        newMaterial.setDiffuseColor(new Color3f(0.6f, 0.6f, 0.6f));
-        //Black
-        newMaterial.setSpecularColor(new Color3f(1f, 1f, 1f));
-        //Create the shininess of the object
-        newMaterial.setShininess(128);
-        newMaterial.setLightingEnable(true);
-        return newMaterial;
+    private static Material setMaterial() {
+        //material from lab 6
+        int SH = 10;               // 10
+        Material ma = new Material();
+        ma.setAmbientColor(new Color3f(0.6f, 0.6f, 0.6f));
+        ma.setEmissiveColor(new Color3f(0.0f, 0.0f, 0.0f));
+        ma.setDiffuseColor(new Color3f(0.0f, 0.0f, 0.0f));
+        ma.setSpecularColor(new Color3f(1f, 1f, 1f));
+        ma.setShininess(SH);
+        ma.setLightingEnable(true);
+        return ma;
     }
 
 }
