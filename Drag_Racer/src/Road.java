@@ -222,7 +222,7 @@ public class Road {
         app.setColoringAttributes(ca);
         PolygonAttributes pa = new PolygonAttributes();
         app.setPolygonAttributes(pa);
-        //app.setMaterial(setMaterial());  //uncomment this when we have the lighting set up
+        app.setMaterial(setMaterial());  //uncomment this when we have the lighting set up
         if (IsTransparent) {
             TransparencyAttributes ta = new TransparencyAttributes(TransparencyAttributes.FASTEST, 0.5f);
             app.setTransparencyAttributes(ta);
