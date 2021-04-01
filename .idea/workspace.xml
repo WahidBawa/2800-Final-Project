@@ -3,8 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="4ca5ffad-6381-40a9-86b5-5f229a373d18" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Drag_Racer/Resources/textures/moon.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Drag_Racer/Resources/textures/neon.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Drag_Racer/out/production/Drag_Racer/Road$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Drag_Racer/out/production/Drag_Racer/Road$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Drag_Racer/out/production/Drag_Racer/Road.class" beforeDir="false" afterPath="$PROJECT_DIR$/Drag_Racer/out/production/Drag_Racer/Road.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Drag_Racer/src/GroundAndBackground.java" beforeDir="false" afterPath="$PROJECT_DIR$/Drag_Racer/src/GroundAndBackground.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Drag_Racer/src/Road.java" beforeDir="false" afterPath="$PROJECT_DIR$/Drag_Racer/src/Road.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,7 +32,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -41,6 +43,8 @@
       <option name="presentableId" value="Default" />
       <updated>1615433643100</updated>
       <workItem from="1615433645056" duration="28000" />
+      <workItem from="1617244560803" duration="746000" />
+      <workItem from="1617287750426" duration="100000" />
     </task>
     <servers />
   </component>
@@ -48,6 +52,10 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1617287835158">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.-385.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1617287835158" />
     <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1617066125715">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

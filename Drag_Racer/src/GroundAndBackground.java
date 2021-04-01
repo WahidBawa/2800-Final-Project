@@ -1,15 +1,56 @@
 import org.jogamp.java3d.*;
+import org.jogamp.java3d.utils.geometry.Cylinder;
 import org.jogamp.java3d.utils.geometry.Primitive;
 import org.jogamp.java3d.utils.geometry.Sphere;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.vecmath.Color3f;
 import org.jogamp.vecmath.Point3d;
-import org.jogamp.vecmath.Vector2f;
 import org.jogamp.vecmath.Vector3f;
 
 import java.util.Iterator;
 
 public class GroundAndBackground{
+    public static TransformGroup generateCylinder(int size, String file){
+        Transform3D transform3D = new Transform3D();
+        transform3D.setTranslation(new Vector3f(0,1.5f,-10));
+        TransformGroup scene_TG = new TransformGroup(transform3D);
+
+        TransformGroup banner = new TransformGroup(transform3D);
+        Cylinder c = new Cylinder(size, 0.5f, Primitive.GENERATE_TEXTURE_COORDS, setApp("Text"));
+        banner.addChild(c);
+        scene_TG.addChild(banner);
+
+        scene_TG.addChild(Commons.rotateBehavior(10000, banner));
+
+        baseCylinder(size, scene_TG);
+
+        return scene_TG;
+    }
+    private static void baseCylinder(int size, TransformGroup scene){
+
+
+        Transform3D transform3D = new Transform3D();
+        transform3D.setTranslation(new Vector3f(0,0.2f,0));
+        TransformGroup botBase = new TransformGroup(transform3D);
+        transform3D.setTranslation(new Vector3f(0,-0.2f,0));
+        TransformGroup topBase = new TransformGroup(transform3D);
+
+        TransformGroup rotation = new TransformGroup();
+        Cylinder c = new Cylinder(size*1.05f, 0.1f, Primitive.GENERATE_TEXTURE_COORDS, setApp("neon"));
+        rotation.addChild(c);
+        botBase.addChild(rotation);
+        botBase.addChild(Commons.rotateBehavior(10000, rotation));
+
+        rotation = new TransformGroup();
+        c = new Cylinder(size*1.05f, 0.1f, Primitive.GENERATE_TEXTURE_COORDS, setApp("neon"));
+        rotation.addChild(c);
+        topBase.addChild(rotation);
+        topBase.addChild(Commons.rotateBehavior(10000, rotation));
+
+        scene.addChild(topBase);
+        scene.addChild(botBase);
+    }
+
     public static TransformGroup generateGround(int size, float h){
         TransformGroup scene_TG = new TransformGroup();
         //Loop to tile the ground
@@ -40,7 +81,7 @@ public class GroundAndBackground{
         square.setCoordinate(3, new Point3d(-1 * scale.x + w, -1 * scale.y, 1 * scale.z + pos));
         square.setTextureCoordinate(0, 3, uv3);
 
-        return new Shape3D(square, setApp());
+        return new Shape3D(square, setApp("grid"));
     }
     private static TransformGroup sphere(int n, int d, float x, float z){
         //set the sphere to the correct location
@@ -52,17 +93,17 @@ public class GroundAndBackground{
         Sphere s = new Sphere(n, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY, d);
 
         //Apply to the sphere and attach to the base
-        s.setAppearance(setApp());
+        s.setAppearance(setApp("grid"));
         TG.addChild(s);
 
         //Return
         return TG;
     }
 
-    private static Appearance setApp() {
+    private static Appearance setApp(String texture) {
         Appearance app = new Appearance();
+        app.setTexture(texturedApp(texture));
         app.setMaterial(setMaterial());
-        app.setTexture(texturedApp("grid"));
         return app;
     }
 

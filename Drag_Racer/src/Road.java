@@ -317,6 +317,8 @@ public class Road {
         TransformGroup sceneTG = new TransformGroup();       // create a TransformGroup (TG)
         scene.addChild(sceneTG);	                         // add TG to the scene BranchGroup
         sceneTG.addChild(GroundAndBackground.generateGround(4, 0.1001f));
+        sceneTG.addChild(GroundAndBackground.generateCylinder(1, "Test"));
+        createLight(scene);
         wallsBarriersRoadLamps(sceneTG);
         scene.compile(); // optimize scene BG
 
