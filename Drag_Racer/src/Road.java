@@ -86,9 +86,19 @@ public class Road {
     private static TransformGroup createColumn(double scale, Vector3d pos) {
         Transform3D transM = new Transform3D();
         transM.set(scale, pos);  // Create base TG with 'scale' and 'position'
-        TransformGroup baseTG = new TransformGroup(transM);
+        Transform3D transT= new Transform3D();
+        transT.setTranslation(new Vector3f(0.0f, 0.0f, -50.0f));
 
-        Shape3D shape = new Box(0.5, 2.0, 200.0);
+        Transform3D trfm= new Transform3D();
+        trfm.mul(transM);
+        trfm.mul(transT);
+
+        TransformGroup baseTG = new TransformGroup();
+        baseTG.setTransform(trfm);
+
+
+
+        Shape3D shape = new Box(0.5, 2.0, -300.0);
         baseTG.addChild(shape); // Create a column as a box and add to 'baseTG'
 
         Appearance app = shape.getAppearance();
@@ -188,7 +198,7 @@ public class Road {
         TransformGroup baseMain= new TransformGroup();
 
         //create 20 road pieces and place them in order down the columns
-        for (int i=1; i<=20; i++) {
+        for (int i=1; i<=30; i++) {
             TransformGroup RoadPiece = new TransformGroup();
             Transform3D translator5 = new Transform3D();
             translator5.setTranslation(new Vector3f(0.0f, -0.1f, (float) -i));
@@ -268,7 +278,7 @@ public class Road {
 
         //create n lamps and place them in order down the columns
         //right side
-        for (int i=1; i<=8; i++) {
+        for (int i=1; i<=16; i++) {
             TransformGroup Lamp = new TransformGroup();
             Transform3D translator5 = new Transform3D();
             translator5.setTranslation(new Vector3f(1.2f, -0.4f, (float) 2*(-i) +3));
@@ -281,7 +291,7 @@ public class Road {
         //yes placing the street lights is weird in the z axis be aware of that
 
         //left side
-        for (int i=1; i<=8; i++) {
+        for (int i=1; i<=16; i++) {
             TransformGroup Lamp = new TransformGroup();
             Transform3D translator5 = new Transform3D();
             translator5.setTranslation(new Vector3f(-1.2f, -0.4f, (float) 2*(-i) +3));
@@ -328,7 +338,7 @@ public class Road {
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Commons.setEye(new Point3d(0, 1, 7));
+                Commons.setEye(new Point3d(0, 5, -40));
                 new Commons.MyGUI(createScene(), "Drag Racing Game");
             }
         });
