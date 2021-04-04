@@ -53,7 +53,7 @@ public class Car {
             Vector3d vct = new Vector3d();
             navigatorTF.get(vct);
 
-//            soundJOAL.setPos(snd_pt, (float)vct.x,  (float)vct.y, (float) vct.z); //get the xyz of the movement vector and set the sound location to that vector
+            soundJOAL.setPos(snd_pt, viewposi.x,  viewposi.y, viewposi.z); //get the xyz of the movement vector and set the sound location to that vector
 
 
             WakeupOnAWTEvent event;
@@ -247,11 +247,11 @@ public class Car {
 
         objectTG.addChild(objectCAR);
 
-//        soundJOAL = new SoundUtilityJOAL();
-//        if (!soundJOAL.load(snd_pt, 0f, 0f, 10f, true))     // fix 'snd_pt' at cow location
-//            System.out.println("Could not load " + snd_pt);
-//        else
-//            soundJOAL.play(snd_pt);                         // start 'snd_pt'
+        soundJOAL = new SoundUtilityJOAL();
+        if (!soundJOAL.load(snd_pt, 0f, 0f, 10f, true))     // fix 'snd_pt' at cow location
+            System.out.println("Could not load " + snd_pt);
+        else
+            soundJOAL.play(snd_pt);                         // start 'snd_pt'
 
 
 
