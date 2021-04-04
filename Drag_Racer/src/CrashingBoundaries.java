@@ -9,7 +9,7 @@ import java.util.Iterator;
 public class CrashingBoundaries extends Behavior {
     private boolean inCollision;
     private final Shape3D shape;
-    private final ColoringAttributes shapeColoring;
+    private final Texture shapeTexture;
     private final Appearance shapeAppearance;
     private WakeupOnCollisionEntry wEnter;
     private WakeupOnCollisionExit wExit;
@@ -17,7 +17,7 @@ public class CrashingBoundaries extends Behavior {
     public CrashingBoundaries(Shape3D s) {
         shape = s; // save the original color of 'shape"
         shapeAppearance = shape.getAppearance();
-        shapeColoring = shapeAppearance.getColoringAttributes();
+        shapeTexture = shapeAppearance.getTexture();
         inCollision = false;
     }
 
@@ -28,17 +28,20 @@ public class CrashingBoundaries extends Behavior {
     }
 
     public void processStimulus(Iterator<WakeupCriterion> criteria) {
-        Color3f hilightClr = Commons.Red;
-        ColoringAttributes highlight = new ColoringAttributes(hilightClr, ColoringAttributes.SHADE_GOURAUD);
+        Texture grid = GroundAndBackground.texturedApp("grid");
         inCollision = !inCollision; // collision has taken place
 
         if (inCollision) { // change color to highlight 'shape'
-            shapeAppearance.setColoringAttributes(highlight);
-
-
+            try { //Strange error where it thinks appearance wasnt set
+                shapeAppearance.setTexture(grid);
+            }
+            catch(CapabilityNotSetException e) {}
             wakeupOn(wExit); // keep the color until no collision
         } else { // change color back to its original
-            shapeAppearance.setColoringAttributes(shapeColoring);
+            try {//Strange error where it thinks appearance wasnt set
+                shapeAppearance.setTexture(shapeTexture);
+            }
+            catch(CapabilityNotSetException e) {}
             wakeupOn(wEnter); // wait for collision happens
         }
     }

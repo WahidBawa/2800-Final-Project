@@ -102,10 +102,8 @@ public class Road {
         baseTG.addChild(shape); // Create a column as a box and add to 'baseTG'
 
         Appearance app = shape.getAppearance();
-        ColoringAttributes ca = new ColoringAttributes();
-        ca.setColor(1f, 1f, 1f); // set column's color and make changeable
-        app.setCapability(Appearance.ALLOW_COLORING_ATTRIBUTES_WRITE);
-        app.setColoringAttributes(ca);
+        app.setCapability(Appearance.ALLOW_TEXTURE_WRITE);
+        app.setTexture(GroundAndBackground.texturedApp("gridBlue"));
 
         CrashingBoundaries cd = new CrashingBoundaries(shape);
         cd.setSchedulingBounds(new BoundingSphere(pt_zero, 10d)); // detect column's collision
@@ -329,7 +327,7 @@ public class Road {
         sceneTG.addChild(GroundAndBackground.generateGround(4, 0.1001f));
         sceneTG.addChild(GroundAndBackground.generateCylinder(1, "Test"));
 
-        Tree tree1 = new Tree(sceneTG);
+        //Tree tree1 = new Tree(sceneTG);
 
         createLight(scene);
         wallsBarriersRoadLamps(sceneTG);

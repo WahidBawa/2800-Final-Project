@@ -1,4 +1,6 @@
 import org.jogamp.java3d.*;
+import org.jogamp.java3d.loaders.Scene;
+import org.jogamp.java3d.loaders.objectfile.ObjectFile;
 import org.jogamp.java3d.utils.geometry.Cylinder;
 import org.jogamp.java3d.utils.geometry.Primitive;
 import org.jogamp.java3d.utils.geometry.Sphere;
@@ -7,9 +9,38 @@ import org.jogamp.vecmath.Color3f;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3f;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
 import java.util.Iterator;
 
 public class GroundAndBackground{
+    public static void Tree(TransformGroup objectTG, float x, float z) {
+
+        TransformGroup transformGroup = new TransformGroup(); // we will rotate the loaded obj inside of this group
+        Transform3D transform = new Transform3D(); // use this to apply the transformations to the transform group
+        transform.setTranslation(new Vector3f(x,1.5f,z));
+        transformGroup.setTransform(transform); // apply the transformation to the transform group
+
+        ObjectFile objectFile = new ObjectFile(ObjectFile.STRIPIFY | ObjectFile.TRIANGULATE | ObjectFile.RESIZE); // used to load in the obj file
+
+        try {
+            Scene s = objectFile.load(new File("Assets/tree.obj").toURI().toURL()); // load in the file
+
+            BranchGroup objBG = s.getSceneGroup();
+            Shape3D tree = (Shape3D) objBG.getChild(0); // get the shape3d object from the obj
+            tree.setAppearance(setApp("gridBlue"));
+
+            objBG.removeAllChildren();
+            transformGroup.addChild(tree);
+            objectTG.addChild(transformGroup);
+
+        } catch (FileNotFoundException | MalformedURLException e) { // if there is an error
+            System.err.println(e);
+            System.exit(1);
+        }
+
+    }
     public static TransformGroup generateCylinder(int size, String file){
         //Transform the object to the correct location
         Transform3D transform3D = new Transform3D();
@@ -34,21 +65,21 @@ public class GroundAndBackground{
     private static void baseCylinder(int size, TransformGroup scene){
         //Create the bases and translate to the correct location
         Transform3D transform3D = new Transform3D();
-        transform3D.setTranslation(new Vector3f(0,0.2f,0));
+        transform3D.setTranslation(new Vector3f(0,0.3f,0));
         TransformGroup botBase = new TransformGroup(transform3D);
         transform3D.setTranslation(new Vector3f(0,-0.2f,0));
         TransformGroup topBase = new TransformGroup(transform3D);
 
         //Create the object and rotate
         TransformGroup rotation = new TransformGroup();
-        Cylinder c = new Cylinder(size*1.05f, 0.1f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY, setApp("neon"));
+        Cylinder c = new Cylinder(size*1.05f, 0.1f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY, setApp("gridBlue"));
         rotation.addChild(c);
         botBase.addChild(rotation);
         botBase.addChild(Commons.rotateBehavior(10000, rotation));
 
         //Create the object and rotate
         rotation = new TransformGroup();
-        c = new Cylinder(size*1.05f, 0.1f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY, setApp("neon"));
+        c = new Cylinder(size*1.05f, 0.1f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY, setApp("gridBlue"));
         rotation.addChild(c);
         topBase.addChild(rotation);
         topBase.addChild(Commons.rotateBehavior(10000, rotation));
@@ -67,6 +98,8 @@ public class GroundAndBackground{
             scene_TG.addChild(ground(new Vector3f(5f, h, 5f), -(i*10), 0));
             scene_TG.addChild(sphere(8, 60, 10, -(i*10)));
             scene_TG.addChild(sphere(8, 60, -10, -(i*10)));
+            Tree(scene_TG, -3, -(i*10));
+            Tree(scene_TG, 3, -(i*10));
         }
         return scene_TG;
     }
@@ -109,14 +142,14 @@ public class GroundAndBackground{
         return TG;
     }
 
-    private static Appearance setApp(String texture) {
+    public static Appearance setApp(String texture) {
         Appearance app = new Appearance();
         app.setTexture(texturedApp(texture));
         app.setMaterial(setMaterial());
         return app;
     }
 
-    private static Texture texturedApp (String name){
+    public static Texture texturedApp (String name){
         //Load the image
         String filename = "Resources/textures/" + name + ".jpg";
         TextureLoader loader = new TextureLoader(filename, null);

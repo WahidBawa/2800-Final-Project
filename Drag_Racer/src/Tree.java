@@ -24,7 +24,7 @@ public class Tree {
         ObjectFile objectFile = new ObjectFile(ObjectFile.STRIPIFY | ObjectFile.TRIANGULATE | ObjectFile.RESIZE); // used to load in the obj file
 
         try {
-            Scene s = objectFile.load(new File("Assets/lowpolytree.obj").toURI().toURL()); // load in the file
+            Scene s = objectFile.load(new File("Assets/tree.obj").toURI().toURL()); // load in the file
 
             BranchGroup objBG = s.getSceneGroup();
             Shape3D tree = (Shape3D) objBG.getChild(0); // get the shape3d object from the obj
