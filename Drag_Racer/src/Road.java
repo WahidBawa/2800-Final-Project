@@ -176,7 +176,7 @@ public class Road {
         Alpha alphaOrbit = new Alpha(-1, Alpha.INCREASING_ENABLE |
                 Alpha.DECREASING_ENABLE, 0, 0, 5000, 2500, 200,	5000, 2500, 200);
         RotationInterpolator tickTock = new RotationInterpolator(alphaOrbit,
-                transfmTG[1], yAxis1, -(float)Math.PI/ 2.0f, (float)Math.PI/ 2.0f);
+                transfmTG[1], yAxis1, 3*(float)Math.PI/2, (float)Math.PI/2);
         tickTock.setSchedulingBounds(new BoundingSphere(pt_zero, 10d));
         transfmTG[1].addChild(tickTock);     // add orbit animation to scene graph
 

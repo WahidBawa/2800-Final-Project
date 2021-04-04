@@ -85,6 +85,7 @@ public class Car {
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT) {
                         angle += 0.1;
+
                     }
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT) {
