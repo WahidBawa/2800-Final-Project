@@ -1,23 +1,43 @@
+import org.jogamp.java3d.BranchGroup;
+import org.jogamp.java3d.Shape3D;
+import org.jogamp.java3d.Transform3D;
+import org.jogamp.java3d.TransformGroup;
+import org.jogamp.java3d.loaders.IncorrectFormatException;
+import org.jogamp.java3d.loaders.ParsingErrorException;
+import org.jogamp.java3d.loaders.Scene;
+import org.jogamp.java3d.loaders.objectfile.ObjectFile;
+import org.jogamp.vecmath.Vector3f;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+
 public class Tree {
 
-    private BranchGroup loadShape() {
+    public Tree(TransformGroup objectTG) {
 
-        int flags = ObjectFile.RESIZE | ObjectFile.TRIANGULATE | ObjectFile.STRIPIFY;
-        ObjectFile f = new ObjectFile(flags, (float) (60 * Math.PI / 180.0));
-        Scene s = null;
+        TransformGroup transformGroup = new TransformGroup(); // we will rotate the loaded obj inside of this group
+        Transform3D transform = new Transform3D(); // use this to apply the transformations to the transform group
+        transform.setTranslation(new Vector3f(0,1.5f,-15));
+        transformGroup.setTransform(transform); // apply the transformation to the transform group
+
+        ObjectFile objectFile = new ObjectFile(ObjectFile.STRIPIFY | ObjectFile.TRIANGULATE | ObjectFile.RESIZE); // used to load in the obj file
 
         try {
-            s = f.load("Assets/lowpolytree.obj");
-        } catch (FileNotFoundException e) {
-            System.err.println(e);
-            System.exit(1);
-        } catch (ParsingErrorException e) {
-            System.err.println(e);
-            System.exit(1);
-        } catch (IncorrectFormatException e) {
+            Scene s = objectFile.load(new File("Assets/lowpolytree.obj").toURI().toURL()); // load in the file
+
+            BranchGroup objBG = s.getSceneGroup();
+            Shape3D tree = (Shape3D) objBG.getChild(0); // get the shape3d object from the obj
+
+            objBG.removeAllChildren();
+            transformGroup.addChild(tree);
+            objectTG.addChild(transformGroup);
+
+        } catch (FileNotFoundException | MalformedURLException e) { // if there is an error
             System.err.println(e);
             System.exit(1);
         }
-        return s.getSceneGroup();
+
     }
 }
+

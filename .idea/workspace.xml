@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4ca5ffad-6381-40a9-86b5-5f229a373d18" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Drag_Racer/src/Tree.java" afterDir="false" />
+    <list default="true" id="4ca5ffad-6381-40a9-86b5-5f229a373d18" name="Default Changelist" comment="added obj for tree">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Drag_Racer/src/Tree.java" beforeDir="false" afterPath="$PROJECT_DIR$/Drag_Racer/src/Tree.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +29,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Drag_Racer" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
@@ -55,8 +55,16 @@
       <workItem from="1615433645056" duration="28000" />
       <workItem from="1617244560803" duration="746000" />
       <workItem from="1617287750426" duration="100000" />
-      <workItem from="1617491483656" duration="1204000" />
+      <workItem from="1617491483656" duration="1742000" />
     </task>
+    <task id="LOCAL-00001" summary="added obj for tree">
+      <created>1617493078132</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1617493078132</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -72,5 +80,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="added obj for tree" />
+    <option name="LAST_COMMIT_MESSAGE" value="added obj for tree" />
   </component>
 </project>
