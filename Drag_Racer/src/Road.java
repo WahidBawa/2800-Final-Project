@@ -21,13 +21,6 @@ public class Road {
     private static Point3d pt_zero = new Point3d(0d, 0d, 0d);
 // aleksa adds road here
 
-/*
-
-        KEVIN PLEASE GOD STOP ADDING RANDOM SHIT TO THE ROAD CLASS
-        IM DROWNING IN RANDOM FUNCTIONS -Av
-
-
- */
     private static Background createBkground(Color3f clr, BoundingSphere bounds) {
         //creating the background using background attribute
         Background bg = new Background();

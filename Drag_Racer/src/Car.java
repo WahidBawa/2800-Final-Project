@@ -5,9 +5,7 @@ import org.jogamp.java3d.loaders.Scene;
 import org.jogamp.java3d.loaders.objectfile.ObjectFile;
 import org.jogamp.java3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
 import org.jogamp.java3d.utils.universe.ViewingPlatform;
-import org.jogamp.vecmath.Color3f;
-import org.jogamp.vecmath.Vector3d;
-import org.jogamp.vecmath.Vector3f;
+import org.jogamp.vecmath.*;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -23,8 +21,10 @@ public class Car {
     public static class BehaviorArrowKey extends Behavior {
         private TransformGroup navigatorTG;
         private WakeupOnAWTEvent wEnter;
-        private double angle;
+        private float angle;
         private float x, y, z;
+        private Matrix3f comMat= new Matrix3f();
+        Point3f viewposi = new Point3f(0.0f,0.0f,0.0f);
 //        private final WakeupCondition wakeupCondition;
 
         public BehaviorArrowKey(ViewingPlatform targetVP, TransformGroup chasedTG) {
@@ -41,6 +41,9 @@ public class Car {
         public void initialize() {
             wEnter = new WakeupOnAWTEvent(KeyEvent.KEY_PRESSED);
             wakeupOn(wEnter);                              // decide when behavior becomes live
+            comMat.m00 = 1.0f; comMat.m01 = 0.0f; comMat.m02 = 0.0f;
+            comMat.m10 = 0.0f; comMat.m11 = 1.0f; comMat.m12 = 0.0f;
+            comMat.m20 = 0.0f; comMat.m21 = 0.0f; comMat.m22 = 1.0f;
         }
 
         @Override
@@ -71,6 +74,68 @@ public class Car {
             wakeupOn(wEnter);                              // decide when behavior becomes live
         }
 
+        private Matrix3f coMatrix(int mode, float angle) {
+            Matrix3f tempMat = new Matrix3f();
+            switch (mode) {
+                case 1:
+                    tempMat.m00 = (float) Math.cos(angle);
+                    tempMat.m01 = 0.0f;
+                    tempMat.m02 = (float) Math.sin(angle);
+                    tempMat.m10 = 0.0f;
+                    tempMat.m11 = 1.0f;
+                    tempMat.m12 = 0.0f;
+                    tempMat.m20 = (float) -Math.sin(angle);
+                    tempMat.m21 = 0.0f;
+                    tempMat.m22 = (float) Math.cos(angle);
+                    break;
+                case 2:
+                    tempMat.m00 = 1.0f;
+                    tempMat.m01 = 0.0f;
+                    tempMat.m02 = 0.0f;
+                    tempMat.m10 = 0.0f;
+                    tempMat.m11 = (float) Math.cos(angle);
+                    tempMat.m12 = (float) Math.sin(angle);
+                    tempMat.m20 = 0.0f;
+                    tempMat.m21 = (float) -Math.sin(angle);
+                    tempMat.m22 = (float) Math.cos(angle);
+                    break;
+                case 3:
+                    tempMat.m00 = (float) Math.cos(angle);
+                    tempMat.m01 = (float) -Math.sin(angle);
+                    tempMat.m02 = 0.0f;
+                    tempMat.m10 = (float) Math.sin(angle);
+                    tempMat.m11 = (float) Math.cos(angle);
+                    tempMat.m12 = 0.0f;
+                    tempMat.m20 = 0.0f;
+                    tempMat.m21 = 0.0f;
+                    tempMat.m22 = 1.0f;
+                    break;
+                default:
+            }
+            return tempMat;
+        }
+
+            private Transform3D setRotation3D(TransformGroup Trans, float angle, Matrix3f rotMat, int mode)
+        { // to set the position after rotation
+             Transform3D rt3d = new Transform3D();
+             Trans.getTransform(rt3d);
+             rotMat.transpose();
+             rotMat.invert();
+             rotMat.mul(rotMat, coMatrix(mode, angle));
+             rt3d.setRotation(rotMat);
+             Trans.setTransform(rt3d);
+
+             return rt3d;
+        }
+
+        private Transform3D setPosition3D(TransformGroup Trans, Point3f point)
+        { // to set the position after movement
+             Transform3D t3d = new Transform3D();
+             navigatorTG.getTransform(t3d);
+             t3d.setTranslation(new Vector3d(point));
+             navigatorTG.setTransform(t3d);
+             return t3d;
+        }
 
         private void ProcessKeyEvent(AWTEvent[] events) {
             for (AWTEvent event : events) { // iterate through events
@@ -80,26 +145,31 @@ public class Car {
                     navigatorTG.getTransform(transform1);
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_UP) { // check if the key you've pressed is the target key
-                        z -= 0.1;
+
+                        viewposi.x = viewposi.x-3.0f*0.02f*(float)Math.sin(angle);
+                         viewposi.z = viewposi.z-3.0f*0.02f*(float)Math.cos(angle);
+                         setPosition3D(navigatorTG, viewposi);
                     }
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT) {
                         angle += 0.1;
+                        setRotation3D(navigatorTG, 0.1f, comMat, 1);
 
                     }
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT) {
                         angle -= 0.1;
+                        setRotation3D(navigatorTG, -0.1f, comMat, 1);
                     }
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_DOWN) { // check if the key you've pressed is the target key
-                        z += 0.1;
+
+                        viewposi.x = viewposi.x+1.0f*0.02f*(float)Math.sin(angle);
+                         viewposi.z = viewposi.z+1.0f*0.02f*(float)Math.cos(angle);
+                        setPosition3D(navigatorTG, viewposi);
                     }
 
-                    transform1.rotY(angle);
-                    transform1.setTranslation(new Vector3f(x, y, z));
 
-                    navigatorTG.setTransform(transform1);
                 }
 
             }
