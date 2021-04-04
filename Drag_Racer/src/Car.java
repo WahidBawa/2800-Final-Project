@@ -23,14 +23,19 @@ public class Car {
     public static class BehaviorArrowKey extends Behavior {
         private TransformGroup navigatorTG;
         private WakeupOnAWTEvent wEnter;
-//        private final WakeupCriterion[] wakeupCriteria;
-        private final WakeupCondition wakeupCondition;
+        private double angle;
+        private float x, y, z;
+//        private final WakeupCondition wakeupCondition;
 
         public BehaviorArrowKey(ViewingPlatform targetVP, TransformGroup chasedTG) {
             navigatorTG = chasedTG;
             targetVP.getViewPlatformTransform();
+            angle = 0;
+            x = 0;
+            y = 0;
+            z = 0;
 
-            wakeupCondition = new WakeupOr(new WakeupCriterion[]{new WakeupOnAWTEvent(KeyEvent.KEY_PRESSED), new WakeupOnAWTEvent(KeyEvent.KEY_RELEASED)});
+//            wakeupCondition = new WakeupOr(new WakeupCriterion[]{new WakeupOnAWTEvent(KeyEvent.KEY_PRESSED), new WakeupOnAWTEvent(KeyEvent.KEY_RELEASED)});
         }
 
         public void initialize() {
@@ -71,17 +76,29 @@ public class Car {
             for (AWTEvent event : events) { // iterate through events
                 KeyEvent keyEvent = (KeyEvent) event; // set key event
                 if (keyEvent.getID() == KeyEvent.KEY_PRESSED) { // see if this is a key down event
+                    Transform3D transform1 = new Transform3D();
+                    navigatorTG.getTransform(transform1);
+
                     if (keyEvent.getKeyCode() == KeyEvent.VK_UP) { // check if the key you've pressed is the target key
-                        Transform3D transform1 = new Transform3D();
-                        navigatorTG.getTransform(transform1);
-                        Vector3f vector3f = new Vector3f();
-
-                        transform1.get(vector3f);
-
-                        transform1.set(new Vector3f(vector3f.x, vector3f.y, vector3f.z - 0.1f));
-
-                        navigatorTG.setTransform(transform1);
+                        z -= 0.1;
                     }
+
+                    if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT) {
+                        angle += 0.1;
+                    }
+
+                    if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT) {
+                        angle -= 0.1;
+                    }
+
+                    if (keyEvent.getKeyCode() == KeyEvent.VK_DOWN) { // check if the key you've pressed is the target key
+                        z += 0.1;
+                    }
+
+                    transform1.rotY(angle);
+                    transform1.setTranslation(new Vector3f(x, y, z));
+
+                    navigatorTG.setTransform(transform1);
                 }
 
             }
