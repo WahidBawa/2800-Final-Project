@@ -164,8 +164,8 @@ public class Car {
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_DOWN) { // check if the key you've pressed is the target key
 
-                        viewposi.x = viewposi.x+1.0f*0.02f*(float)Math.sin(angle);
-                         viewposi.z = viewposi.z+1.0f*0.02f*(float)Math.cos(angle);
+                        viewposi.x = viewposi.x+1.0f*0.02f*(float)Math.sin(angle) * 3f;
+                        viewposi.z = viewposi.z+1.0f*0.02f*(float)Math.cos(angle) * 3f;
                         setPosition3D(navigatorTG, viewposi);
                     }
 
