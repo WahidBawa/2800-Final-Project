@@ -22,6 +22,8 @@ public class Commons extends JPanel {
             Cyan, Orange, Magenta, Grey};
     public final static int clr_num = 8;
 
+    private static SimpleUniverse su = null;
+    private static Canvas3D canvas_3D;
     private static JFrame frame;
     private static Point3d eye = new Point3d(1.35, 0.35, 2.0);
 
@@ -74,6 +76,9 @@ public class Commons extends JPanel {
         viewTransform.setTransform(view_TM);                 // set the TransformGroup of ViewingPlatform
     }
 
+    public static SimpleUniverse getSimpleU() {
+        return su;
+    }
 
     /* a function to build the content branch and attach to 'scene' */
     private static BranchGroup createScene() {
@@ -110,6 +115,13 @@ public class Commons extends JPanel {
     public static void main(String[] args) {
         frame = new JFrame("XY's Commons");                  // call constructor with 'createScene()'
         frame.getContentPane().add(new Commons(createScene()));
+    }
+
+    public static void createUniverse() {
+        GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
+        canvas_3D = new Canvas3D(config);
+        su = new SimpleUniverse(canvas_3D);   // create a SimpleUniverse
+        defineViewer(su);                                    // set the viewer's location
     }
 
     public static class MyGUI extends JFrame {

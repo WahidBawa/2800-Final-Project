@@ -318,6 +318,7 @@ public class Road {
     }
 
     public static BranchGroup createScene() {
+        Commons.createUniverse();
         BranchGroup scene = new BranchGroup(); // create 'scene' as content branch
 
         BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.MAX_VALUE);
@@ -330,6 +331,7 @@ public class Road {
         sceneTG.addChild(GroundAndBackground.generateCylinder(1, "Test"));
         createLight(scene);
         wallsBarriersRoadLamps(sceneTG);
+        scene.addChild(Car.carObject());
         scene.compile(); // optimize scene BG
 
         return scene;
@@ -338,7 +340,7 @@ public class Road {
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Commons.setEye(new Point3d(0, 5, -40));
+                Commons.setEye(new Point3d(0, 5, 4));
                 new Commons.MyGUI(createScene(), "Drag Racing Game");
             }
         });
