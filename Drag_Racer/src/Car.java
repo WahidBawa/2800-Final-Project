@@ -7,7 +7,9 @@ import org.jogamp.java3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
 import org.jogamp.java3d.utils.universe.ViewingPlatform;
 import org.jogamp.vecmath.Color3f;
 import org.jogamp.vecmath.Vector3d;
+import org.jogamp.vecmath.Vector3f;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.util.Iterator;
@@ -21,14 +23,14 @@ public class Car {
     public static class BehaviorArrowKey extends Behavior {
         private TransformGroup navigatorTG;
         private WakeupOnAWTEvent wEnter;
-
-        public void KeyPressed(KeyEvent ekg){
-
-        }
+//        private final WakeupCriterion[] wakeupCriteria;
+        private final WakeupCondition wakeupCondition;
 
         public BehaviorArrowKey(ViewingPlatform targetVP, TransformGroup chasedTG) {
             navigatorTG = chasedTG;
             targetVP.getViewPlatformTransform();
+
+            wakeupCondition = new WakeupOr(new WakeupCriterion[]{new WakeupOnAWTEvent(KeyEvent.KEY_PRESSED), new WakeupOnAWTEvent(KeyEvent.KEY_RELEASED)});
         }
 
         public void initialize() {
@@ -42,11 +44,47 @@ public class Car {
             navigatorTG.getTransform(navigatorTF);
             Vector3d vct = new Vector3d();
             navigatorTF.get(vct);
-            vct.z-=3d;
-            // get position of 'navigatorTG'
 
-            soundJOAL.setPos(snd_pt, (float)vct.x,  (float)vct.y, (float) vct.z); //get the xyz of the movement vector and set the sound location to that vector
+//            soundJOAL.setPos(snd_pt, (float)vct.x,  (float)vct.y, (float) vct.z); //get the xyz of the movement vector and set the sound location to that vector
+
+
+            WakeupOnAWTEvent event;
+            WakeupCriterion genericEvent;
+            AWTEvent[] events;
+
+            while (criteria.hasNext()) { // while there is another wakeup criteria
+                genericEvent = criteria.next();
+
+                if (genericEvent instanceof WakeupOnAWTEvent) { // if generic event is instance of wakeupEvent
+                    event = (WakeupOnAWTEvent) genericEvent;
+                    events = event.getAWTEvent();
+                    ProcessKeyEvent(events);
+
+                }
+            }
+
             wakeupOn(wEnter);                              // decide when behavior becomes live
+        }
+
+
+        private void ProcessKeyEvent(AWTEvent[] events) {
+            for (AWTEvent event : events) { // iterate through events
+                KeyEvent keyEvent = (KeyEvent) event; // set key event
+                if (keyEvent.getID() == KeyEvent.KEY_PRESSED) { // see if this is a key down event
+                    if (keyEvent.getKeyCode() == KeyEvent.VK_UP) { // check if the key you've pressed is the target key
+                        Transform3D transform1 = new Transform3D();
+                        navigatorTG.getTransform(transform1);
+                        Vector3f vector3f = new Vector3f();
+
+                        transform1.get(vector3f);
+
+                        transform1.set(new Vector3f(vector3f.x, vector3f.y, vector3f.z - 0.1f));
+
+                        navigatorTG.setTransform(transform1);
+                    }
+                }
+
+            }
         }
     }
 
@@ -117,32 +155,32 @@ public class Car {
         trfm.mul(rotator2);
 
         objectCAR.setTransform(trfm);
-        carTF= objectCAR;
+        carTF = objectCAR;
 
         objectTG.addChild(objectCAR);
 
-        soundJOAL = new SoundUtilityJOAL();
-        if (!soundJOAL.load(snd_pt, 0f, 0f, 10f, true))     // fix 'snd_pt' at cow location
-            System.out.println("Could not load " + snd_pt);
-        else
-            soundJOAL.play(snd_pt);                         // start 'snd_pt'
+//        soundJOAL = new SoundUtilityJOAL();
+//        if (!soundJOAL.load(snd_pt, 0f, 0f, 10f, true))     // fix 'snd_pt' at cow location
+//            System.out.println("Could not load " + snd_pt);
+//        else
+//            soundJOAL.play(snd_pt);                         // start 'snd_pt'
 
 
 
         ViewingPlatform ourView = Commons.getSimpleU().getViewingPlatform();
-        KeyNavigatorBehavior myRotationbehavior = new KeyNavigatorBehavior(objectTG);
-       // BehaviorArrowKey myViewRotationbehavior = new BehaviorArrowKey(ourView, objectTG);
-        myRotationbehavior.setSchedulingBounds(new BoundingSphere());
-        myRotationbehavior.setSchedulingInterval(myRotationbehavior.getNumSchedulingIntervals()-1);
-        objectTG.addChild(myRotationbehavior);
-      //  myViewRotationbehavior.setSchedulingBounds(new BoundingSphere());
-        //objectTG.addChild(myViewRotationbehavior);
+//        KeyNavigatorBehavior myRotationbehavior = new KeyNavigatorBehavior(objectTG);
+
+        BehaviorArrowKey myViewRotationbehavior = new BehaviorArrowKey(ourView, objectTG);
+
+//        myRotationbehavior.setSchedulingBounds(new BoundingSphere());
+//        myRotationbehavior.setSchedulingInterval(myRotationbehavior.getNumSchedulingIntervals()-1);
+//        objectTG.addChild(myRotationbehavior);
+
+        myViewRotationbehavior.setSchedulingBounds(new BoundingSphere());
+        objectTG.addChild(myViewRotationbehavior);
 
         objectBG.addChild(objectTG);
 
         return objectBG;
     }
-
-
-
 }

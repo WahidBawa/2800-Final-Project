@@ -328,8 +328,6 @@ public class Road {
         sceneTG.addChild(GroundAndBackground.generateGround(4, 0.1001f));
         sceneTG.addChild(GroundAndBackground.generateCylinder(1, "Test"));
 
-        //Tree tree1 = new Tree(sceneTG);
-
         createLight(scene);
         wallsBarriersRoadLamps(sceneTG);
         scene.addChild(Car.carObject());
