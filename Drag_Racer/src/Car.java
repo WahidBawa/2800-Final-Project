@@ -152,7 +152,7 @@ public class Car {
                     if (keyEvent.getKeyCode() == KeyEvent.VK_UP) { // check if the key you've pressed is the target key
 
                         if (canUpPlay) {
-                            Sounds.stopSounds();  //stop all sounds to avoid overlap
+                            Sounds.stopSounds(0);  //stop all sounds to avoid overlap
                             Sounds.playSound(1); //play sound
                             canUpPlay= false; //set false to avoid repeating
                         }
@@ -169,9 +169,8 @@ public class Car {
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT) {
 
-                        Sounds.stopSounds();  //stop all sounds to avoid overlap
                         if (canLPlay) {
-                            Sounds.stopSounds();  //stop all sounds to avoid overlap
+                            Sounds.stopSounds(1);  //stop all sounds to avoid overlap
                             Sounds.playSound(3); //play sound
                             canLPlay= false; //set false to avoid repeating
                         }
@@ -186,9 +185,9 @@ public class Car {
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT) {
 
-                        Sounds.stopSounds();  //stop all sounds to avoid overlap
+
                         if (canRPlay) {
-                            Sounds.stopSounds();  //stop all sounds to avoid overlap
+                            Sounds.stopSounds(1);  //stop all sounds to avoid overlap
                             Sounds.playSound(3); //play sound
                             canRPlay= false; //set false to avoid repeating
                         }
@@ -202,9 +201,9 @@ public class Car {
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_DOWN) { // check if the key you've pressed is the target key
 
-                        Sounds.stopSounds();  //stop all sounds to avoid overlap
+
                         if (canDownPlay) {
-                            Sounds.stopSounds();  //stop all sounds to avoid overlap
+                            Sounds.stopSounds(0);  //stop all sounds to avoid overlap
                             Sounds.playSound(0); //play sound
                             canDownPlay= false; //set false to avoid repeating
                         }

@@ -41,11 +41,19 @@ public class Sounds {
 //        soundJOAL.stop(snd_pt);
     }
 
-    public static void stopSounds(){
-        soundJOAL.stop("CarBrake");
-        soundJOAL.stop("CarDriving");
-        soundJOAL.stop("CarEngineStart");
-        soundJOAL.stop("CarTurn");
+    public static void stopSounds(int mode){
+        if (mode==0) {
+            soundJOAL.stop("CarBrake");
+            soundJOAL.stop("CarDriving");
+            soundJOAL.stop("CarEngineStart");
+            soundJOAL.stop("CarTurn");
+        }
+        //this is a special case for the L R buttons to not prematurely stop the blinker sound
+        else{
+            soundJOAL.stop("CarDriving");
+            soundJOAL.stop("CarEngineStart");
+            soundJOAL.stop("CarTurn");
+        }
     }
 
 }
