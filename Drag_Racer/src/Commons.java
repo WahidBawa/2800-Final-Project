@@ -26,6 +26,7 @@ public class Commons extends JPanel implements MouseListener {
     public final static int clr_num = 8;
 
     private static SimpleUniverse su = null;
+    public static MyMouseListener mouseListener;
     private static Canvas3D canvas_3D;
     private static JFrame frame;
     private static Point3d eye = new Point3d(1.35, 0.35, 2.0);
