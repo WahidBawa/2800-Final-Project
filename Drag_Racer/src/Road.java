@@ -19,7 +19,6 @@ import java.io.File;
 
 public class Road {
     private static Point3d pt_zero = new Point3d(0d, 0d, 0d);
-// aleksa adds road here
 
     private static Background createBkground(Color3f clr, BoundingSphere bounds) {
         //creating the background using background attribute
@@ -36,9 +35,8 @@ public class Road {
         AmbientLight ambientLight = new AmbientLight(true, new Color3f(0.2f, 0.2f, 0.2f)); // lightOn set to true, with Color3f(0.2f, 0.2f, 0.,2f)
         ambientLight.setInfluencingBounds(new BoundingSphere(new Point3d(0,0,0), 100));// set influencing bounds with bouding sphere at point3d (0,0,0) with radius 100
         bg.addChild(ambientLight); // add child to branch group with ambient light
-        PointLight pointLight = new PointLight(true, Commons.White, new Point3f(2, 2, 2), new Point3f(1, 0, 0));
-        pointLight.setInfluencingBounds(new BoundingSphere(new Point3d(0,0,0), 100));
-        bg.addChild(pointLight); // add point light to branch group
+
+        //point lights moved to StreetLights
     }
 
     private static ExponentialFog createFog(Color3f clr, BoundingSphere bounds) {
@@ -76,7 +74,7 @@ public class Road {
         return new Shape3D(lsa);
     }
 
-    private static TransformGroup createColumn(double scale, Vector3d pos) {
+    private static TransformGroup createColumn(double scale, Vector3d pos, double zSize) {
         Transform3D transM = new Transform3D();
         transM.set(scale, pos);  // Create base TG with 'scale' and 'position'
         Transform3D transT= new Transform3D();
@@ -189,7 +187,7 @@ public class Road {
         TransformGroup baseMain= new TransformGroup();
 
         //create 20 road pieces and place them in order down the columns
-        for (int i=1; i<=30; i++) {
+        for (int i=0; i<=30; i++) {
             TransformGroup RoadPiece = new TransformGroup();
             Transform3D translator5 = new Transform3D();
             translator5.setTranslation(new Vector3f(0.0f, -0.1f, (float) -i));
@@ -216,6 +214,19 @@ public class Road {
         return ma;
     }
 
+    public static Material setMaterialSphere(Color3f color) {
+        //material from lab 6
+        int SH = 128;               // 10
+        Material ma = new Material();
+        ma.setAmbientColor(new Color3f(0.6f, 0.6f, 0.6f));
+        ma.setEmissiveColor(new Color3f(0.0f, 0.0f, 0.0f));
+        ma.setDiffuseColor(color);
+        ma.setSpecularColor(new Color3f(1.0f, 1.0f, 1.0f));
+        ma.setShininess(SH);
+        ma.setLightingEnable(true);
+        return ma;
+    }
+
     public static Sphere materializeSphere(float radius, Color3f color, boolean IsTransparent) {
         Appearance app = new Appearance();
         Color3f theColor = color;
@@ -223,7 +234,7 @@ public class Road {
         app.setColoringAttributes(ca);
         PolygonAttributes pa = new PolygonAttributes();
         app.setPolygonAttributes(pa);
-        app.setMaterial(setMaterial());  //uncomment this when we have the lighting set up
+        app.setMaterial(setMaterialSphere(color));  //uncomment this when we have the lighting set up
         if (IsTransparent) {
             TransparencyAttributes ta = new TransparencyAttributes(TransparencyAttributes.FASTEST, 0.5f);
             app.setTransparencyAttributes(ta);
@@ -231,70 +242,7 @@ public class Road {
         return new Sphere(radius, Sphere.GENERATE_NORMALS, 80, app);
     }
 
-    private static TransformGroup createStreetLight(){
-        TransformGroup baseMain= new TransformGroup();
 
-        //the lamps are just cylinders with an opaque sphere with a smaller white sphere inside
-
-        //CREATE CYLINDER
-        Appearance app = new Appearance();
-        ColoringAttributes colorCylinder= new ColoringAttributes(Commons.Grey, ColoringAttributes.FASTEST);
-        app.setColoringAttributes(colorCylinder); //after setting color we set the appearance
-        TransformGroup cylinderShape= new TransformGroup();
-        cylinderShape.addChild(new Cylinder(0.04f, 1f, app));
-
-        Transform3D translator= new Transform3D();
-        translator.setTranslation(new Vector3f(0, 1.0f ,0)); //this vector will place the cylinder above y=0
-        Transform3D cylinderMatrix= new Transform3D(); //this is the matrix used to move the cylinder
-        cylinderMatrix.mul(translator); //translating the cylinder
-        cylinderShape.setTransform(cylinderMatrix);
-
-        //CREATE SPHERES
-        TransformGroup spheres = new TransformGroup();
-        spheres.addChild(materializeSphere(0.2f, Commons.Grey,true ));
-        spheres.addChild(materializeSphere(0.08f, Commons.Yellow,false ));
-        Transform3D translatorSphere= new Transform3D();
-        translatorSphere.setTranslation(new Vector3f(0, 1.5f ,0)); //this vector will place the cylinder above y=0
-        Transform3D sphereMatrix= new Transform3D(); //this is the matrix used to move the cylinder
-        sphereMatrix.mul(translatorSphere); //translating the cylinder
-        spheres.setTransform(sphereMatrix);
-
-        baseMain.addChild(spheres);
-        baseMain.addChild(cylinderShape);
-        return baseMain;
-    }
-
-    private static TransformGroup createLamps(){
-        TransformGroup baseMain= new TransformGroup();
-
-        //create n lamps and place them in order down the columns
-        //right side
-        for (int i=1; i<=16; i++) {
-            TransformGroup Lamp = new TransformGroup();
-            Transform3D translator5 = new Transform3D();
-            translator5.setTranslation(new Vector3f(1.2f, -0.4f, (float) 2*(-i) +3));
-            Transform3D trfm5 = new Transform3D();              // TG for composition matrix
-            trfm5.mul(translator5);    // apply translation
-            Lamp.addChild(createStreetLight());
-            Lamp.setTransform(trfm5);
-            baseMain.addChild(Lamp);
-        }
-        //yes placing the street lights is weird in the z axis be aware of that
-
-        //left side
-        for (int i=1; i<=16; i++) {
-            TransformGroup Lamp = new TransformGroup();
-            Transform3D translator5 = new Transform3D();
-            translator5.setTranslation(new Vector3f(-1.2f, -0.4f, (float) 2*(-i) +3));
-            Transform3D trfm5 = new Transform3D();              // TG for composition matrix
-            trfm5.mul(translator5);    // apply translation
-            Lamp.addChild(createStreetLight());
-            Lamp.setTransform(trfm5);
-            baseMain.addChild(Lamp);
-        }
-
-        return baseMain;
-    }
     /*
     This function creates the side walls for the project
      */
@@ -302,15 +250,19 @@ public class Road {
         Vector3d[] pos = {new Vector3d(1, 0, -10),
                 new Vector3d(-1, 0, -10)};
         for (int i =0; i < 2; i++)
-            sceneTG.addChild(createColumn(0.1, pos[i]));
+            sceneTG.addChild(createColumn(0.1, pos[i], -330.0));
+
         sceneTG.addChild(createBox());
         sceneTG.addChild(createRoad());
-        sceneTG.addChild(createLamps());
+        sceneTG.addChild(StreetLights.createLamps());
     }
 
     public static BranchGroup createScene() {
         Commons.createUniverse();
         BranchGroup scene = new BranchGroup(); // create 'scene' as content branch
+
+        Commons.pickTool = new PickTool( scene );                   // allow picking of objs in 'sceneBG'
+        Commons.pickTool.setMode(PickTool.BOUNDS);
 
         Sounds.initialSound(); //initialize the sounds
         Sounds.playSound(2); //play car starting sounds when game loads
@@ -335,7 +287,7 @@ public class Road {
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Commons.setEye(new Point3d(0, 5, 4));
+                Commons.setEye(new Point3d(0, 5, 7));
                 new Commons.MyGUI(createScene(), "Drag Racing Game");
             }
         });

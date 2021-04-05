@@ -274,6 +274,7 @@ public class Car {
         //adding the cow shape here
         BranchGroup carBG = loadShape();
         Shape3D carShape= (Shape3D)carBG.getChild(0);
+        carShape.setUserData(1);
         carShape.setAppearance(setApp(Commons.Grey));
         TransformGroup objectCAR = new TransformGroup();
 
@@ -296,24 +297,8 @@ public class Car {
 
         objectTG.addChild(objectCAR);
 
-//
-//        soundJOAL = new SoundUtilityJOAL();
-//        if (!soundJOAL.load(snd_pt, 0f, 0f, 10f, true))     // fix 'snd_pt' at cow location
-//            System.out.println("Could not load " + snd_pt);
-//        else
-//            soundJOAL.play(snd_pt);                         // start 'snd_pt'
-
-
-
         ViewingPlatform ourView = Commons.getSimpleU().getViewingPlatform();
-//        KeyNavigatorBehavior myRotationbehavior = new KeyNavigatorBehavior(objectTG);
-
         BehaviorArrowKey myViewRotationbehavior = new BehaviorArrowKey(ourView, objectTG);
-
-//        myRotationbehavior.setSchedulingBounds(new BoundingSphere());
-//        myRotationbehavior.setSchedulingInterval(myRotationbehavior.getNumSchedulingIntervals()-1);
-//        objectTG.addChild(myRotationbehavior);
-
         myViewRotationbehavior.setSchedulingBounds(new BoundingSphere());
         objectTG.addChild(myViewRotationbehavior);
 

@@ -15,6 +15,9 @@ public class Sounds {
 
         if (!soundJOAL.load("CarTurn", 0f, 0f, 0f, false))
             System.out.println("Could not load " + "CarTurn");
+
+        if (!soundJOAL.load("Horn", 0f, 0f, 0f, false))
+            System.out.println("Could not load " + "Horn");
     }
 
     /* a function to play different sound according to key (user) */
@@ -23,6 +26,7 @@ public class Sounds {
         CAR DRIVING-1
         CAR ENGINE-2
         CAR TURN-3
+        CAR HORN-4
      */
     public static void playSound(int key) {
         String snd_pt = "CarBrake";
@@ -33,6 +37,9 @@ public class Sounds {
         }
         else if(key== 3){
             snd_pt = "CarTurn";
+        }
+        else if (key==4){
+            snd_pt= "Horn";
         }
         soundJOAL.play(snd_pt);
 //        try {

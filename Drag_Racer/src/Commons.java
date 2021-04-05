@@ -1,13 +1,16 @@
-import java.awt.BorderLayout;
-import java.awt.GraphicsConfiguration;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.geometry.ColorCube;
+import org.jogamp.java3d.utils.picking.PickResult;
+import org.jogamp.java3d.utils.picking.PickTool;
 import org.jogamp.java3d.utils.universe.SimpleUniverse;
 import org.jogamp.vecmath.*;
 
-public class Commons extends JPanel {
+public class Commons extends JPanel implements MouseListener {
     private static final long serialVersionUID = 1L;
     public final static Color3f Red = new Color3f(1.0f, 0.0f, 0.0f);
     public final static Color3f Green = new Color3f(0.0f, 1.0f, 0.0f);
@@ -26,6 +29,7 @@ public class Commons extends JPanel {
     private static Canvas3D canvas_3D;
     private static JFrame frame;
     private static Point3d eye = new Point3d(1.35, 0.35, 2.0);
+    public static PickTool pickTool;
 
     /* a function to create a rotation behavior and refer it to 'my_TG' */
     public static RotationInterpolator rotateBehavior(int r_num, TransformGroup my_TG) {
@@ -132,4 +136,41 @@ public class Commons extends JPanel {
             pack();
         }
     }
+
+    @Override
+    public void mouseClicked(MouseEvent event) {
+        int x = event.getX(); int y = event.getY();           // mouse coordinates
+        Point3d point3d = new Point3d(), center = new Point3d();
+        canvas_3D.getPixelLocationInImagePlate(x, y, point3d);   // obtain AWT pixel in ImagePlate coordinates
+        canvas_3D.getCenterEyeInImagePlate(center);              // obtain eye's position in IP coordinates
+
+        Transform3D transform3D = new Transform3D();          // matrix to relate ImagePlate coordinates~
+        canvas_3D.getImagePlateToVworld(transform3D);            // to Virtual World coordinates
+        transform3D.transform(point3d);                       // transform 'point3d' with 'transform3D'
+        transform3D.transform(center);                        // transform 'center' with 'transform3D'
+
+        Vector3d mouseVec = new Vector3d();
+        mouseVec.sub(point3d, center);
+        mouseVec.normalize();
+        pickTool.setShapeRay(point3d, mouseVec);              // send a PickRay for intersection
+
+        if (pickTool.pickClosest() != null) {
+            System.out.println("working!!!");
+            PickResult pickResult = pickTool.pickClosest();   // obtain the closest hit
+            Shape3D car = (Shape3D) pickResult.getNode(PickResult.PRIMITIVE);
+            if (car == null) {
+                //IF CAR IS NULL, the object clicked was not a sphere and doesnt need to change
+            }
+            else {
+                if ((int) car.getUserData() == 1) {               // retrieve 'UserData'
+                    Sounds.playSound(4);                      // set 'UserData' to a new value
+                }
+            }
+        }
+    }
+
+    public void mouseEntered(MouseEvent arg0) { }
+    public void mouseExited(MouseEvent arg0) { }
+    public void mousePressed(MouseEvent e) { }
+    public void mouseReleased(MouseEvent e) { }
 }
