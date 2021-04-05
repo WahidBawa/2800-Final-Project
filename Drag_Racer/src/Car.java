@@ -17,6 +17,7 @@ public class Car {
     private static SoundUtilityJOAL soundJOAL;
     private static String snd_pt = "Car";
     private static TransformGroup carTF;
+    public static TransformGroup objectTG;
 
     public static class BehaviorArrowKey extends Behavior {
         private TransformGroup navigatorTG;
@@ -268,7 +269,7 @@ public class Car {
 
     public static BranchGroup carObject() {
         BranchGroup objectBG = new BranchGroup();
-        TransformGroup objectTG = new TransformGroup();
+        objectTG = new TransformGroup();
         objectTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 
         //adding the cow shape here
