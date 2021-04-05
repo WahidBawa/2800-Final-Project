@@ -295,6 +295,8 @@ public class Car {
         objectCAR.setTransform(trfm);
         carTF = objectCAR;
 
+        objectTG.setUserData(1);
+
         objectTG.addChild(objectCAR);
 
         ViewingPlatform ourView = Commons.getSimpleU().getViewingPlatform();

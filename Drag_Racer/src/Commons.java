@@ -104,6 +104,7 @@ public class Commons extends JPanel implements MouseListener {
     public Commons(BranchGroup sceneBG) {
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         Canvas3D canvas_3D = new Canvas3D(config);
+        canvas_3D.addMouseListener(this);
         SimpleUniverse su = new SimpleUniverse(canvas_3D);   // create a SimpleUniverse
         defineViewer(su);                                    // set the viewer's location
 
@@ -153,6 +154,7 @@ public class Commons extends JPanel implements MouseListener {
         mouseVec.sub(point3d, center);
         mouseVec.normalize();
         pickTool.setShapeRay(point3d, mouseVec);              // send a PickRay for intersection
+        System.out.println("listening to mouse");
 
         if (pickTool.pickClosest() != null) {
             System.out.println("working!!!");
