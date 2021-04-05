@@ -26,6 +26,7 @@ public class Commons extends JPanel implements MouseListener {
     public final static int clr_num = 8;
 
     private static SimpleUniverse su = null;
+    public static Camera cam;
     public static MyMouseListener mouseListener;
     private static Canvas3D canvas_3D;
     private static JFrame frame;
@@ -103,7 +104,7 @@ public class Commons extends JPanel implements MouseListener {
 
     /* a constructor to set up and run the application */
     public Commons(BranchGroup sceneBG) {
-        Camera cam = new Camera(eye);
+        cam = new Camera(eye);
         Canvas3D canvas_3D = cam.getCanvas3D();
 
         mouseListener = new MyMouseListener(canvas_3D, pickTool);

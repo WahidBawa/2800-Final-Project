@@ -3,10 +3,7 @@ import org.jogamp.java3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
 import org.jogamp.java3d.utils.geometry.Cone;
 import org.jogamp.java3d.utils.geometry.Primitive;
 import org.jogamp.java3d.utils.universe.*;
-import org.jogamp.vecmath.Color3f;
-import org.jogamp.vecmath.Point3d;
-import org.jogamp.vecmath.Point3f;
-import org.jogamp.vecmath.Vector3d;
+import org.jogamp.vecmath.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -15,28 +12,28 @@ public class Camera {
     private static final long serialVersionUID = 1L;
     static final int width = 600;                            // size of each Canvas3D
     static final int height = 600;
-
+    private Vector3f location = new Vector3f(0,1,0);
+    private ViewingPlatform vp;
+    private Viewer viewer;
     private Canvas3D canvas3D = new Canvas3D(SimpleUniverse.getPreferredConfiguration());
     SimpleUniverse su;
+
+    public void moveCamera(float x, float y, float z){
+        Transform3D t1 = new Transform3D();
+        t1.setTranslation(new Vector3f(x,y,z));
+        vp.getViewPlatformTransform().setTransform(t1);
+    }
+
     public Camera(Point3d eye)	{
-        ViewingPlatform vp = new ViewingPlatform(2);       // a VP with 2 TG about it
-        Viewer viewer = new Viewer( canvas3D );         // point 1st Viewer to c3D[0]
-        Transform3D t3d = new Transform3D( );
-        t3d.rotX( Math.PI / 2.0 );                         // rotate and position the 1st ~
-        t3d.setTranslation( new Vector3d( 0, 0, -13 ) );   // viewer looking down from top
-        t3d.invert( );
-        MultiTransformGroup mtg = vp.getMultiTransformGroup( );
-        mtg.getTransformGroup(0).setTransform( t3d );
-
-        su = new SimpleUniverse(vp, viewer); // a SU with one Vp and 3 Viewers
-
+        // a Canvas3D can only be attached to a single Viewer
+        viewer = new Viewer( canvas3D );	             // attach a Viewer to its canvas
+        vp = new ViewingPlatform( 1 );       // 1 VP with 1 TG above
+        createViewer( canvas3D, "F-L", Commons.Orange, eye.x, eye.y, eye.z );
+        su = new SimpleUniverse(vp, viewer); // a SU with one Vp and 3 Viewer
     }
 
     ViewingPlatform createViewer(Canvas3D canvas3D, String name, Color3f clr,
                                  double x, double y, double z) {
-        // a Canvas3D can only be attached to a single Viewer
-        Viewer viewer = new Viewer( canvas3D );	             // attach a Viewer to its canvas
-        ViewingPlatform vp = new ViewingPlatform( 1 );       // 1 VP with 1 TG above
         // assign PG to the Viewer
         vp.setPlatformGeometry( labelPlatformGeometry( name ) );
         viewer.setAvatar( createViewerAvatar( name, clr ) ); // assign VA to the Viewer
@@ -52,12 +49,12 @@ public class Camera {
         // set TG's capabilities to allow KeyNavigatorBehavior modify the Viewer's position
         vp.getViewPlatformTransform( ).setCapability( TransformGroup.ALLOW_TRANSFORM_WRITE );
         vp.getViewPlatformTransform( ).setCapability( TransformGroup.ALLOW_TRANSFORM_READ );
+
         KeyNavigatorBehavior key = new KeyNavigatorBehavior( vp.getViewPlatformTransform( ) );
         key.setSchedulingBounds( new BoundingSphere() );          // enable viewer navigation
         key.setEnable( false );
         vp.addChild( key );                                   // add KeyNavigatorBehavior to VP
-        viewer.setViewingPlatform( vp );                      // set VP for the Viewer
-        Button button = new Button( name );
+        //viewer.setViewingPlatform( vp );                      // set VP for the Viewer
 
         return vp;
     }

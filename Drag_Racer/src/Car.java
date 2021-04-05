@@ -140,6 +140,7 @@ public class Car {
              navigatorTG.getTransform(t3d);
              t3d.setTranslation(new Vector3d(point));
              navigatorTG.setTransform(t3d);
+             Commons.cam.moveCamera(viewposi.x,viewposi.y+0.5f,viewposi.z+3);
              return t3d;
         }
 
