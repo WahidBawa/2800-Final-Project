@@ -25,7 +25,7 @@ public class Menu extends JFrame implements ActionListener {
         titleLabel.setHorizontalTextPosition(JLabel.RIGHT);
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
         titleLabel.setVerticalAlignment(JLabel.TOP);
-        titleLabel.setBounds(100, 50, 250,50);
+        titleLabel.setBounds(50, 50, 350,50);
 
         buttonStart = new JButton();
         buttonStart.setBounds(70,380,100,50);
