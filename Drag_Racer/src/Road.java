@@ -312,6 +312,9 @@ public class Road {
         Commons.createUniverse();
         BranchGroup scene = new BranchGroup(); // create 'scene' as content branch
 
+        Sounds.initialSound(); //initialize the sounds
+        Sounds.playSound(2); //play car starting sounds when game loads
+
         BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.MAX_VALUE);
         scene.addChild(createBkground(Commons.Grey, bounds)); //add background
 

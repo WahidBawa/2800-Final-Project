@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ca5ffad-6381-40a9-86b5-5f229a373d18" name="Default Changelist" comment="added obj for tree">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Drag_Racer/src/Tree.java" beforeDir="false" afterPath="$PROJECT_DIR$/Drag_Racer/src/Tree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Drag_Racer/out/production/Drag_Racer/GroundAndBackground.class" beforeDir="false" afterPath="$PROJECT_DIR$/Drag_Racer/out/production/Drag_Racer/GroundAndBackground.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Drag_Racer/out/production/Drag_Racer/SoundUtilityJOAL.class" beforeDir="false" afterPath="$PROJECT_DIR$/Drag_Racer/out/production/Drag_Racer/SoundUtilityJOAL.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Drag_Racer/out/production/Drag_Racer/Tree.class" beforeDir="false" afterPath="$PROJECT_DIR$/Drag_Racer/out/production/Drag_Racer/Tree.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,9 +81,16 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added obj for tree" />
     <option name="LAST_COMMIT_MESSAGE" value="added obj for tree" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1617586679146">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1617586679146" />
   </component>
 </project>

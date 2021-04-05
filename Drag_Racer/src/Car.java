@@ -26,6 +26,10 @@ public class Car {
         private Matrix3f comMat= new Matrix3f();
         Point3f viewposi = new Point3f(0.0f,0.0f,0.0f);
 //        private final WakeupCondition wakeupCondition;
+        private boolean canUpPlay= true;    //these variables prevent sounds from being played multiple times
+        private boolean canDownPlay= true;
+        private boolean canRPlay= true;
+        private boolean canLPlay= true;
 
         public BehaviorArrowKey(ViewingPlatform targetVP, TransformGroup chasedTG) {
             navigatorTG = chasedTG;
@@ -39,6 +43,7 @@ public class Car {
         }
 
         public void initialize() {
+
             wEnter = new WakeupOnAWTEvent(KeyEvent.KEY_PRESSED);
             wakeupOn(wEnter);                              // decide when behavior becomes live
             comMat.m00 = 1.0f; comMat.m01 = 0.0f; comMat.m02 = 0.0f;
@@ -53,7 +58,7 @@ public class Car {
             Vector3d vct = new Vector3d();
             navigatorTF.get(vct);
 
-            soundJOAL.setPos(snd_pt, viewposi.x,  viewposi.y, viewposi.z); //get the xyz of the movement vector and set the sound location to that vector
+           // soundJOAL.setPos(snd_pt, viewposi.x,  viewposi.y, viewposi.z); //get the xyz of the movement vector and set the sound location to that vector
 
 
             WakeupOnAWTEvent event;
@@ -146,23 +151,66 @@ public class Car {
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_UP) { // check if the key you've pressed is the target key
 
+                        if (canUpPlay) {
+                            Sounds.stopSounds();  //stop all sounds to avoid overlap
+                            Sounds.playSound(1); //play sound
+                            canUpPlay= false; //set false to avoid repeating
+                        }
+                        canDownPlay= true;
+                        canRPlay= true;
+                        canLPlay= true;
+
                         viewposi.x = viewposi.x-3.0f*0.02f*(float)Math.sin(angle);
                          viewposi.z = viewposi.z-3.0f*0.02f*(float)Math.cos(angle);
                          setPosition3D(navigatorTG, viewposi);
+
+
                     }
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT) {
+
+                        Sounds.stopSounds();  //stop all sounds to avoid overlap
+                        if (canLPlay) {
+                            Sounds.stopSounds();  //stop all sounds to avoid overlap
+                            Sounds.playSound(3); //play sound
+                            canLPlay= false; //set false to avoid repeating
+                        }
+                        canDownPlay= true;
+                        canUpPlay= true;
+                        canRPlay= true;
+
                         angle += 0.1;
                         setRotation3D(navigatorTG, 0.1f, comMat, 1);
 
                     }
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT) {
+
+                        Sounds.stopSounds();  //stop all sounds to avoid overlap
+                        if (canRPlay) {
+                            Sounds.stopSounds();  //stop all sounds to avoid overlap
+                            Sounds.playSound(3); //play sound
+                            canRPlay= false; //set false to avoid repeating
+                        }
+                        canDownPlay= true;
+                        canUpPlay= true;
+                        canLPlay= true;
+
                         angle -= 0.1;
                         setRotation3D(navigatorTG, -0.1f, comMat, 1);
                     }
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_DOWN) { // check if the key you've pressed is the target key
+
+                        Sounds.stopSounds();  //stop all sounds to avoid overlap
+                        if (canDownPlay) {
+                            Sounds.stopSounds();  //stop all sounds to avoid overlap
+                            Sounds.playSound(0); //play sound
+                            canDownPlay= false; //set false to avoid repeating
+                        }
+                        canRPlay= true;
+                        canUpPlay= true;
+                        canLPlay= true;
 
                         viewposi.x = viewposi.x+1.0f*0.02f*(float)Math.sin(angle) * 3f;
                         viewposi.z = viewposi.z+1.0f*0.02f*(float)Math.cos(angle) * 3f;
@@ -175,6 +223,8 @@ public class Car {
             }
         }
     }
+
+
 
     private static BranchGroup loadShape() {
         int flags = ObjectFile.RESIZE | ObjectFile.TRIANGULATE | ObjectFile.STRIPIFY;
@@ -247,11 +297,12 @@ public class Car {
 
         objectTG.addChild(objectCAR);
 
-        soundJOAL = new SoundUtilityJOAL();
-        if (!soundJOAL.load(snd_pt, 0f, 0f, 10f, true))     // fix 'snd_pt' at cow location
-            System.out.println("Could not load " + snd_pt);
-        else
-            soundJOAL.play(snd_pt);                         // start 'snd_pt'
+//
+//        soundJOAL = new SoundUtilityJOAL();
+//        if (!soundJOAL.load(snd_pt, 0f, 0f, 10f, true))     // fix 'snd_pt' at cow location
+//            System.out.println("Could not load " + snd_pt);
+//        else
+//            soundJOAL.play(snd_pt);                         // start 'snd_pt'
 
 
 
