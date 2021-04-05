@@ -260,8 +260,9 @@ public class Road {
     public static BranchGroup createScene() {
         Commons.createUniverse();
         BranchGroup scene = new BranchGroup(); // create 'scene' as content branch
+        BranchGroup sceneCar= Car.carObject();
 
-        Commons.pickTool = new PickTool( scene );                   // allow picking of objs in 'sceneBG'
+        Commons.pickTool = new PickTool( sceneCar );                   // allow picking of objs in 'sceneCar'
         Commons.pickTool.setMode(PickTool.BOUNDS);
 
         Sounds.initialSound(); //initialize the sounds
@@ -278,7 +279,7 @@ public class Road {
 
         createLight(scene);
         wallsBarriersRoadLamps(sceneTG);
-        scene.addChild(Car.carObject());
+        scene.addChild(sceneCar);
         scene.compile(); // optimize scene BG
 
         return scene;

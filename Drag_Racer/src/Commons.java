@@ -159,9 +159,10 @@ public class Commons extends JPanel implements MouseListener {
         if (pickTool.pickClosest() != null) {
             System.out.println("working!!!");
             PickResult pickResult = pickTool.pickClosest();   // obtain the closest hit
-            Shape3D car = (Shape3D) pickResult.getNode(PickResult.PRIMITIVE);
+            Shape3D car = (Shape3D) pickResult.getNode(PickResult.SHAPE3D);
             if (car == null) {
                 //IF CAR IS NULL, the object clicked was not a sphere and doesnt need to change
+                System.out.println("working NULLL!!!");
             }
             else {
                 if ((int) car.getUserData() == 1) {               // retrieve 'UserData'
