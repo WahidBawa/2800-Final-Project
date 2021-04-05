@@ -26,8 +26,8 @@ public class Commons extends JPanel implements MouseListener {
     public final static int clr_num = 8;
 
     private static SimpleUniverse su = null;
-    private static Canvas3D canvas_3D;
-    private static JFrame frame;
+    public static Canvas3D canvas_3D;
+    public static JFrame frame;
     private static Point3d eye = new Point3d(1.35, 0.35, 2.0);
     public static PickTool pickTool;
 
@@ -68,18 +68,6 @@ public class Commons extends JPanel implements MouseListener {
         return rot_beh;
     }
 
-    /* a function to position viewer to 'eye' location */
-    public static void defineViewer(SimpleUniverse su) {
-
-        TransformGroup viewTransform = su.getViewingPlatform().getViewPlatformTransform();
-        Point3d center = new Point3d(0, 0, 0);               // define the point where the eye looks at
-        Vector3d up = new Vector3d(0, 1, 0);                 // define camera's up direction
-        Transform3D view_TM = new Transform3D();
-        view_TM.lookAt(eye, center, up);
-        view_TM.invert();
-        viewTransform.setTransform(view_TM);                 // set the TransformGroup of ViewingPlatform
-    }
-
     public static SimpleUniverse getSimpleU() {
         return su;
     }
@@ -102,11 +90,11 @@ public class Commons extends JPanel implements MouseListener {
 
     /* a constructor to set up and run the application */
     public Commons(BranchGroup sceneBG) {
-        GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
-        Canvas3D canvas_3D = new Canvas3D(config);
+        Camera cam = new Camera(eye);
+        Canvas3D canvas_3D = cam.getCanvas3D();
         canvas_3D.addMouseListener(this);
-        SimpleUniverse su = new SimpleUniverse(canvas_3D);   // create a SimpleUniverse
-        defineViewer(su);                                    // set the viewer's location
+
+        SimpleUniverse su = cam.getSu();
 
         sceneBG.compile();
         su.addBranchGraph(sceneBG);                          // attach the scene to SimpleUniverse
@@ -126,7 +114,6 @@ public class Commons extends JPanel implements MouseListener {
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         canvas_3D = new Canvas3D(config);
         su = new SimpleUniverse(canvas_3D);   // create a SimpleUniverse
-        defineViewer(su);                                    // set the viewer's location
     }
 
     public static class MyGUI extends JFrame {
