@@ -75,7 +75,6 @@ public class Car {
 
         Transform3D rotator = new Transform3D();
         Transform3D rotator2 = new Transform3D();
-        Transform3D rotator3 = new Transform3D();
         Transform3D scaler = new Transform3D();
         scaler.setScale(0.6d);
         rotator.rotY(-1.570796);        //this is to rotate around y axis
