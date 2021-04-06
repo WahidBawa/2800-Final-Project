@@ -1,11 +1,12 @@
-import java.util.*;
-
 import com.jogamp.openal.AL;
 import com.jogamp.openal.ALException;
 import com.jogamp.openal.ALFactory;
 import com.jogamp.openal.util.ALut;
 
 import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 public class SoundUtilityJOAL {
     private final static String SOUND_DIR = "Assets/";
@@ -13,8 +14,8 @@ public class SoundUtilityJOAL {
 
     private AL al; // to access the JOAL API
 
-    private HashMap<String, int[]> buffersMap;
-    private HashMap<String, int[]> sourcesMap;
+    private final HashMap<String, int[]> buffersMap;
+    private final HashMap<String, int[]> sourcesMap;
     // store for the sounds: (name, buffer) and (name, source) pairs
 
     // listener info
@@ -22,6 +23,15 @@ public class SoundUtilityJOAL {
     private float[] oriLis; // orientation
     private int angleLis = 0;
     // anti-clockwise rotation anyway from -z axis
+
+    /* construction linking to OpenAL via JOAL and positioning listener at origin */
+    public SoundUtilityJOAL() {
+        buffersMap = new HashMap<String, int[]>();
+        sourcesMap = new HashMap<String, int[]>();
+
+        initOpenAL();
+        initListener();
+    }
 
     public static void main(String[] args) {  // cow ocean
         String soundName = "ocean";
@@ -46,15 +56,6 @@ public class SoundUtilityJOAL {
         soundMan.cleanUp();
     }
 
-    /* construction linking to OpenAL via JOAL and positioning listener at origin */
-    public SoundUtilityJOAL() {
-        buffersMap = new HashMap<String, int[]>();
-        sourcesMap = new HashMap<String, int[]>();
-
-        initOpenAL();
-        initListener();
-    }
-
     /* function to set up the link to OpenAL (OpenAL Utility Toolkit) via JOAL*/
     private void initOpenAL() {
         try {    // creates OpenAL context and makes it current on the current thread
@@ -68,14 +69,15 @@ public class SoundUtilityJOAL {
     }
 
     /* function to position the listener at (0, 0, 0) facing towards (0, 0, -1) */
-    private void initListener()	{
-        xLis = yLis = 0; zLis = 0.0f;                     // position the listener
+    private void initListener() {
+        xLis = yLis = 0;
+        zLis = 0.0f;                     // position the listener
         al.alListener3f(AL.AL_POSITION, xLis, yLis, zLis);
         al.alListener3i(AL.AL_VELOCITY, 0, 0, 0);         // no velocity
 
         // (xAt, yAt, zAt, xUp, yUp, zUp) defines "look-at" and "up" directions
         // Therefore, listener now faces along -z axis, with up being the +y axis
-        oriLis = new float[] { xLis, yLis, zLis - 1.0f, 0.0f, 1.0f, 0.0f};
+        oriLis = new float[]{xLis, yLis, zLis - 1.0f, 0.0f, 1.0f, 0.0f};
         al.alListenerfv(AL.AL_ORIENTATION, oriLis, 0);
     }
 
@@ -160,7 +162,7 @@ public class SoundUtilityJOAL {
 
     /* function to move the sound named 'nm' to position at (x,y,z) */
     public boolean setPos(String nm, float x, float y, float z) {
-        int[] source = (int[]) sourcesMap.get(nm);
+        int[] source = sourcesMap.get(nm);
         if (source == null) {
             System.out.println("No source found for " + nm);
             return false;
@@ -179,7 +181,7 @@ public class SoundUtilityJOAL {
 
     /* function to play or resume the sound named 'nm' */
     public boolean play(String nm) {
-        int[] source = (int[]) sourcesMap.get(nm);
+        int[] source = sourcesMap.get(nm);
         if (source == null) {
             System.out.println("No source found for " + nm);
             return false;
@@ -191,7 +193,7 @@ public class SoundUtilityJOAL {
 
     /* function to stop the playing of the sound named 'nm' */
     public boolean stop(String nm) {
-        int[] source = (int[]) sourcesMap.get(nm);
+        int[] source = sourcesMap.get(nm);
         if (source == null) {
             System.out.println("No source found for " + nm);
             return false;
@@ -202,9 +204,8 @@ public class SoundUtilityJOAL {
     }
 
     /* function to pause the playing of the sound named 'nm' */
-    public boolean pause(String nm)
-    {
-        int[] source = (int[]) sourcesMap.get(nm);
+    public boolean pause(String nm) {
+        int[] source = sourcesMap.get(nm);
         if (source == null) {
             System.out.println("No source found for " + nm);
             return false;
@@ -239,16 +240,22 @@ public class SoundUtilityJOAL {
         al.alListenerfv(AL.AL_ORIENTATION, oriLis, 0);
     }
 
-    public float getX() { return xLis; }
+    public float getX() {
+        return xLis;
+    }
 
-    public float getZ() { return zLis; }
+    public float getZ() {
+        return zLis;
+    }
 
     /* function to turn the listener anti-clockwise by degrees */
     public void turnListener(int degrees) {
         setListenerOri(angleLis + degrees);
     }
 
-    public int getAngle() { return angleLis; }
+    public int getAngle() {
+        return angleLis;
+    }
 
     /* function to set the listener's orientation to 'ang' degrees (in the
      * anti-clockwise direction around the y-axis) */

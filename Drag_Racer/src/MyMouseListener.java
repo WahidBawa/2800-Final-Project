@@ -17,9 +17,11 @@ public class MyMouseListener implements MouseListener {
         this.canvas_3D = canvas_3D;
         this.pickTool = pickTool;
     }
+
     @Override
     public void mouseClicked(MouseEvent event) {
-        int x = event.getX(); int y = event.getY();           // mouse coordinates
+        int x = event.getX();
+        int y = event.getY();           // mouse coordinates
         Point3d point3d = new Point3d(), center = new Point3d();
         canvas_3D.getPixelLocationInImagePlate(x, y, point3d);   // obtain AWT pixel in ImagePlate coordinates
         canvas_3D.getCenterEyeInImagePlate(center);              // obtain eye's position in IP coordinates
@@ -42,8 +44,7 @@ public class MyMouseListener implements MouseListener {
             if (car == null) {
                 //IF CAR IS NULL, the object clicked was not a sphere and doesnt need to change
                 System.out.println("working NULLL!!!");
-            }
-            else {
+            } else {
                 if ((int) car.getUserData() == 1) {               // retrieve 'UserData'
                     Sounds.playSound(4);                      // set 'UserData' to a new value
                 }
@@ -67,8 +68,15 @@ public class MyMouseListener implements MouseListener {
         this.pickTool = pickTool;
     }
 
-    public void mouseEntered(MouseEvent arg0) { }
-    public void mouseExited(MouseEvent arg0) { }
-    public void mousePressed(MouseEvent e) { }
-    public void mouseReleased(MouseEvent e) { }
+    public void mouseEntered(MouseEvent arg0) {
+    }
+
+    public void mouseExited(MouseEvent arg0) {
+    }
+
+    public void mousePressed(MouseEvent e) {
+    }
+
+    public void mouseReleased(MouseEvent e) {
+    }
 }

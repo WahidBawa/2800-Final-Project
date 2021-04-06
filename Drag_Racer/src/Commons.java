@@ -1,17 +1,18 @@
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.geometry.ColorCube;
 import org.jogamp.java3d.utils.picking.PickResult;
 import org.jogamp.java3d.utils.picking.PickTool;
 import org.jogamp.java3d.utils.universe.SimpleUniverse;
-import org.jogamp.vecmath.*;
+import org.jogamp.vecmath.Color3f;
+import org.jogamp.vecmath.Point3d;
+import org.jogamp.vecmath.Vector3d;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class Commons extends JPanel implements MouseListener {
-    private static final long serialVersionUID = 1L;
     public final static Color3f Red = new Color3f(1.0f, 0.0f, 0.0f);
     public final static Color3f Green = new Color3f(0.0f, 1.0f, 0.0f);
     public final static Color3f Blue = new Color3f(0.0f, 0.0f, 1.0f);
@@ -24,14 +25,32 @@ public class Commons extends JPanel implements MouseListener {
     public final static Color3f[] Clrs = {Blue, Green, Red, Yellow,
             Cyan, Orange, Magenta, Grey};
     public final static int clr_num = 8;
-
-    private static SimpleUniverse su = null;
+    private static final long serialVersionUID = 1L;
     public static Camera cam;
     public static MyMouseListener mouseListener;
+    public static PickTool pickTool;
+    private static SimpleUniverse su = null;
     private static Canvas3D canvas_3D;
     private static JFrame frame;
     private static Point3d eye = new Point3d(1.35, 0.35, 2.0);
-    public static PickTool pickTool;
+
+    /* a constructor to set up and run the application */
+    public Commons(BranchGroup sceneBG) {
+        cam = new Camera(eye);
+        Canvas3D canvas_3D = cam.getCanvas3D();
+
+        mouseListener = new MyMouseListener(canvas_3D, pickTool);
+        canvas_3D.addMouseListener(mouseListener);
+        SimpleUniverse su = cam.getSu();   // create a SimpleUniverse
+
+        sceneBG.compile();
+        su.addBranchGraph(sceneBG);                          // attach the scene to SimpleUniverse
+
+        setLayout(new BorderLayout());
+        add("Center", canvas_3D);
+        frame.setSize(600, 600);                             // set the size of the JFrame
+        frame.setVisible(true);
+    }
 
     /* a function to create a rotation behavior and refer it to 'my_TG' */
     public static RotationInterpolator rotateBehavior(int r_num, TransformGroup my_TG) {
@@ -45,11 +64,12 @@ public class Commons extends JPanel implements MouseListener {
         rot_beh.setSchedulingBounds(bounds);
         return rot_beh;
     }
+
     public static RotationInterpolator rotateBehaviorx(int r_num, TransformGroup my_TG) {
 
         my_TG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
         Transform3D xAxis = new Transform3D();
-        xAxis.rotX(Math.PI/2);
+        xAxis.rotX(Math.PI / 2);
         Alpha rotationAlpha = new Alpha(-1, r_num);
         RotationInterpolator rot_beh = new RotationInterpolator(
                 rotationAlpha, my_TG, xAxis, 0.0f, (float) Math.PI * 2.0f);
@@ -57,11 +77,12 @@ public class Commons extends JPanel implements MouseListener {
         rot_beh.setSchedulingBounds(bounds);
         return rot_beh;
     }
+
     public static RotationInterpolator rotateBehaviorz(int r_num, TransformGroup my_TG) {
 
         my_TG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
         Transform3D zAxis = new Transform3D();
-        zAxis.rotZ(Math.PI/2);
+        zAxis.rotZ(Math.PI / 2);
         Alpha rotationAlpha = new Alpha(-1, r_num);
         RotationInterpolator rot_beh = new RotationInterpolator(
                 rotationAlpha, my_TG, zAxis, 0.0f, (float) Math.PI * 2.0f);
@@ -92,7 +113,7 @@ public class Commons extends JPanel implements MouseListener {
 
         TransformGroup content_TG = new TransformGroup();    // create a TransformGroup (TG)
         content_TG.addChild(new ColorCube(0.4f));
-        scene.addChild(content_TG);	                         // add TG to the scene BranchGroup
+        scene.addChild(content_TG);                             // add TG to the scene BranchGroup
         scene.addChild(rotateBehavior(10000, content_TG));   // make TG continuously rotating
 
         return scene;
@@ -100,24 +121,6 @@ public class Commons extends JPanel implements MouseListener {
 
     public static void setEye(Point3d eye_position) {
         eye = eye_position;
-    }
-
-    /* a constructor to set up and run the application */
-    public Commons(BranchGroup sceneBG) {
-        cam = new Camera(eye);
-        Canvas3D canvas_3D = cam.getCanvas3D();
-
-        mouseListener = new MyMouseListener(canvas_3D, pickTool);
-        canvas_3D.addMouseListener(mouseListener);
-        SimpleUniverse su = cam.getSu();   // create a SimpleUniverse
-
-        sceneBG.compile();
-        su.addBranchGraph(sceneBG);                          // attach the scene to SimpleUniverse
-
-        setLayout(new BorderLayout());
-        add("Center", canvas_3D);
-        frame.setSize(600, 600);                             // set the size of the JFrame
-        frame.setVisible(true);
     }
 
     public static void main(String[] args) {
@@ -132,18 +135,10 @@ public class Commons extends JPanel implements MouseListener {
         defineViewer(su);                                    // set the viewer's location
     }
 
-    public static class MyGUI extends JFrame {
-        private static final long serialVersionUID = 1L;
-        public MyGUI(BranchGroup branchGroup, String title) {
-            frame = new JFrame(title);                       // call constructor with 'branchGroup'
-            frame.getContentPane().add(new Commons(branchGroup));
-            pack();
-        }
-    }
-
     @Override
     public void mouseClicked(MouseEvent event) {
-        int x = event.getX(); int y = event.getY();           // mouse coordinates
+        int x = event.getX();
+        int y = event.getY();           // mouse coordinates
         Point3d point3d = new Point3d(), center = new Point3d();
         canvas_3D.getPixelLocationInImagePlate(x, y, point3d);   // obtain AWT pixel in ImagePlate coordinates
         canvas_3D.getCenterEyeInImagePlate(center);              // obtain eye's position in IP coordinates
@@ -165,8 +160,7 @@ public class Commons extends JPanel implements MouseListener {
             Shape3D car = (Shape3D) pickResult.getNode(PickResult.PRIMITIVE);
             if (car == null) {
                 //IF CAR IS NULL, the object clicked was not a sphere and doesnt need to change
-            }
-            else {
+            } else {
                 if ((int) car.getUserData() == 1) {               // retrieve 'UserData'
                     Sounds.playSound(4);                      // set 'UserData' to a new value
                 }
@@ -174,8 +168,25 @@ public class Commons extends JPanel implements MouseListener {
         }
     }
 
-    public void mouseEntered(MouseEvent arg0) { }
-    public void mouseExited(MouseEvent arg0) { }
-    public void mousePressed(MouseEvent e) { }
-    public void mouseReleased(MouseEvent e) { }
+    public void mouseEntered(MouseEvent arg0) {
+    }
+
+    public void mouseExited(MouseEvent arg0) {
+    }
+
+    public void mousePressed(MouseEvent e) {
+    }
+
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    public static class MyGUI extends JFrame {
+        private static final long serialVersionUID = 1L;
+
+        public MyGUI(BranchGroup branchGroup, String title) {
+            frame = new JFrame(title);                       // call constructor with 'branchGroup'
+            frame.getContentPane().add(new Commons(branchGroup));
+            pack();
+        }
+    }
 }

@@ -1,16 +1,14 @@
-
 import org.jogamp.java3d.*;
-import org.jogamp.vecmath.Color3f;
 
 import java.util.Iterator;
 
 /* This behavior of collision detection highlights the
     object when it is in a state of collision. */
 public class CrashingBoundaries extends Behavior {
-    private boolean inCollision;
     private final Shape3D shape;
     private final Texture shapeTexture;
     private final Appearance shapeAppearance;
+    private boolean inCollision;
     private WakeupOnCollisionEntry wEnter;
     private WakeupOnCollisionExit wExit;
 
@@ -34,14 +32,14 @@ public class CrashingBoundaries extends Behavior {
         if (inCollision) { // change color to highlight 'shape'
             try { //Strange error where it thinks appearance wasnt set
                 shapeAppearance.setTexture(grid);
+            } catch (CapabilityNotSetException e) {
             }
-            catch(CapabilityNotSetException e) {}
             wakeupOn(wExit); // keep the color until no collision
         } else { // change color back to its original
             try {//Strange error where it thinks appearance wasnt set
                 shapeAppearance.setTexture(shapeTexture);
+            } catch (CapabilityNotSetException e) {
             }
-            catch(CapabilityNotSetException e) {}
             wakeupOn(wEnter); // wait for collision happens
         }
     }

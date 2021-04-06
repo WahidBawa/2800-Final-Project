@@ -3,34 +3,49 @@
  * Permission required material. Contact: xyuan@uwindsor.ca
  **********************************************************/
 
-import java.awt.BorderLayout;
-import java.awt.GraphicsConfiguration;
-import java.net.URL;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import org.jdesktop.j3d.examples.sound.PointSoundBehavior;
 import org.jdesktop.j3d.examples.sound.audio.JOALMixer;
-import org.jogamp.java3d.Alpha;
-import org.jogamp.java3d.BoundingSphere;
-import org.jogamp.java3d.BranchGroup;
-import org.jogamp.java3d.Canvas3D;
-import org.jogamp.java3d.PointSound;
-import org.jogamp.java3d.RotationInterpolator;
-import org.jogamp.java3d.Transform3D;
-import org.jogamp.java3d.TransformGroup;
+import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
-import org.jogamp.java3d.utils.geometry.ColorCube;
 import org.jogamp.java3d.utils.universe.SimpleUniverse;
 import org.jogamp.java3d.utils.universe.Viewer;
 import org.jogamp.java3d.utils.universe.ViewingPlatform;
 import org.jogamp.vecmath.Point3d;
-import org.jogamp.vecmath.Point3f;
 import org.jogamp.vecmath.Vector3d;
+
+import javax.swing.*;
+import java.awt.*;
+import java.net.URL;
 
 public class SoundCube extends JPanel {
 
     private static final long serialVersionUID = 1L;
+
+    /* a constructor to set up and run the application */
+    public SoundCube() {
+        GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
+        Canvas3D canvas_3D = new Canvas3D(config);
+        SimpleUniverse su = new SimpleUniverse(canvas_3D);   // create a SimpleUniverse
+        enableAudio(su);                                     // enable audio device
+        defineViewer(su, new Point3d(1.35, 0.35, 2.0));    // set the viewer's location
+
+        BranchGroup scene = new BranchGroup();
+        createScene(scene);                           // add contents to the scene branch
+        scene.addChild(keyNavigation(su));                   // allow key navigation
+
+        scene.compile();                                     // optimize the BranchGroup
+        su.addBranchGraph(scene);                            // attach the scene to SimpleUniverse
+
+        setLayout(new BorderLayout());
+        add("Center", canvas_3D);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Java3D Demo with Sound"); // NOTE: change XY to your initials
+        frame.getContentPane().add(new SoundCube());         // create an instance of the class
+        frame.setSize(600, 600);                             // set the size of the JFrame
+        frame.setVisible(true);
+    }
 
     /* a function to create a rotation behavior and refer it to 'my_TG' */
     private RotationInterpolator rotateBehavior(TransformGroup my_TG) {
@@ -60,7 +75,7 @@ public class SoundCube extends JPanel {
     /* a function to enable audio device via JOAL */
     private void enableAudio(SimpleUniverse simple_U) {
 
-        JOALMixer mixer = null;		                         // create a null mixer as a joalmixer
+        JOALMixer mixer = null;                                 // create a null mixer as a joalmixer
         Viewer viewer = simple_U.getViewer();
         viewer.getView().setBackClipDistance(20.0f);         // make object(s) disappear beyond 20f
 
@@ -102,36 +117,9 @@ public class SoundCube extends JPanel {
     /* a function to build the content branch and attach to 'scene' */
     private void createScene(BranchGroup scene) {
         TransformGroup content_TG = new TransformGroup();    // create a TransformGroup (TG)
-        content_TG.addChild(Road.texturePlane("road",0,0));             // attach a ColorCube to TG
+        content_TG.addChild(Road.texturePlane("road", 0, 0));             // attach a ColorCube to TG
         content_TG.addChild(Road.xyzAxis(Commons.Cyan, 1));
-        scene.addChild(content_TG);	                         // add TG to the scene BranchGroup
+        scene.addChild(content_TG);                             // add TG to the scene BranchGroup
         scene.addChild(rotateBehavior(content_TG));          // make TG continuously rotating
-    }
-
-    /* a constructor to set up and run the application */
-    public SoundCube() {
-        GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
-        Canvas3D canvas_3D = new Canvas3D(config);
-        SimpleUniverse su = new SimpleUniverse(canvas_3D);   // create a SimpleUniverse
-        enableAudio(su);                                     // enable audio device
-        defineViewer(su, new Point3d(1.35, 0.35, 2.0));    // set the viewer's location
-
-        BranchGroup scene = new BranchGroup();
-        createScene(scene);                           // add contents to the scene branch
-        scene.addChild(keyNavigation(su));                   // allow key navigation
-
-        scene.compile();		                             // optimize the BranchGroup
-        su.addBranchGraph(scene);                            // attach the scene to SimpleUniverse
-
-        setLayout(new BorderLayout());
-        add("Center", canvas_3D);
-        setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Java3D Demo with Sound"); // NOTE: change XY to your initials
-        frame.getContentPane().add(new SoundCube());         // create an instance of the class
-        frame.setSize(600, 600);                             // set the size of the JFrame
-        frame.setVisible(true);
     }
 }

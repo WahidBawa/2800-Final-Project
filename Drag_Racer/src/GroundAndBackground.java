@@ -12,14 +12,13 @@ import org.jogamp.vecmath.Vector3f;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
-import java.util.Iterator;
 
-public class GroundAndBackground{
+public class GroundAndBackground {
     public static void Tree(TransformGroup objectTG, float x, float z) {
 
         TransformGroup transformGroup = new TransformGroup(); // we will rotate the loaded obj inside of this group
         Transform3D transform = new Transform3D(); // use this to apply the transformations to the transform group
-        transform.setTranslation(new Vector3f(x,1.5f,z));
+        transform.setTranslation(new Vector3f(x, 1.5f, z));
         transformGroup.setTransform(transform); // apply the transformation to the transform group
 
         ObjectFile objectFile = new ObjectFile(ObjectFile.STRIPIFY | ObjectFile.TRIANGULATE | ObjectFile.RESIZE); // used to load in the obj file
@@ -41,10 +40,11 @@ public class GroundAndBackground{
         }
 
     }
-    public static TransformGroup generateCylinder(int size, String file){
+
+    public static TransformGroup generateCylinder(int size, String file) {
         //Transform the object to the correct location
         Transform3D transform3D = new Transform3D();
-        transform3D.setTranslation(new Vector3f(0,1.5f,-15));
+        transform3D.setTranslation(new Vector3f(0, 1.5f, -15));
         TransformGroup scene_TG = new TransformGroup(transform3D);
 
         //Create the banner to hold the text image
@@ -62,24 +62,25 @@ public class GroundAndBackground{
         //Return to create scene
         return scene_TG;
     }
-    private static void baseCylinder(int size, TransformGroup scene){
+
+    private static void baseCylinder(int size, TransformGroup scene) {
         //Create the bases and translate to the correct location
         Transform3D transform3D = new Transform3D();
-        transform3D.setTranslation(new Vector3f(0,0.3f,0));
+        transform3D.setTranslation(new Vector3f(0, 0.3f, 0));
         TransformGroup botBase = new TransformGroup(transform3D);
-        transform3D.setTranslation(new Vector3f(0,-0.2f,0));
+        transform3D.setTranslation(new Vector3f(0, -0.2f, 0));
         TransformGroup topBase = new TransformGroup(transform3D);
 
         //Create the object and rotate
         TransformGroup rotation = new TransformGroup();
-        Cylinder c = new Cylinder(size*1.05f, 0.1f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY, setApp("gridBlue"));
+        Cylinder c = new Cylinder(size * 1.05f, 0.1f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY, setApp("gridBlue"));
         rotation.addChild(c);
         botBase.addChild(rotation);
         botBase.addChild(Commons.rotateBehavior(10000, rotation));
 
         //Create the object and rotate
         rotation = new TransformGroup();
-        c = new Cylinder(size*1.05f, 0.1f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY, setApp("gridBlue"));
+        c = new Cylinder(size * 1.05f, 0.1f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY, setApp("gridBlue"));
         rotation.addChild(c);
         topBase.addChild(rotation);
         topBase.addChild(Commons.rotateBehavior(10000, rotation));
@@ -89,29 +90,30 @@ public class GroundAndBackground{
         scene.addChild(botBase);
     }
 
-    public static TransformGroup generateGround(int size, float h){
+    public static TransformGroup generateGround(int size, float h) {
         TransformGroup scene_TG = new TransformGroup();
         //Loop to tile the ground
-        for(int i = 0; i < size; i++){
-            scene_TG.addChild(ground(new Vector3f(5f, h, 5f), -(i*10), -10));
-            scene_TG.addChild(ground(new Vector3f(5f, h, 5f), -(i*10), 10));
-            scene_TG.addChild(ground(new Vector3f(5f, h, 5f), -(i*10), 0));
-            scene_TG.addChild(sphere(8, 60, 10, -(i*10)));
-            scene_TG.addChild(sphere(8, 60, -10, -(i*10)));
-            Tree(scene_TG, -3, -(i*10));
-            Tree(scene_TG, 3, -(i*10));
+        for (int i = 0; i < size; i++) {
+            scene_TG.addChild(ground(new Vector3f(5f, h, 5f), -(i * 10), -10));
+            scene_TG.addChild(ground(new Vector3f(5f, h, 5f), -(i * 10), 10));
+            scene_TG.addChild(ground(new Vector3f(5f, h, 5f), -(i * 10), 0));
+            scene_TG.addChild(sphere(8, 60, 10, -(i * 10)));
+            scene_TG.addChild(sphere(8, 60, -10, -(i * 10)));
+            Tree(scene_TG, -3, -(i * 10));
+            Tree(scene_TG, 3, -(i * 10));
         }
         return scene_TG;
     }
-    private static Shape3D ground (Vector3f scale, int pos, int w){
+
+    private static Shape3D ground(Vector3f scale, int pos, int w) {
         //Creates all the lines needed for the Ground
-        float uv0[] = {0f, 0f};
-        float uv1[] = {1f, 0f};
-        float uv2[] = {1f, 1f};
-        float uv3[] = {0f, 1f};
+        float[] uv0 = {0f, 0f};
+        float[] uv1 = {1f, 0f};
+        float[] uv2 = {1f, 1f};
+        float[] uv3 = {0f, 1f};
 
         //Setting the coords and the texture of the flat surface
-        QuadArray square = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.COORDINATES| QuadArray.TEXTURE_COORDINATE_2);
+        QuadArray square = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.COORDINATES | QuadArray.TEXTURE_COORDINATE_2);
         square.setCoordinate(0, new Point3d(1 * scale.x + w, -1 * scale.y, 1 * scale.z + pos));
         square.setTextureCoordinate(0, 0, uv0);
         square.setCoordinate(1, new Point3d(1 * scale.x + w, -1 * scale.y, -1 * scale.z + pos));
@@ -125,10 +127,11 @@ public class GroundAndBackground{
         flatGround.setAppearance(setApp("grid"));
         return flatGround;
     }
-    private static TransformGroup sphere(int n, int d, float x, float z){
+
+    private static TransformGroup sphere(int n, int d, float x, float z) {
         //set the sphere to the correct location
         Transform3D move = new Transform3D();
-        move.setTranslation(new Vector3f(x,-6,z));
+        move.setTranslation(new Vector3f(x, -6, z));
         TransformGroup TG = new TransformGroup(move);
 
         //Create the sphere
@@ -149,14 +152,14 @@ public class GroundAndBackground{
         return app;
     }
 
-    public static Texture texturedApp (String name){
+    public static Texture texturedApp(String name) {
         //Load the image
         String filename = "Resources/textures/" + name + ".jpg";
         TextureLoader loader = new TextureLoader(filename, null);
         ImageComponent2D image = loader.getImage();
 
         //Check if the image was not found
-        if(image == null){
+        if (image == null) {
             System.out.println("Cannot load file: " + filename);
         }
 

@@ -32,14 +32,12 @@ public class Sounds {
         String snd_pt = "CarBrake";
         if (key == 1)
             snd_pt = "CarDriving";
-        else if(key ==2){
+        else if (key == 2) {
             snd_pt = "CarEngineStart";
-        }
-        else if(key== 3){
+        } else if (key == 3) {
             snd_pt = "CarTurn";
-        }
-        else if (key==4){
-            snd_pt= "Horn";
+        } else if (key == 4) {
+            snd_pt = "Horn";
         }
         soundJOAL.play(snd_pt);
 //        try {
@@ -48,15 +46,15 @@ public class Sounds {
 //        soundJOAL.stop(snd_pt);
     }
 
-    public static void stopSounds(int mode){
-        if (mode==0) {
+    public static void stopSounds(int mode) {
+        if (mode == 0) {
             soundJOAL.stop("CarBrake");
             soundJOAL.stop("CarDriving");
             soundJOAL.stop("CarEngineStart");
             soundJOAL.stop("CarTurn");
         }
         //this is a special case for the L R buttons to not prematurely stop the blinker sound
-        else{
+        else {
             soundJOAL.stop("CarDriving");
             soundJOAL.stop("CarEngineStart");
             soundJOAL.stop("CarTurn");

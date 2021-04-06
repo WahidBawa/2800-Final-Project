@@ -3,7 +3,6 @@ import org.jogamp.java3d.loaders.IncorrectFormatException;
 import org.jogamp.java3d.loaders.ParsingErrorException;
 import org.jogamp.java3d.loaders.Scene;
 import org.jogamp.java3d.loaders.objectfile.ObjectFile;
-import org.jogamp.java3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
 import org.jogamp.java3d.utils.universe.ViewingPlatform;
 import org.jogamp.vecmath.*;
 
@@ -14,23 +13,110 @@ import java.util.Iterator;
 
 public class Car {
 
-    private static SoundUtilityJOAL soundJOAL;
-    private static String snd_pt = "Car";
-    private static TransformGroup carTF;
     public static TransformGroup objectTG;
+    private static SoundUtilityJOAL soundJOAL;
+    private static final String snd_pt = "Car";
+    private static TransformGroup carTF;
+
+    private static BranchGroup loadShape() {
+        int flags = ObjectFile.RESIZE | ObjectFile.TRIANGULATE | ObjectFile.STRIPIFY;
+        ObjectFile f = new ObjectFile(flags, (float) (60 * Math.PI / 180.0));
+        Scene s = null;
+        try {
+            s = f.load("Assets/Car.obj");
+        } catch (FileNotFoundException e) {
+            System.err.println(e);
+            System.exit(1);
+        } catch (ParsingErrorException e) {
+            System.err.println(e);
+            System.exit(1);
+        } catch (IncorrectFormatException e) {
+            System.err.println(e);
+            System.exit(1);
+        }
+        return s.getSceneGroup();
+    }
+
+    public static Material setMaterialCar(Color3f clr) {
+        //material from lab 6
+        int SH = 2;               // 10
+        Material ma = new Material();
+        ma.setAmbientColor(clr);
+        ma.setEmissiveColor(clr);
+        ma.setDiffuseColor(clr);
+        ma.setSpecularColor(clr);
+        ma.setShininess(SH);
+        ma.setLightingEnable(true);
+        return ma;
+    }
+
+    private static Appearance setApp(Color3f clr) {
+        Appearance app = new Appearance();
+        app.setMaterial(setMaterialCar(Commons.Grey));
+        ColoringAttributes colorAtt = new ColoringAttributes();
+        colorAtt.setColor(clr);
+        app.setColoringAttributes(colorAtt);
+        return app;
+    }
+
+    public static BranchGroup carObject() {
+        BranchGroup objectBG = new BranchGroup();
+        objectTG = new TransformGroup();
+        objectTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+
+        //adding the cow shape here
+        BranchGroup carBG = loadShape();
+        Shape3D carShape = (Shape3D) carBG.getChild(0);
+        carShape.setUserData(1);
+        carShape.setAppearance(setApp(Commons.Grey));
+        TransformGroup objectCAR = new TransformGroup();
+
+        objectCAR.addChild(carBG);
+
+        Transform3D rotator = new Transform3D();
+        Transform3D rotator2 = new Transform3D();
+        Transform3D rotator3 = new Transform3D();
+        Transform3D scaler = new Transform3D();
+        scaler.setScale(0.6d);
+        rotator.rotY(-1.570796);        //this is to rotate around y axis
+        rotator2.rotX(-1.570796);        //this is to rotate around z axis
+        Transform3D trfm = new Transform3D();
+        trfm.set(new Vector3f(0f, 0.06f, 0f));
+        trfm.mul(rotator);
+        trfm.mul(scaler);
+        trfm.mul(rotator2);
+
+        objectCAR.setTransform(trfm);
+        carTF = objectCAR;
+
+        objectTG.setUserData(1);
+
+        objectTG.addChild(objectCAR);
+
+        ViewingPlatform ourView = Commons.getSimpleU().getViewingPlatform();
+        BehaviorArrowKey myViewRotationbehavior = new BehaviorArrowKey(ourView, objectTG);
+        myViewRotationbehavior.setSchedulingBounds(new BoundingSphere());
+        objectTG.addChild(myViewRotationbehavior);
+
+        objectBG.addChild(objectTG);
+
+        return objectBG;
+    }
 
     public static class BehaviorArrowKey extends Behavior {
-        private TransformGroup navigatorTG;
+        Point3f viewposi = new Point3f(0.0f, 0.0f, 0.0f);
+        private final TransformGroup navigatorTG;
         private WakeupOnAWTEvent wEnter;
         private float angle;
-        private float x, y, z;
-        private Matrix3f comMat= new Matrix3f();
-        Point3f viewposi = new Point3f(0.0f,0.0f,0.0f);
-//        private final WakeupCondition wakeupCondition;
-        private boolean canUpPlay= true;    //these variables prevent sounds from being played multiple times
-        private boolean canDownPlay= true;
-        private boolean canRPlay= true;
-        private boolean canLPlay= true;
+        private final float x;
+        private final float y;
+        private final float z;
+        private final Matrix3f comMat = new Matrix3f();
+        //        private final WakeupCondition wakeupCondition;
+        private boolean canUpPlay = true;    //these variables prevent sounds from being played multiple times
+        private boolean canDownPlay = true;
+        private boolean canRPlay = true;
+        private boolean canLPlay = true;
 
         public BehaviorArrowKey(ViewingPlatform targetVP, TransformGroup chasedTG) {
             navigatorTG = chasedTG;
@@ -39,17 +125,21 @@ public class Car {
             x = 0;
             y = 0;
             z = 0;
-
-//            wakeupCondition = new WakeupOr(new WakeupCriterion[]{new WakeupOnAWTEvent(KeyEvent.KEY_PRESSED), new WakeupOnAWTEvent(KeyEvent.KEY_RELEASED)});
         }
 
         public void initialize() {
 
             wEnter = new WakeupOnAWTEvent(KeyEvent.KEY_PRESSED);
             wakeupOn(wEnter);                              // decide when behavior becomes live
-            comMat.m00 = 1.0f; comMat.m01 = 0.0f; comMat.m02 = 0.0f;
-            comMat.m10 = 0.0f; comMat.m11 = 1.0f; comMat.m12 = 0.0f;
-            comMat.m20 = 0.0f; comMat.m21 = 0.0f; comMat.m22 = 1.0f;
+            comMat.m00 = 1.0f;
+            comMat.m01 = 0.0f;
+            comMat.m02 = 0.0f;
+            comMat.m10 = 0.0f;
+            comMat.m11 = 1.0f;
+            comMat.m12 = 0.0f;
+            comMat.m20 = 0.0f;
+            comMat.m21 = 0.0f;
+            comMat.m22 = 1.0f;
         }
 
         @Override
@@ -59,7 +149,7 @@ public class Car {
             Vector3d vct = new Vector3d();
             navigatorTF.get(vct);
 
-           // soundJOAL.setPos(snd_pt, viewposi.x,  viewposi.y, viewposi.z); //get the xyz of the movement vector and set the sound location to that vector
+            // soundJOAL.setPos(snd_pt, viewposi.x,  viewposi.y, viewposi.z); //get the xyz of the movement vector and set the sound location to that vector
 
 
             WakeupOnAWTEvent event;
@@ -121,27 +211,25 @@ public class Car {
             return tempMat;
         }
 
-            private Transform3D setRotation3D(TransformGroup Trans, float angle, Matrix3f rotMat, int mode)
-        { // to set the position after rotation
-             Transform3D rt3d = new Transform3D();
-             Trans.getTransform(rt3d);
-             rotMat.transpose();
-             rotMat.invert();
-             rotMat.mul(rotMat, coMatrix(mode, angle));
-             rt3d.setRotation(rotMat);
-             Trans.setTransform(rt3d);
+        private Transform3D setRotation3D(TransformGroup Trans, float angle, Matrix3f rotMat, int mode) { // to set the position after rotation
+            Transform3D rt3d = new Transform3D();
+            Trans.getTransform(rt3d);
+            rotMat.transpose();
+            rotMat.invert();
+            rotMat.mul(rotMat, coMatrix(mode, angle));
+            rt3d.setRotation(rotMat);
+            Trans.setTransform(rt3d);
 
-             return rt3d;
+            return rt3d;
         }
 
-        private Transform3D setPosition3D(TransformGroup Trans, Point3f point)
-        { // to set the position after movement
-             Transform3D t3d = new Transform3D();
-             navigatorTG.getTransform(t3d);
-             t3d.setTranslation(new Vector3d(point));
-             navigatorTG.setTransform(t3d);
-             Commons.cam.moveCamera(viewposi.x,viewposi.y+0.5f,viewposi.z+3);
-             return t3d;
+        private Transform3D setPosition3D(TransformGroup Trans, Point3f point) { // to set the position after movement
+            Transform3D t3d = new Transform3D();
+            navigatorTG.getTransform(t3d);
+            t3d.setTranslation(new Vector3d(point));
+            navigatorTG.setTransform(t3d);
+            Commons.cam.moveCamera(viewposi.x, viewposi.y + 0.5f, viewposi.z + 3);
+            return t3d;
         }
 
         private void ProcessKeyEvent(AWTEvent[] events) {
@@ -156,15 +244,15 @@ public class Car {
                         if (canUpPlay) {
                             Sounds.stopSounds(0);  //stop all sounds to avoid overlap
                             Sounds.playSound(1); //play sound
-                            canUpPlay= false; //set false to avoid repeating
+                            canUpPlay = false; //set false to avoid repeating
                         }
-                        canDownPlay= true;
-                        canRPlay= true;
-                        canLPlay= true;
+                        canDownPlay = true;
+                        canRPlay = true;
+                        canLPlay = true;
 
-                        viewposi.x = viewposi.x-3.0f*0.02f*(float)Math.sin(angle);
-                         viewposi.z = viewposi.z-3.0f*0.02f*(float)Math.cos(angle);
-                         setPosition3D(navigatorTG, viewposi);
+                        viewposi.x = viewposi.x - 3.0f * 0.02f * (float) Math.sin(angle);
+                        viewposi.z = viewposi.z - 3.0f * 0.02f * (float) Math.cos(angle);
+                        setPosition3D(navigatorTG, viewposi);
 
 
                     }
@@ -174,11 +262,11 @@ public class Car {
                         if (canLPlay) {
                             Sounds.stopSounds(1);  //stop all sounds to avoid overlap
                             Sounds.playSound(3); //play sound
-                            canLPlay= false; //set false to avoid repeating
+                            canLPlay = false; //set false to avoid repeating
                         }
-                        canDownPlay= true;
-                        canUpPlay= true;
-                        canRPlay= true;
+                        canDownPlay = true;
+                        canUpPlay = true;
+                        canRPlay = true;
 
                         angle += 0.1;
                         setRotation3D(navigatorTG, 0.1f, comMat, 1);
@@ -191,11 +279,11 @@ public class Car {
                         if (canRPlay) {
                             Sounds.stopSounds(1);  //stop all sounds to avoid overlap
                             Sounds.playSound(3); //play sound
-                            canRPlay= false; //set false to avoid repeating
+                            canRPlay = false; //set false to avoid repeating
                         }
-                        canDownPlay= true;
-                        canUpPlay= true;
-                        canLPlay= true;
+                        canDownPlay = true;
+                        canUpPlay = true;
+                        canLPlay = true;
 
                         angle -= 0.1;
                         setRotation3D(navigatorTG, -0.1f, comMat, 1);
@@ -207,14 +295,14 @@ public class Car {
                         if (canDownPlay) {
                             Sounds.stopSounds(0);  //stop all sounds to avoid overlap
                             Sounds.playSound(0); //play sound
-                            canDownPlay= false; //set false to avoid repeating
+                            canDownPlay = false; //set false to avoid repeating
                         }
-                        canRPlay= true;
-                        canUpPlay= true;
-                        canLPlay= true;
+                        canRPlay = true;
+                        canUpPlay = true;
+                        canLPlay = true;
 
-                        viewposi.x = viewposi.x+1.0f*0.02f*(float)Math.sin(angle) * 3f;
-                        viewposi.z = viewposi.z+1.0f*0.02f*(float)Math.cos(angle) * 3f;
+                        viewposi.x = viewposi.x + 1.0f * 0.02f * (float) Math.sin(angle) * 3f;
+                        viewposi.z = viewposi.z + 1.0f * 0.02f * (float) Math.cos(angle) * 3f;
                         setPosition3D(navigatorTG, viewposi);
                     }
 
@@ -223,91 +311,5 @@ public class Car {
 
             }
         }
-    }
-
-
-
-    private static BranchGroup loadShape() {
-        int flags = ObjectFile.RESIZE | ObjectFile.TRIANGULATE | ObjectFile.STRIPIFY;
-        ObjectFile f = new ObjectFile(flags, (float) (60 * Math.PI / 180.0));
-        Scene s = null;
-        try {
-            s = f.load("Assets/Car.obj");
-        } catch (FileNotFoundException e) {
-            System.err.println(e);
-            System.exit(1);
-        } catch (ParsingErrorException e) {
-            System.err.println(e);
-            System.exit(1);
-        } catch (IncorrectFormatException e) {
-            System.err.println(e);
-            System.exit(1);
-        }
-        return s.getSceneGroup();
-    }
-
-    public static Material setMaterialCar(Color3f clr) {
-        //material from lab 6
-        int SH = 2;               // 10
-        Material ma = new Material();
-        ma.setAmbientColor(clr);
-        ma.setEmissiveColor(clr);
-        ma.setDiffuseColor(clr);
-        ma.setSpecularColor(clr);
-        ma.setShininess(SH);
-        ma.setLightingEnable(true);
-        return ma;
-    }
-
-    private static Appearance setApp(Color3f clr) {
-        Appearance app = new Appearance();
-        app.setMaterial(setMaterialCar(Commons.Grey));
-        ColoringAttributes colorAtt = new ColoringAttributes();
-        colorAtt.setColor(clr);
-        app.setColoringAttributes(colorAtt);
-        return app;
-    }
-
-    public static BranchGroup carObject() {
-        BranchGroup objectBG = new BranchGroup();
-        objectTG = new TransformGroup();
-        objectTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-
-        //adding the cow shape here
-        BranchGroup carBG = loadShape();
-        Shape3D carShape= (Shape3D)carBG.getChild(0);
-        carShape.setUserData(1);
-        carShape.setAppearance(setApp(Commons.Grey));
-        TransformGroup objectCAR = new TransformGroup();
-
-        objectCAR.addChild(carBG);
-
-        Transform3D rotator = new Transform3D();
-        Transform3D rotator2 = new Transform3D();
-        Transform3D rotator3 = new Transform3D();
-        Transform3D scaler = new Transform3D();
-        scaler.setScale(0.6d);
-        rotator.rotY(-1.570796);		//this is to rotate around y axis
-        rotator2.rotX(-1.570796);		//this is to rotate around z axis
-        Transform3D trfm= new Transform3D();
-        trfm.mul(rotator);
-        trfm.mul(scaler);
-        trfm.mul(rotator2);
-
-        objectCAR.setTransform(trfm);
-        carTF = objectCAR;
-
-        objectTG.setUserData(1);
-
-        objectTG.addChild(objectCAR);
-
-        ViewingPlatform ourView = Commons.getSimpleU().getViewingPlatform();
-        BehaviorArrowKey myViewRotationbehavior = new BehaviorArrowKey(ourView, objectTG);
-        myViewRotationbehavior.setSchedulingBounds(new BoundingSphere());
-        objectTG.addChild(myViewRotationbehavior);
-
-        objectBG.addChild(objectTG);
-
-        return objectBG;
     }
 }

@@ -28,11 +28,11 @@ public class StreetLights {
 
         //There are two light sources, one above and one below the diameters of the spheres, light interact from within the spheres
         PointLight pointLight = new PointLight(true, Commons.White, new Point3f(0, 1, 0), new Point3f(2f, 0, 0));
-        pointLight.setInfluencingBounds(new BoundingSphere(new Point3d(0,0,0), 10f));
+        pointLight.setInfluencingBounds(new BoundingSphere(new Point3d(0, 0, 0), 10f));
         spheres.addChild(pointLight); //add the light to center source
 
         PointLight pointLight2 = new PointLight(true, Commons.White, new Point3f(0, -1, 0), new Point3f(2f, 0, 0));
-        pointLight2.setInfluencingBounds(new BoundingSphere(new Point3d(0,0,0), 10f));
+        pointLight2.setInfluencingBounds(new BoundingSphere(new Point3d(0, 0, 0), 10f));
         spheres.addChild(pointLight2); //add the light to center source
 
         spheres.addChild(Road.materializeSphere(0.2f, Commons.Grey, true));
@@ -48,15 +48,15 @@ public class StreetLights {
         return baseMain;
     }
 
-    public static TransformGroup createLamps(){
-        TransformGroup baseMain= new TransformGroup();
+    public static TransformGroup createLamps() {
+        TransformGroup baseMain = new TransformGroup();
 
         //create n lamps and place them in order down the columns
         //right side
-        for (int i=-1; i<=16; i++) {
+        for (int i = -1; i <= 16; i++) {
             TransformGroup Lamp = new TransformGroup();
             Transform3D translator5 = new Transform3D();
-            translator5.setTranslation(new Vector3f(1.2f, -0.4f, (float) 2*(-i) +3));
+            translator5.setTranslation(new Vector3f(1.2f, -0.4f, (float) 2 * (-i) + 3));
             Transform3D trfm5 = new Transform3D();              // TG for composition matrix
             trfm5.mul(translator5);    // apply translation
             Lamp.addChild(createStreetLight());
@@ -66,10 +66,10 @@ public class StreetLights {
         //yes placing the street lights is weird in the z axis be aware of that
 
         //left side
-        for (int i=-1; i<=16; i++) {
+        for (int i = -1; i <= 16; i++) {
             TransformGroup Lamp = new TransformGroup();
             Transform3D translator5 = new Transform3D();
-            translator5.setTranslation(new Vector3f(-1.2f, -0.4f, (float) 2*(-i) +3));
+            translator5.setTranslation(new Vector3f(-1.2f, -0.4f, (float) 2 * (-i) + 3));
             Transform3D trfm5 = new Transform3D();              // TG for composition matrix
             trfm5.mul(translator5);    // apply translation
             Lamp.addChild(createStreetLight());
