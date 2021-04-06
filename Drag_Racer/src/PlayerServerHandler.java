@@ -20,47 +20,50 @@
         otherTurn <playerID> <posn>
 */
 
-import java.net.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 public class PlayerServerHandler extends Thread {
-	private Server server;
-	private Socket clientSock;
-	private BufferedReader in;
-	private PrintWriter out;
+    private final Server server;
+    private final Socket clientSock;
+    private BufferedReader in;
+    private PrintWriter out;
 
-	private int playerID; // this player id is assigned by CodeNet4By4.FBFServer
+    private int playerID; // this player id is assigned by CodeNet4By4.FBFServer
 
-	public PlayerServerHandler(Socket s, Server serv) {
-		clientSock = s;
-		server = serv;
-		System.out.println("Player connection request");
-		try {
-			in = new BufferedReader(new InputStreamReader(clientSock.getInputStream()));
-			out = new PrintWriter(clientSock.getOutputStream(), true);     // autoflush
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-	}
+    public PlayerServerHandler(Socket s, Server serv) {
+        clientSock = s;
+        server = serv;
+        System.out.println("Player connection request");
+        try {
+            in = new BufferedReader(new InputStreamReader(clientSock.getInputStream()));
+            out = new PrintWriter(clientSock.getOutputStream(), true);     // autoflush
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
 
-	/*
-	 * Add this player to FSFServer array, get an ID, then start processing
-	 * client-side input
-	 */
-	public void run() {
-		playerID = server.addPlayer(this);
-		sendMessage("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIiii");
+    /*
+     * Add this player to FSFServer array, get an ID, then start processing
+     * client-side input
+     */
+    public void run() {
+        playerID = server.addPlayer(this);
+        sendMessage("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIiii");
 
 
-		while (true) {
-			try {
-				if (in.ready()) {
-					System.out.println(in.readLine());
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+        while (true) {
+            try {
+                if (in.ready()) {
+                    System.out.println(in.readLine());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 //		if (playerID != -1) {                 // -1 means adding the player was rejected
 //			sendMessage("ok " + playerID);
 //			System.out.println("ok " + playerID);         // tell player his/her playerID
@@ -79,11 +82,11 @@ public class PlayerServerHandler extends Thread {
 //		} catch (Exception e) {
 //			System.out.println(e);
 //		}
-	}
+    }
 
-	/* Stop when the input stream closes (is null) or "disconnect" is sent.
-	 * Otherwise pass the input to doRequest().
-	 */
+    /* Stop when the input stream closes (is null) or "disconnect" is sent.
+     * Otherwise pass the input to doRequest().
+     */
 //	private void processPlayerInput() {
 //		String line;
 //		boolean done = false;
@@ -103,11 +106,11 @@ public class PlayerServerHandler extends Thread {
 //		}
 //	}
 
-	/*The input line can be : try <posn> -- try to occupy position pos (pos == 0-63)
-	 * 
-	 * No checking of posn done here; we assume the client has checked it. No
-	 * checking of turn order here; we assume the client is doing it
-	 */
+    /*The input line can be : try <posn> -- try to occupy position pos (pos == 0-63)
+     *
+     * No checking of posn done here; we assume the client has checked it. No
+     * checking of turn order here; we assume the client is doing it
+     */
 //	private void doRequest(String line) {
 //		if (line.startsWith("try")) {
 //			try {
@@ -125,24 +128,24 @@ public class PlayerServerHandler extends Thread {
 //		}
 //	}
 
-	/* called by handler and top-level server */
-	synchronized public void sendMessage(String msg) {
-		try {
-			out.println(msg);
-		} catch (Exception e) {
-			System.out.println("Handler for player " + playerID + "\n" + e);
-		}
-	}
+    /* called by handler and top-level server */
+    synchronized public void sendMessage(String msg) {
+        try {
+            out.println(msg);
+        } catch (Exception e) {
+            System.out.println("Handler for player " + playerID + "\n" + e);
+        }
+    }
 
-	synchronized public String getMessage() {
-		try {
-			if (in.ready()) {
-				return in.readLine();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    synchronized public String getMessage() {
+        try {
+            if (in.ready()) {
+                return in.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-		return null;
-	}
+        return null;
+    }
 } 

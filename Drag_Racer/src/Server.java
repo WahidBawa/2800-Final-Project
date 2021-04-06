@@ -1,4 +1,5 @@
-import java.net.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class Server {
     private static final int PORT = 4321;
@@ -12,13 +13,13 @@ public class Server {
 //    private final static int PLAYER2 = 2;             // use to be MACHINE
 
     /* data structures shared by the handlers */
-    private PlayerServerHandler[] handlers;        // handlers for players
+    private final PlayerServerHandler[] handlers;        // handlers for players
     private int numPlayers;
 
     public Server() {                    // Concurrently process players
         handlers = new PlayerServerHandler[MAX_PLAYERS];
 //        handlers[0] = handlers[1] = null;
-        handlers[0]  = null;
+        handlers[0] = null;
         numPlayers = 0;
 
         ServerSocket serverSock;
@@ -31,7 +32,14 @@ public class Server {
                 new PlayerServerHandler(clientSock, this).start();
             }
 
-        } catch (Exception e) { System.out.println(e); }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    // *************************************
+    public static void main(String[] args) {
+        new Server();
     }
 
     /* methods for child threads to access shared data structures */
@@ -61,11 +69,6 @@ public class Server {
         int otherID = ((playerID == PLAYER1) ? PLAYER2 : PLAYER1);
         if (handlers[otherID - 1] != null) // index is ID-1
             handlers[otherID - 1].sendMessage(msg);
-    }
-
-    // *************************************
-    public static void main(String args[]) {
-        new Server();
     }
 
 }

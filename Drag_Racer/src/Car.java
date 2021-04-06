@@ -9,14 +9,13 @@ import org.jogamp.vecmath.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Iterator;
 
 public class Car {
 
+    private static final String snd_pt = "Car";
     public static TransformGroup objectTG;
     private static SoundUtilityJOAL soundJOAL;
-    private static final String snd_pt = "Car";
     private static TransformGroup carTF;
 
     private static BranchGroup loadShape() {
@@ -104,14 +103,14 @@ public class Car {
     }
 
     public static class BehaviorArrowKey extends Behavior {
-        Point3f viewposi = new Point3f(0.0f, 0.0f, 0.0f);
         private final TransformGroup navigatorTG;
-        private WakeupOnAWTEvent wEnter;
-        private float angle;
         private final float x;
         private final float y;
         private final float z;
         private final Matrix3f comMat = new Matrix3f();
+        Point3f viewposi = new Point3f(0.0f, 0.0f, 0.0f);
+        private WakeupOnAWTEvent wEnter;
+        private float angle;
         //        private final WakeupCondition wakeupCondition;
         private boolean canUpPlay = true;    //these variables prevent sounds from being played multiple times
         private boolean canDownPlay = true;
@@ -305,16 +304,6 @@ public class Car {
                         viewposi.z = viewposi.z + 1.0f * 0.02f * (float) Math.cos(angle) * 3f;
                         setPosition3D(navigatorTG, viewposi);
                     }
-
-                    if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
-                        try {
-                            System.out.println(Road.client.getMessage());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-
                 }
 
             }

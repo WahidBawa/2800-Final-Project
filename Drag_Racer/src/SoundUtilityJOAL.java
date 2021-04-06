@@ -11,13 +11,10 @@ import java.util.Set;
 public class SoundUtilityJOAL {
     private final static String SOUND_DIR = "Assets/";
     // where the WAV files are located
-
-    private AL al; // to access the JOAL API
-
     private final HashMap<String, int[]> buffersMap;
     private final HashMap<String, int[]> sourcesMap;
+    private AL al; // to access the JOAL API
     // store for the sounds: (name, buffer) and (name, source) pairs
-
     // listener info
     private float xLis, yLis, zLis; // current position
     private float[] oriLis; // orientation

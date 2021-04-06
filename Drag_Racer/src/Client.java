@@ -46,11 +46,11 @@ public class Client extends Thread {
     }
 
     public String getMessage() throws IOException {
-       if (in.ready()) {
-           return in.readLine();
-       }
+        if (in.ready()) {
+            return in.readLine();
+        }
 
-       return null;
+        return null;
     }
 
 
