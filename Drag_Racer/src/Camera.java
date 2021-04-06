@@ -38,7 +38,7 @@ public class Camera {
         vp.setPlatformGeometry(labelPlatformGeometry(name));
         viewer.setAvatar(createViewerAvatar(name, clr)); // assign VA to the Viewer
 
-        Point3d center = new Point3d(0, 0, 0);               // define where the eye looks at
+        Point3d center = new Point3d(0, 0.5f, 0);               // define where the eye looks at
         Vector3d up = new Vector3d(0, 1, 0);                 // define camera's up direction
         Transform3D viewTM = new Transform3D();
         Point3d eye = new Point3d(x, y, z);                  // define eye's location
