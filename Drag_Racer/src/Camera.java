@@ -25,9 +25,6 @@ public class Camera {
         createViewer(canvas3D, "F-L", Commons.Orange, eye.x, eye.y, eye.z);
         su = new SimpleUniverse(vp, viewer); // a SU with one Vp and 3 Viewer
 
-        Transform3D t1 = new Transform3D();
-        t1.setTranslation(new Vector3f(0, 0.06f + 0.6f, 3));
-        vp.getViewPlatformTransform().setTransform(t1);
     }
 
     public void moveCamera(float x, float y, float z) {
