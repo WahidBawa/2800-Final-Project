@@ -9,6 +9,7 @@ import org.jogamp.vecmath.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Iterator;
 
 public class Car {
@@ -303,6 +304,14 @@ public class Car {
                         viewposi.x = viewposi.x + 1.0f * 0.02f * (float) Math.sin(angle) * 3f;
                         viewposi.z = viewposi.z + 1.0f * 0.02f * (float) Math.cos(angle) * 3f;
                         setPosition3D(navigatorTG, viewposi);
+                    }
+
+                    if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
+                        try {
+                            System.out.println(Road.client.getMessage());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
 
 

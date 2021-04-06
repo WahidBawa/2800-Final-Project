@@ -6,8 +6,11 @@ import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.java3d.utils.picking.PickTool;
 import org.jogamp.vecmath.*;
 
+import java.io.IOException;
+
 public class Road {
     private static final Point3d pt_zero = new Point3d(0d, 0d, 0d);
+    public static Client client;
 
     private static Background createBkground(Color3f clr, BoundingSphere bounds) {
         //creating the background using background attribute
@@ -274,12 +277,22 @@ public class Road {
     }
 
     public static void main(String[] args) {
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 Commons.setEye(new Point3d(0, 0.5f, 3));
                 new Commons.MyGUI(createScene(), "Drag Racing Game");
             }
         });
+
+
+        try {
+            client = new Client();
+            client.start();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
