@@ -18,7 +18,7 @@ public class GroundAndBackground {
 
         TransformGroup transformGroup = new TransformGroup(); // we will rotate the loaded obj inside of this group
         Transform3D transform = new Transform3D(); // use this to apply the transformations to the transform group
-        transform.setTranslation(new Vector3f(x, 1.5f, z));
+        transform.setTranslation(new Vector3f(x, 0.8f, z));
         transformGroup.setTransform(transform); // apply the transformation to the transform group
 
         ObjectFile objectFile = new ObjectFile(ObjectFile.STRIPIFY | ObjectFile.TRIANGULATE | ObjectFile.RESIZE); // used to load in the obj file
