@@ -87,7 +87,7 @@ public class Menu extends JFrame implements ActionListener {
         player1LT.setBounds(53, 180, 120,30);
 
         //label for time double value <--- we'd be setting this at the end of the race
-        player1LTC = new JLabel("1.2334443 sec "); //create label
+        player1LTC = new JLabel("NULL sec "); //create label
         player1LTC.setFont(new Font("SansSerif",Font.BOLD, 14));
         player1LTC.setIconTextGap(30); //sets the gap of image from text
         player1LTC.setHorizontalTextPosition(JLabel.RIGHT);
@@ -105,7 +105,7 @@ public class Menu extends JFrame implements ActionListener {
         player2LT.setBounds(53, 210, 120,30);
 
         //label for p2 time double value <--- we'd be setting this at the end of the race
-        player2LTC = new JLabel("1.22222222 sec "); //create label
+        player2LTC = new JLabel("NULL sec "); //create label
         player2LTC.setFont(new Font("SansSerif",Font.BOLD, 14));
         player2LTC.setIconTextGap(30); //sets the gap of image from text
         player2LTC.setHorizontalTextPosition(JLabel.RIGHT);

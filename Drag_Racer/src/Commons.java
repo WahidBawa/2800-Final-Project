@@ -197,7 +197,7 @@ public class Commons extends JPanel implements MouseListener {
             frame = new JFrame(title);                       // call constructor with 'branchGroup'
             frame.getContentPane().add(new Commons(branchGroup));
             pack();
-
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
     }
 }
