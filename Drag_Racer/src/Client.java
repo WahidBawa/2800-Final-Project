@@ -14,7 +14,6 @@ public class Client extends Thread {
     private BufferedReader in;
     private boolean counting, raceEnded, messageSent, idReceived;
 
-
     public Client() throws IOException {
         counting = false;
         startTime = endTime = 0;
@@ -70,7 +69,6 @@ public class Client extends Thread {
         if (in.ready()) {
             return in.readLine();
         }
-
         return null;
     }
 
@@ -91,14 +89,6 @@ public class Client extends Thread {
             raceEnded = true;
             endTime = System.currentTimeMillis();
         }
-    }
-
-    public double getTimePassed() {
-        if (counting) {
-            return (System.currentTimeMillis() - startTime) / 1000f;
-        }
-
-        return 0;
     }
 
     public double getFinalTime() {

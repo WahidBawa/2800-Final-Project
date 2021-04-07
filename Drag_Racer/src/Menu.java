@@ -188,6 +188,11 @@ public class Menu extends JFrame implements ActionListener {
             }
             outLabel.setForeground(Color.yellow);
 
+            Sounds.soundJOAL.stop("CarBrake");
+            Sounds.soundJOAL.stop("CarDriving");
+            Sounds.soundJOAL.stop("CarEngineStart");
+            Sounds.soundJOAL.stop("CarTurn");
+            Sounds.soundJOAL.stop("Horn");
 
             Commons.frame.dispose();
         }

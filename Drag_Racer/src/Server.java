@@ -4,11 +4,10 @@ import java.net.Socket;
 public class Server {
     private static final int PORT = 4321;
 
-    private static final int MAX_PLAYERS = 2;         // two-person game
+    private static final int MAX_PLAYERS = 2;
     private final static int PLAYER1 = 1;
-    private final static int PLAYER2 = 2;             // use to be MACHINE
+    private final static int PLAYER2 = 2;
 
-    /* data structures shared by the handlers */
     private final PlayerServerHandler[] handlers;        // handlers for players
     private int numPlayers;
 
@@ -32,24 +31,20 @@ public class Server {
         }
     }
 
-    // *************************************
     public static void main(String[] args) {
         new Server();
     }
 
-    /* methods for child threads to access shared data structures */
     synchronized public boolean enoughPlayers() {
         return (numPlayers == MAX_PLAYERS);
     }
 
-    /* store a reference to the handler, and return a player ID to the handler.
-     * The ID is the array index where the handler is stored + 1. */
     synchronized public int addPlayer(PlayerServerHandler h) {
         for (int i = 0; i < MAX_PLAYERS; i++)
             if (handlers[i] == null) {
                 handlers[i] = h;
                 numPlayers++;
-                if (numPlayers == MAX_PLAYERS) {
+                if (enoughPlayers()) {
                     System.out.println("WE HAVE REACHED THE MAX AMOUNT OF PLAYERS");
                 }
                 return i + 1; // playerID is 1 or 2 (array index + 1)
@@ -59,12 +54,6 @@ public class Server {
         return -1; // means we have enough players already
     }
 
-    synchronized public void removePlayer(int playerID) {
-        handlers[playerID - 1] = null;      // no checking done of player value
-        numPlayers--;
-    }
-
-    /* a function to send message to the other player */
     synchronized public void tellOther(int playerID, String msg) {
         int otherID = ((playerID == PLAYER1) ? PLAYER2 : PLAYER1);
         if (handlers[otherID - 1] != null) // index is ID-1

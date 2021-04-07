@@ -1,6 +1,6 @@
 public class Sounds {
 
-    private static SoundUtilityJOAL soundJOAL;               // needed for sound
+    public static SoundUtilityJOAL soundJOAL;               // needed for sound
 
     public static void initialSound() {
         soundJOAL = new SoundUtilityJOAL();
@@ -40,10 +40,6 @@ public class Sounds {
             snd_pt = "Horn";
         }
         soundJOAL.play(snd_pt);
-//        try {
-//            Thread.sleep(100); // sleep for 0.5 secs
-//        } catch (InterruptedException ex) {}
-//        soundJOAL.stop(snd_pt);
     }
 
     public static void stopSounds(int mode) {
