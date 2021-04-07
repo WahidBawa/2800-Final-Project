@@ -19,10 +19,14 @@ public class Menu extends JFrame implements ActionListener {
     private static JButton buttonStart; //start button
     private static JButton buttonExit; //exit button
 
+    private static boolean player1Received, player2Received;
+
 
     public Menu() {
 
         frame = new JFrame();
+
+        player1Received = player2Received = false;
 
         ImageIcon logo = new ImageIcon(new ImageIcon("Assets/checkered_flag.png").getImage().getScaledInstance(30,30, Image.SCALE_DEFAULT)); //create an image icon
         titleLabel = new JLabel("Drag Racer!"); //create label
@@ -109,7 +113,7 @@ public class Menu extends JFrame implements ActionListener {
         player2LTC.setVerticalAlignment(JLabel.TOP);
         player2LTC.setBounds(180, 210, 120,30);
 
-        outLabel = new JLabel("Player 1 Wins!"); //create label
+        outLabel = new JLabel("NO WINNER YET"); //create label
         outLabel.setFont(new Font("SansSerif",Font.BOLD, 20));
         outLabel.setHorizontalTextPosition(JLabel.RIGHT);
         outLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -167,11 +171,25 @@ public class Menu extends JFrame implements ActionListener {
             player1LC.setText("true");
             player1LC.setForeground(Color.green);
             player1LTC.setText(time);
+            player1Received = true;
         }
         else{
             player2LC.setText("true");
             player2LC.setForeground(Color.green);
             player2LTC.setText(time);
+            player2Received = true;
+        }
+
+        if (player1Received && player2Received) {
+            if (Float.parseFloat(player1LTC.getText()) < Float.parseFloat(player2LTC.getText())) {
+                outLabel.setText("Player 1 Wins");
+            } else {
+                outLabel.setText("Player 2 Wins");
+            }
+            outLabel.setForeground(Color.yellow);
+
+
+            Commons.frame.dispose();
         }
 
     }

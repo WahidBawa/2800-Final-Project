@@ -33,7 +33,7 @@ public class Commons extends JPanel implements MouseListener {
     public static Client client;
     private static SimpleUniverse su = null;
     private static Canvas3D canvas_3D;
-    private static JFrame frame;
+    public static JFrame frame;
     private static Point3d eye = new Point3d(1.35, 0.35, 2.0);
 
     /* a constructor to set up and run the application */
@@ -197,6 +197,7 @@ public class Commons extends JPanel implements MouseListener {
             frame = new JFrame(title);                       // call constructor with 'branchGroup'
             frame.getContentPane().add(new Commons(branchGroup));
             pack();
+
         }
     }
 }
