@@ -28,97 +28,97 @@ public class Menu extends JFrame implements ActionListener {
 
         player1Received = player2Received = false;
 
-        ImageIcon logo = new ImageIcon(new ImageIcon("Assets/checkered_flag.png").getImage().getScaledInstance(30,30, Image.SCALE_DEFAULT)); //create an image icon
+        ImageIcon logo = new ImageIcon(new ImageIcon("Assets/checkered_flag.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)); //create an image icon
         titleLabel = new JLabel("Drag Racer!"); //create label
         titleLabel.setIcon(logo);
-        titleLabel.setFont(new Font("SansSerif",Font.BOLD, 30));
-        titleLabel.setFont(new Font("SansSerif",Font.BOLD, 40));
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 30));
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 40));
         titleLabel.setIconTextGap(30); //sets the gap of image from text
         titleLabel.setHorizontalTextPosition(JLabel.RIGHT);
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
         titleLabel.setVerticalAlignment(JLabel.TOP);
-        titleLabel.setBounds(50, 50, 350,50);
+        titleLabel.setBounds(50, 50, 350, 50);
 
         //label for connection of p1
         player1L = new JLabel("Player 1 data received:"); //create label
-        player1L.setFont(new Font("SansSerif",Font.BOLD, 10));
+        player1L.setFont(new Font("SansSerif", Font.BOLD, 10));
         player1L.setIconTextGap(30); //sets the gap of image from text
         player1L.setHorizontalTextPosition(JLabel.RIGHT);
         player1L.setHorizontalAlignment(JLabel.CENTER);
         player1L.setVerticalAlignment(JLabel.TOP);
-        player1L.setBounds(20, 140, 120,30);
+        player1L.setBounds(20, 140, 120, 30);
 
         //p1 connection status
         player1LC = new JLabel("null"); //create label
         player1LC.setForeground(Color.red);
-        player1LC.setFont(new Font("SansSerif",Font.BOLD, 10));
+        player1LC.setFont(new Font("SansSerif", Font.BOLD, 10));
         player1LC.setIconTextGap(30); //sets the gap of image from text
         player1LC.setHorizontalTextPosition(JLabel.RIGHT);
         player1LC.setHorizontalAlignment(JLabel.CENTER);
         player1LC.setVerticalAlignment(JLabel.TOP);
-        player1LC.setBounds(140, 140, 50,30);
+        player1LC.setBounds(140, 140, 50, 30);
 
         //label for connection of p2
         player2L = new JLabel("Player 2 data received:"); //create label
-        player2L.setFont(new Font("SansSerif",Font.BOLD, 10));
+        player2L.setFont(new Font("SansSerif", Font.BOLD, 10));
         player2L.setIconTextGap(30); //sets the gap of image from text
         player2L.setHorizontalTextPosition(JLabel.RIGHT);
         player2L.setHorizontalAlignment(JLabel.CENTER);
         player2L.setVerticalAlignment(JLabel.TOP);
-        player2L.setBounds(220, 140, 120,30);
+        player2L.setBounds(220, 140, 120, 30);
 
         //p2 connection status
         player2LC = new JLabel("null"); //create label
         player2LC.setForeground(Color.red);
-        player2LC.setFont(new Font("SansSerif",Font.BOLD, 10));
+        player2LC.setFont(new Font("SansSerif", Font.BOLD, 10));
         player2LC.setIconTextGap(30); //sets the gap of image from text
         player2LC.setHorizontalTextPosition(JLabel.RIGHT);
         player2LC.setHorizontalAlignment(JLabel.CENTER);
         player2LC.setVerticalAlignment(JLabel.TOP);
-        player2LC.setBounds(340, 140, 50,30);
+        player2LC.setBounds(340, 140, 50, 30);
 
         //label for time
         player1LT = new JLabel("Player 1 time: "); //create label
-        player1LT.setFont(new Font("SansSerif",Font.BOLD, 14));
+        player1LT.setFont(new Font("SansSerif", Font.BOLD, 14));
         player1LT.setIconTextGap(30); //sets the gap of image from text
         player1LT.setHorizontalTextPosition(JLabel.RIGHT);
         player1LT.setHorizontalAlignment(JLabel.CENTER);
         player1LT.setVerticalAlignment(JLabel.TOP);
-        player1LT.setBounds(53, 180, 120,30);
+        player1LT.setBounds(53, 180, 120, 30);
 
         //label for time double value <--- we'd be setting this at the end of the race
         player1LTC = new JLabel("NULL sec "); //create label
-        player1LTC.setFont(new Font("SansSerif",Font.BOLD, 14));
+        player1LTC.setFont(new Font("SansSerif", Font.BOLD, 14));
         player1LTC.setIconTextGap(30); //sets the gap of image from text
         player1LTC.setHorizontalTextPosition(JLabel.RIGHT);
         player1LTC.setHorizontalAlignment(JLabel.CENTER);
         player1LTC.setVerticalAlignment(JLabel.TOP);
-        player1LTC.setBounds(180, 180, 120,30);
+        player1LTC.setBounds(180, 180, 120, 30);
 
         //label for p2 time
         player2LT = new JLabel("Player 2 time: "); //create label
-        player2LT.setFont(new Font("SansSerif",Font.BOLD, 14));
+        player2LT.setFont(new Font("SansSerif", Font.BOLD, 14));
         player2LT.setIconTextGap(30); //sets the gap of image from text
         player2LT.setHorizontalTextPosition(JLabel.RIGHT);
         player2LT.setHorizontalAlignment(JLabel.CENTER);
         player2LT.setVerticalAlignment(JLabel.TOP);
-        player2LT.setBounds(53, 210, 120,30);
+        player2LT.setBounds(53, 210, 120, 30);
 
         //label for p2 time double value <--- we'd be setting this at the end of the race
         player2LTC = new JLabel("NULL sec "); //create label
-        player2LTC.setFont(new Font("SansSerif",Font.BOLD, 14));
+        player2LTC.setFont(new Font("SansSerif", Font.BOLD, 14));
         player2LTC.setIconTextGap(30); //sets the gap of image from text
         player2LTC.setHorizontalTextPosition(JLabel.RIGHT);
         player2LTC.setHorizontalAlignment(JLabel.CENTER);
         player2LTC.setVerticalAlignment(JLabel.TOP);
-        player2LTC.setBounds(180, 210, 120,30);
+        player2LTC.setBounds(180, 210, 120, 30);
 
         outLabel = new JLabel("NO WINNER YET"); //create label
-        outLabel.setFont(new Font("SansSerif",Font.BOLD, 20));
+        outLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
         outLabel.setHorizontalTextPosition(JLabel.RIGHT);
         outLabel.setHorizontalAlignment(JLabel.CENTER);
         outLabel.setVerticalAlignment(JLabel.TOP);
-        outLabel.setBounds(50, 300, 350,50);
+        outLabel.setBounds(50, 300, 350, 50);
 
         buttonStart = new JButton();
         buttonStart.setBounds(70, 380, 100, 50);
@@ -166,14 +166,13 @@ public class Menu extends JFrame implements ActionListener {
 
     }
 
-    public static void updateTimes(int PlayerID, String time){
-        if (PlayerID==1){
+    public static void updateTimes(int PlayerID, String time) {
+        if (PlayerID == 1) {
             player1LC.setText("true");
             player1LC.setForeground(Color.green);
             player1LTC.setText(time);
             player1Received = true;
-        }
-        else{
+        } else {
             player2LC.setText("true");
             player2LC.setForeground(Color.green);
             player2LTC.setText(time);

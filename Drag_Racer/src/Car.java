@@ -15,9 +15,9 @@ public class Car {
 
     private static final String snd_pt = "Car";
     public static TransformGroup objectTG;  //car tg group
+    public static int previousKey = -1; //previous key input
     private static SoundUtilityJOAL soundJOAL;
     private static TransformGroup carTF;
-    public static int previousKey= -1; //previous key input
 
     /*
     function used to load the car shape, similar to assignments
@@ -115,12 +115,12 @@ public class Car {
 
     public static class BehaviorArrowKey extends Behavior {
         public static TransformGroup navigatorTG;
+        public static Point3f viewposi = new Point3f(0.0f, 0.0f, 0.0f);
+        public static Point3f viewposiPrevious = new Point3f(0.0f, 0.0f, 0.0f);
         private final float x;
         private final float y;
         private final float z;
         private final Matrix3f comMat = new Matrix3f();
-        public static Point3f viewposi = new Point3f(0.0f, 0.0f, 0.0f);
-        public static Point3f viewposiPrevious = new Point3f(0.0f, 0.0f, 0.0f);
         private WakeupOnAWTEvent wEnter;
         private float angle;
         //        private final WakeupCondition wakeupCondition;
@@ -137,6 +137,20 @@ public class Car {
             y = 0;
             z = 0;
         }
+
+        /*
+        set the new position of the car, this function can be thought of as the calculation that find the next point the car must move
+        based on key input AND current heading!
+         */
+        public static Transform3D setPosition3D(TransformGroup Trans, Point3f point) { // to set the position after movement
+            Transform3D t3d = new Transform3D();
+            navigatorTG.getTransform(t3d);
+            t3d.setTranslation(new Vector3d(point));
+            navigatorTG.setTransform(t3d);
+            Commons.cam.moveCamera(viewposi.x, viewposi.y + 0.5f, viewposi.z + 3);
+            return t3d;
+        }
+
         /*
         create an empty matrix! super important for keeping the car straight
          */
@@ -167,7 +181,6 @@ public class Car {
             navigatorTF.get(vct);
 
             // soundJOAL.setPos(snd_pt, viewposi.x,  viewposi.y, viewposi.z); //get the xyz of the movement vector and set the sound location to that vector
-
 
 
             WakeupOnAWTEvent event;
@@ -241,19 +254,6 @@ public class Car {
             return rt3d;
         }
 
-        /*
-        set the new position of the car, this function can be thought of as the calculation that find the next point the car must move
-        based on key input AND current heading!
-         */
-        public static Transform3D setPosition3D(TransformGroup Trans, Point3f point) { // to set the position after movement
-            Transform3D t3d = new Transform3D();
-            navigatorTG.getTransform(t3d);
-            t3d.setTranslation(new Vector3d(point));
-            navigatorTG.setTransform(t3d);
-            Commons.cam.moveCamera(viewposi.x, viewposi.y + 0.5f, viewposi.z + 3);
-            return t3d;
-        }
-
         //key proccessing
         private void ProcessKeyEvent(AWTEvent[] events) {
             for (AWTEvent event : events) { // iterate through events
@@ -270,8 +270,8 @@ public class Car {
 
                     Note each key behaviour has a similar if else
                      */
-                    if ((keyEvent.getKeyCode() == KeyEvent.VK_UP && CrashingBoundaries.inCollision && previousKey!=KeyEvent.VK_UP) || (keyEvent.getKeyCode() == KeyEvent.VK_UP && !CrashingBoundaries.inCollision)) { // check if the key you've pressed is the target key
-                        previousKey= KeyEvent.VK_UP;
+                    if ((keyEvent.getKeyCode() == KeyEvent.VK_UP && CrashingBoundaries.inCollision && previousKey != KeyEvent.VK_UP) || (keyEvent.getKeyCode() == KeyEvent.VK_UP && !CrashingBoundaries.inCollision)) { // check if the key you've pressed is the target key
+                        previousKey = KeyEvent.VK_UP;
 
                         if (canUpPlay) {
                             Sounds.stopSounds(0);  //stop all sounds to avoid overlap
@@ -297,7 +297,7 @@ public class Car {
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT) {
 
-                        previousKey= KeyEvent.VK_LEFT;
+                        previousKey = KeyEvent.VK_LEFT;
 
                         if (canLPlay) {
                             Sounds.stopSounds(1);  //stop all sounds to avoid overlap
@@ -316,7 +316,7 @@ public class Car {
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT) {
 
-                        previousKey= KeyEvent.VK_RIGHT;
+                        previousKey = KeyEvent.VK_RIGHT;
 
                         if (canRPlay) {
                             Sounds.stopSounds(1);  //stop all sounds to avoid overlap
@@ -333,9 +333,9 @@ public class Car {
                     }
 
 
-                    if ((keyEvent.getKeyCode() == KeyEvent.VK_DOWN && CrashingBoundaries.inCollision && previousKey!=KeyEvent.VK_DOWN) || (keyEvent.getKeyCode() == KeyEvent.VK_DOWN && !CrashingBoundaries.inCollision)) { // check if the key you've pressed is the target key
+                    if ((keyEvent.getKeyCode() == KeyEvent.VK_DOWN && CrashingBoundaries.inCollision && previousKey != KeyEvent.VK_DOWN) || (keyEvent.getKeyCode() == KeyEvent.VK_DOWN && !CrashingBoundaries.inCollision)) { // check if the key you've pressed is the target key
 
-                        previousKey= KeyEvent.VK_DOWN;
+                        previousKey = KeyEvent.VK_DOWN;
 
                         if (canDownPlay) {
                             Sounds.stopSounds(0);  //stop all sounds to avoid overlap

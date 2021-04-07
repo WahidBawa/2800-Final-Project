@@ -57,7 +57,7 @@ public class PlayerServerHandler extends Thread {
                 if (in.ready()) {
                     String str = in.readLine();
                     if (str.startsWith("FINISHED: ")) {
-                       server.tellOther(playerID, "TIME:" + playerID + ":" + str.split(" ")[1]);
+                        server.tellOther(playerID, "TIME:" + playerID + ":" + str.split(" ")[1]);
                     }
                 }
             } catch (IOException e) {
