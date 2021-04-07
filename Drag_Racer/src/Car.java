@@ -14,9 +14,7 @@ import java.util.Iterator;
 public class Car {
 
     private static final String snd_pt = "Car";
-    public static TransformGroup objectTG;
-    public static int previousKey = -1;
-    public static TransformGroup objectTG;  //car tf group
+    public static TransformGroup objectTG;  //car tg group
     private static SoundUtilityJOAL soundJOAL;
     private static TransformGroup carTF;
     public static int previousKey= -1; //previous key input
