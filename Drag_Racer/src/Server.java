@@ -50,7 +50,6 @@ public class Server {
                 return i + 1; // playerID is 1 or 2 (array index + 1)
             }
 
-
         return -1; // means we have enough players already
     }
 

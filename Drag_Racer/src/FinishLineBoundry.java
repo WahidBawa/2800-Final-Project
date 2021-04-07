@@ -28,7 +28,6 @@ public class FinishLineBoundry extends Behavior {
     }
 
     public void processStimulus(Iterator<WakeupCriterion> criteria) {
-        Texture grid = GroundAndBackground.texturedApp("grid");
         inCollision = !inCollision; // collision has taken place
 
         if (inCollision) { // change color to highlight 'shape'

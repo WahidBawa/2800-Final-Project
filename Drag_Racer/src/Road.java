@@ -25,14 +25,6 @@ public class Road {
         AmbientLight ambientLight = new AmbientLight(true, new Color3f(0.2f, 0.2f, 0.2f)); // lightOn set to true, with Color3f(0.2f, 0.2f, 0.,2f)
         ambientLight.setInfluencingBounds(new BoundingSphere(new Point3d(0, 0, 0), 100));// set influencing bounds with bouding sphere at point3d (0,0,0) with radius 100
         bg.addChild(ambientLight); // add child to branch group with ambient light
-
-        //point lights moved to StreetLights
-    }
-
-    private static ExponentialFog createFog(Color3f clr, BoundingSphere bounds) {
-        ExponentialFog exponentialFog = new ExponentialFog(clr, 0.1f); // set up exponential fog with 0.1 density
-        exponentialFog.setInfluencingBounds(bounds);
-        return exponentialFog;
     }
 
     public static Shape3D xyzAxis(Color3f yColor, float length) {
@@ -117,53 +109,8 @@ public class Road {
         return texture;
     }
 
-    //old function that just tests if the columns have collision
-    //not neccesary
-    private static TransformGroup createBox() {
-        TransformGroup[] transfmTG = new TransformGroup[2];
-        for (int i = 0; i < 2; i++) {         // two TGs: 0-self and 1-orbit
-            transfmTG[i] = new TransformGroup();
-            transfmTG[i].setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-        }
-
-        Transform3D t = new Transform3D(); // define scale and position
-        t.set(0.12f, new Vector3d(0.0, -1, 0.0));
-        TransformGroup transCube = new TransformGroup(t);
-        ColorCube colorCube = new ColorCube();
-        Appearance app = new Appearance(); // create new appearance
-        app.setCapability(Appearance.ALLOW_COLORING_ATTRIBUTES_WRITE); // set transparency attributes to write
-        colorCube.setAppearance(app); // set colorCube appearance
-        //CrashingBoundaries tcdc = new CrashingBoundaries(colorCube); // create a Transparent collisionn detection for columns
-        //tcdc.setSchedulingBounds(new BoundingSphere(pt_zero, 10d)); // set scheduling bounds with bounding sphere using pt_zero and radius of 10d
-        // add colorCube and tcdc to transCube
-        transCube.addChild(colorCube);
-        //transCube.addChild(tcdc);
-        transfmTG[0].addChild(transCube);            // add a unit cube to 3rd TG
-
-        Transform3D yAxis1 = new Transform3D();
-        yAxis1.rotX(Math.PI / 2.0);                // define animation along orbit
-        Alpha alphaOrbit = new Alpha(-1, Alpha.INCREASING_ENABLE |
-                Alpha.DECREASING_ENABLE, 0, 0, 5000, 2500, 200, 5000, 2500, 200);
-        RotationInterpolator tickTock = new RotationInterpolator(alphaOrbit,
-                transfmTG[1], yAxis1, 3 * (float) Math.PI / 2, (float) Math.PI / 2);
-        tickTock.setSchedulingBounds(new BoundingSphere(pt_zero, 10d));
-        transfmTG[1].addChild(tickTock);     // add orbit animation to scene graph
-
-        Transform3D yAxis2 = new Transform3D();
-        Alpha alphaSelf = new Alpha(-1, Alpha.INCREASING_ENABLE,
-                0, 0, 4000, 0, 0, 0, 0, 0);   // define self-rotating animation
-        RotationInterpolator rotatorSelf = new RotationInterpolator(alphaSelf,
-                transfmTG[0], yAxis2, 0.0f, (float) Math.PI * 2.0f);
-        rotatorSelf.setSchedulingBounds(new BoundingSphere(pt_zero, 10d));
-        transfmTG[0].addChild(rotatorSelf);
-        transfmTG[1].addChild(transfmTG[0]);      // add self-rotation to orbit
-
-        return transfmTG[1];
-    }
-
     private static TransformGroup createRoad() {
         TransformGroup baseMain = new TransformGroup();
-
         //create 20 road pieces and place them in order down the columns
         for (int i = 0; i <= 30; i++) {
             TransformGroup RoadPiece = new TransformGroup();
@@ -177,19 +124,6 @@ public class Road {
         }
 
         return baseMain;
-    }
-
-    public static Material setMaterial() {
-        //material from lab 6
-        int SH = 128;               // 10
-        Material ma = new Material();
-        ma.setAmbientColor(new Color3f(0.6f, 0.6f, 0.6f));
-        ma.setEmissiveColor(new Color3f(0.0f, 0.0f, 0.0f));
-        ma.setDiffuseColor(new Color3f(0.6f, 0.6f, 0.6f));
-        ma.setSpecularColor(new Color3f(1.0f, 1.0f, 1.0f));
-        ma.setShininess(SH);
-        ma.setLightingEnable(true);
-        return ma;
     }
 
     public static Material setMaterialSphere(Color3f color) {
@@ -230,7 +164,6 @@ public class Road {
         for (int i = 0; i < 2; i++)
             sceneTG.addChild(createColumn(0.1, pos[i], -330.0));
 
-        //sceneTG.addChild(createBox());
         sceneTG.addChild(createRoad());
         sceneTG.addChild(StreetLights.createLamps());
     }

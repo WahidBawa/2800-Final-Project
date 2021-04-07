@@ -23,8 +23,7 @@ public class Commons extends JPanel implements MouseListener {
     public final static Color3f Magenta = new Color3f(1.0f, 0.0f, 1.0f);
     public final static Color3f White = new Color3f(1.0f, 1.0f, 1.0f);
     public final static Color3f Grey = new Color3f(0.5f, 0.5f, 0.5f);
-    public final static Color3f[] Clrs = {Blue, Green, Red, Yellow,
-            Cyan, Orange, Magenta, Grey};
+    public final static Color3f[] Clrs = {Blue, Green, Red, Yellow, Cyan, Orange, Magenta, Grey};
     public final static int clr_num = 8;
     private static final long serialVersionUID = 1L;
     public static Camera cam;

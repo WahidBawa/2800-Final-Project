@@ -180,24 +180,18 @@ public class Car {
             Vector3d vct = new Vector3d();
             navigatorTF.get(vct);
 
-            // soundJOAL.setPos(snd_pt, viewposi.x,  viewposi.y, viewposi.z); //get the xyz of the movement vector and set the sound location to that vector
-
-
             WakeupOnAWTEvent event;
             WakeupCriterion genericEvent;
             AWTEvent[] events;
 
             while (criteria.hasNext()) { // while there is another wakeup criteria
                 genericEvent = criteria.next();
-
                 if (genericEvent instanceof WakeupOnAWTEvent) { // if generic event is instance of wakeupEvent
                     event = (WakeupOnAWTEvent) genericEvent;
                     events = event.getAWTEvent();
                     ProcessKeyEvent(events);
-
                 }
             }
-
             wakeupOn(wEnter);                              // decide when behavior becomes live
         }
 
@@ -351,7 +345,6 @@ public class Car {
                         setPosition3D(navigatorTG, viewposi); //set position of the car
                     }
                 }
-
             }
         }
     }

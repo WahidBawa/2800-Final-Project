@@ -49,22 +49,6 @@ public class MyMouseListener implements MouseListener {
         }
     }
 
-    public Canvas3D getCanvas_3D() {
-        return canvas_3D;
-    }
-
-    public void setCanvas_3D(Canvas3D canvas_3D) {
-        this.canvas_3D = canvas_3D;
-    }
-
-    public PickTool getPickTool() {
-        return pickTool;
-    }
-
-    public void setPickTool(PickTool pickTool) {
-        this.pickTool = pickTool;
-    }
-
     public void mouseEntered(MouseEvent arg0) {
     }
 
