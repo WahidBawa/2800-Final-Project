@@ -171,7 +171,7 @@ public class Car {
 
         @Override
         public void processStimulus(Iterator<WakeupCriterion> criteria) {
-            if (!Commons.client.isCounting() && !Commons.client.isRaceEnded()) {
+            if (!Commons.client.isCounting() && !Commons.client.isRaceEnded()) { // this will start the race once the user starts moving
                 Commons.client.startCounting();
             }
 

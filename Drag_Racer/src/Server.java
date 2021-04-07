@@ -16,14 +16,14 @@ public class Server {
         handlers[0] = handlers[1] = null;
         numPlayers = 0;
 
-        ServerSocket serverSock;
+        ServerSocket serverSock; // this will store the server socket
         try {
             serverSock = new ServerSocket(PORT);
             Socket clientSock;
-            while (true) {
+            while (true) { // loop through until the server makes a connection with a client
                 System.out.println("Waiting for a client...");
                 clientSock = serverSock.accept();
-                new PlayerServerHandler(clientSock, this).start();
+                new PlayerServerHandler(clientSock, this).start(); // create a new handler to handle this client-server connection
             }
 
         } catch (Exception e) {
@@ -39,21 +39,18 @@ public class Server {
         return (numPlayers == MAX_PLAYERS);
     }
 
-    synchronized public int addPlayer(PlayerServerHandler h) {
-        for (int i = 0; i < MAX_PLAYERS; i++)
-            if (handlers[i] == null) {
-                handlers[i] = h;
-                numPlayers++;
-                if (enoughPlayers()) {
-                    System.out.println("WE HAVE REACHED THE MAX AMOUNT OF PLAYERS");
-                }
+    synchronized public int addPlayer(PlayerServerHandler h) { // this will be called from the playerserverhandler
+        for (int i = 0; i < MAX_PLAYERS; i++) // loop through all of the players
+            if (handlers[i] == null) { // if this player has not yet been added
+                handlers[i] = h; // set the handler
+                numPlayers++; // increase the number of handlers
                 return i + 1; // playerID is 1 or 2 (array index + 1)
             }
 
         return -1; // means we have enough players already
     }
 
-    synchronized public void tellOther(int playerID, String msg) {
+    synchronized public void tellOther(int playerID, String msg) { // this function will relay a message from one client to the other
         int otherID = ((playerID == PLAYER1) ? PLAYER2 : PLAYER1);
         if (handlers[otherID - 1] != null) // index is ID-1
             handlers[otherID - 1].sendMessage(msg);
