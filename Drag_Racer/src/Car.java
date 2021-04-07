@@ -14,6 +14,8 @@ import java.util.Iterator;
 public class Car {
 
     private static final String snd_pt = "Car";
+    public static TransformGroup objectTG;
+    public static int previousKey = -1;
     public static TransformGroup objectTG;  //car tf group
     private static SoundUtilityJOAL soundJOAL;
     private static TransformGroup carTF;
@@ -47,7 +49,7 @@ public class Car {
         int SH = 10;               // 10
         Material ma = new Material();
         ma.setAmbientColor(Commons.Grey);
-        ma.setEmissiveColor(new Color3f(0,0,0));
+        ma.setEmissiveColor(new Color3f(0, 0, 0));
         ma.setDiffuseColor(clr);
         ma.setSpecularColor(new Color3f(1f, 1f, 1f));
         ma.setShininess(SH);
@@ -160,7 +162,9 @@ public class Car {
             Transform3D navigatorTF = new Transform3D();   // get Transform3D from 'navigatorTG'
             navigatorTG.getTransform(navigatorTF);
             Vector3d vct = new Vector3d();
-            navigatorTF.get(vct); //get the point of the transform group
+            navigatorTF.get(vct);
+
+            // soundJOAL.setPos(snd_pt, viewposi.x,  viewposi.y, viewposi.z); //get the xyz of the movement vector and set the sound location to that vector
 
 
             WakeupOnAWTEvent event;
@@ -181,9 +185,6 @@ public class Car {
             wakeupOn(wEnter);                              // decide when behavior becomes live
         }
 
-        /*
-        matrix modes used for turning and translations from key behaviour, mode 1 used heavily
-         */
         private Matrix3f coMatrix(int mode, float angle) {
             Matrix3f tempMat = new Matrix3f();
             switch (mode) {
@@ -225,13 +226,12 @@ public class Car {
             return tempMat;
         }
 
-        //set the rotation of the car using matrix multiplication
         private Transform3D setRotation3D(TransformGroup Trans, float angle, Matrix3f rotMat, int mode) { // to set the position after rotation
             Transform3D rt3d = new Transform3D();
             Trans.getTransform(rt3d);
             rotMat.transpose();
             rotMat.invert();
-            rotMat.mul(rotMat, coMatrix(mode, angle)); //rotate car based on angle and current rotation
+            rotMat.mul(rotMat, coMatrix(mode, angle));
             rt3d.setRotation(rotMat);
             Trans.setTransform(rt3d);
 

@@ -52,13 +52,14 @@ public class PlayerServerHandler extends Thread {
      */
     public void run() {
         playerID = server.addPlayer(this);
-        sendMessage("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIiii");
-
 
         while (true) {
             try {
                 if (in.ready()) {
-                    System.out.println(in.readLine());
+                    String str = in.readLine();
+                    if (str.startsWith("FINISHED: ")) {
+                       server.tellOther(playerID, playerID + ":" + str.split(" ")[1]);
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();

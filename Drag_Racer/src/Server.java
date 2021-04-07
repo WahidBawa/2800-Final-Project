@@ -4,13 +4,9 @@ import java.net.Socket;
 public class Server {
     private static final int PORT = 4321;
 
-    private static final int MAX_PLAYERS = 1;         // two-person game
+    private static final int MAX_PLAYERS = 2;         // two-person game
     private final static int PLAYER1 = 1;
     private final static int PLAYER2 = 2;             // use to be MACHINE
-
-//    private static final int MAX_PLAYERS = 2;         // two-person game
-//    private final static int PLAYER1 = 1;
-//    private final static int PLAYER2 = 2;             // use to be MACHINE
 
     /* data structures shared by the handlers */
     private final PlayerServerHandler[] handlers;        // handlers for players
@@ -18,8 +14,7 @@ public class Server {
 
     public Server() {                    // Concurrently process players
         handlers = new PlayerServerHandler[MAX_PLAYERS];
-//        handlers[0] = handlers[1] = null;
-        handlers[0] = null;
+        handlers[0] = handlers[1] = null;
         numPlayers = 0;
 
         ServerSocket serverSock;
@@ -54,8 +49,13 @@ public class Server {
             if (handlers[i] == null) {
                 handlers[i] = h;
                 numPlayers++;
+                if (numPlayers == MAX_PLAYERS) {
+                    System.out.println("WE HAVE REACHED THE MAX AMOUNT OF PLAYERS");
+                }
                 return i + 1; // playerID is 1 or 2 (array index + 1)
             }
+
+
         return -1; // means we have enough players already
     }
 

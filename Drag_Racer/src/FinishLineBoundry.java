@@ -5,11 +5,11 @@ import java.util.Iterator;
 /* This behavior of collision detection highlights the
     object when it is in a state of collision. */
 public class FinishLineBoundry extends Behavior {
+    public static boolean isInCollisionRecently;
+    public static boolean inCollision;
     private final Shape3D shape;
     private final Texture shapeTexture;
     private final Appearance shapeAppearance;
-    public static boolean isInCollisionRecently;
-    public static boolean inCollision;
     private WakeupOnCollisionEntry wEnter;
     private WakeupOnCollisionExit wExit;
 
@@ -18,7 +18,7 @@ public class FinishLineBoundry extends Behavior {
         shapeAppearance = shape.getAppearance();
         shapeTexture = shapeAppearance.getTexture();
         inCollision = false;
-        isInCollisionRecently= false;
+        isInCollisionRecently = false;
     }
 
     public void initialize() { // USE_GEOMETRY USE_BOUNDS
@@ -33,7 +33,8 @@ public class FinishLineBoundry extends Behavior {
 
         if (inCollision) { // change color to highlight 'shape'
             try { //Strange error where it thinks appearance wasnt set
-               System.out.println("WE HIT THIS HOE!!!");
+                System.out.println("WE HIT THIS HOE!!!");
+                Commons.client.stopCounting();
             } catch (CapabilityNotSetException e) {
             }
             wakeupOn(wExit); // keep the color until no collision
