@@ -95,10 +95,10 @@ public class SoundUtilityJOAL {
             al.alDeleteBuffers(1, buffer, 0); // no need for the buffer anymore
             return false;
         }
-        if (toLoop)
-            System.out.println("Looping source created for " + nm);
-        else
-            System.out.println("Source created for " + nm);
+//        if (toLoop)
+//            System.out.println("Looping source created for " + nm);
+//        else
+//            System.out.println("Source created for " + nm);
 
         buffersMap.put(nm, buffer);    // store sound name and buffer its hash map
         sourcesMap.put(nm, source);    // store sound name and source its hash map
@@ -183,7 +183,7 @@ public class SoundUtilityJOAL {
             System.out.println("No source found for " + nm);
             return false;
         }
-        System.out.println("Playing " + nm);
+//        System.out.println("Playing " + nm);
         al.alSourcePlay(source[0]);
         return true;
     }
@@ -195,7 +195,7 @@ public class SoundUtilityJOAL {
             System.out.println("No source found for " + nm);
             return false;
         }
-        System.out.println("Stopping " + nm);
+//        System.out.println("Stopping " + nm);
         al.alSourceStop(source[0]);
         return true;
     }
@@ -207,7 +207,7 @@ public class SoundUtilityJOAL {
             System.out.println("No source found for " + nm);
             return false;
         }
-        System.out.println("Pausing " + nm);
+//        System.out.println("Pausing " + nm);
         al.alSourcePause(source[0]);
         return true;
     } // end of pause()
@@ -281,7 +281,7 @@ public class SoundUtilityJOAL {
             nm = iter.next();
 
             source = sourcesMap.get(nm);
-            System.out.println("Stopping " + nm);
+//            System.out.println("Stopping " + nm);
             al.alSourceStop(source[0]);
             al.alDeleteSources(1, source, 0);
 

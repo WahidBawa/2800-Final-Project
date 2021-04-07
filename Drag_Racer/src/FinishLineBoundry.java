@@ -33,7 +33,6 @@ public class FinishLineBoundry extends Behavior {
 
         if (inCollision) { // change color to highlight 'shape'
             try { //Strange error where it thinks appearance wasnt set
-                System.out.println("WE HIT THIS HOE!!!");
                 Commons.client.stopCounting();
             } catch (CapabilityNotSetException e) {
             }

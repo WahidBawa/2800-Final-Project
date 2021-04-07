@@ -8,10 +8,11 @@ public class Client extends Thread {
     private static final int PORT = 4321;          // server details
     private static final String HOST = "localhost";
     long startTime, endTime;
+    int id;
     private Socket sock;
     private PrintWriter out;
     private BufferedReader in;
-    private boolean counting, raceEnded, messageSent;
+    private boolean counting, raceEnded, messageSent, idReceived;
 
 
     public Client() throws IOException {
@@ -19,6 +20,7 @@ public class Client extends Thread {
         startTime = endTime = 0;
         raceEnded = false;
         messageSent = false;
+        idReceived = false;
     }
 
     public void run() {
@@ -27,7 +29,17 @@ public class Client extends Thread {
         while (true) {
             try {
                 if (in.ready()) {
-                    System.out.println(in.readLine());
+                    String str = in.readLine();
+                    if (!idReceived) {
+                        id = Integer.parseInt(str);
+                        System.out.println(id);
+                        idReceived = true;
+                    }
+                    if (str.startsWith("TIME:")) {
+                        System.out.println(str);
+                        Menu.updateTimes(Integer.parseInt(str.split(":")[1]), str.split(":")[2]);
+                    }
+
                 }
 
             } catch (IOException e) {
@@ -37,6 +49,7 @@ public class Client extends Thread {
             if (raceEnded && !messageSent) {
                 out.println("FINISHED: " + getFinalTime());
                 messageSent = true;
+                Menu.updateTimes(id, Double.toString(getFinalTime()));
             }
         }
     }

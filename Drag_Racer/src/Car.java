@@ -157,12 +157,17 @@ public class Car {
 
         @Override
         public void processStimulus(Iterator<WakeupCriterion> criteria) {
+            if (!Commons.client.isCounting() && !Commons.client.isRaceEnded()) {
+                Commons.client.startCounting();
+            }
+
             Transform3D navigatorTF = new Transform3D();   // get Transform3D from 'navigatorTG'
             navigatorTG.getTransform(navigatorTF);
             Vector3d vct = new Vector3d();
             navigatorTF.get(vct);
 
             // soundJOAL.setPos(snd_pt, viewposi.x,  viewposi.y, viewposi.z); //get the xyz of the movement vector and set the sound location to that vector
+
 
 
             WakeupOnAWTEvent event;

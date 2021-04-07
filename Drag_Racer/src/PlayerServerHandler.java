@@ -53,12 +53,15 @@ public class PlayerServerHandler extends Thread {
     public void run() {
         playerID = server.addPlayer(this);
 
+        out.println(playerID);
+        System.out.println(playerID);
+
         while (true) {
             try {
                 if (in.ready()) {
                     String str = in.readLine();
                     if (str.startsWith("FINISHED: ")) {
-                       server.tellOther(playerID, playerID + ":" + str.split(" ")[1]);
+                       server.tellOther(playerID, "TIME:" + playerID + ":" + str.split(" ")[1]);
                     }
                 }
             } catch (IOException e) {
