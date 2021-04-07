@@ -240,7 +240,7 @@ public class Road {
         for (int i = 0; i < 2; i++)
             sceneTG.addChild(createColumn(0.1, pos[i], -330.0));
 
-        sceneTG.addChild(createBox());
+        //sceneTG.addChild(createBox());
         sceneTG.addChild(createRoad());
         sceneTG.addChild(StreetLights.createLamps());
     }

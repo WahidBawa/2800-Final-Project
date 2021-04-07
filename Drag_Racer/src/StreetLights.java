@@ -15,6 +15,7 @@ public class StreetLights {
         ColoringAttributes colorCylinder = new ColoringAttributes(Commons.Grey, ColoringAttributes.FASTEST);
         app.setColoringAttributes(colorCylinder); //after setting color we set the appearance
         TransformGroup cylinderShape = new TransformGroup();
+        app.setMaterial(Road.setMaterialSphere(Commons.Grey));
         cylinderShape.addChild(new Cylinder(0.04f, 1f, app));
 
         Transform3D translator = new Transform3D();

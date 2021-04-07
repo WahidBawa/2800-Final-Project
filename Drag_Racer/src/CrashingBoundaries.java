@@ -8,7 +8,8 @@ public class CrashingBoundaries extends Behavior {
     private final Shape3D shape;
     private final Texture shapeTexture;
     private final Appearance shapeAppearance;
-    private boolean inCollision;
+    public static boolean isInCollisionRecently;
+    public static boolean inCollision;
     private WakeupOnCollisionEntry wEnter;
     private WakeupOnCollisionExit wExit;
 
@@ -17,6 +18,7 @@ public class CrashingBoundaries extends Behavior {
         shapeAppearance = shape.getAppearance();
         shapeTexture = shapeAppearance.getTexture();
         inCollision = false;
+        isInCollisionRecently= false;
     }
 
     public void initialize() { // USE_GEOMETRY USE_BOUNDS
@@ -32,12 +34,15 @@ public class CrashingBoundaries extends Behavior {
         if (inCollision) { // change color to highlight 'shape'
             try { //Strange error where it thinks appearance wasnt set
                 shapeAppearance.setTexture(grid);
+//                Car.BehaviorArrowKey.setPosition3D(Car.BehaviorArrowKey.navigatorTG, Car.BehaviorArrowKey.viewposiPrevious);
+//                isInCollisionRecently= !isInCollisionRecently;
             } catch (CapabilityNotSetException e) {
             }
             wakeupOn(wExit); // keep the color until no collision
         } else { // change color back to its original
             try {//Strange error where it thinks appearance wasnt set
                 shapeAppearance.setTexture(shapeTexture);
+
             } catch (CapabilityNotSetException e) {
             }
             wakeupOn(wEnter); // wait for collision happens
