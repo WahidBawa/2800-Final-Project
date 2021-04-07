@@ -11,13 +11,14 @@ public class Client extends Thread {
     private Socket sock;
     private PrintWriter out;
     private BufferedReader in;
-    private boolean counting, raceEnded;
+    private boolean counting, raceEnded, messageSent;
 
 
     public Client() throws IOException {
         counting = false;
         startTime = endTime = 0;
         raceEnded = false;
+        messageSent = false;
     }
 
     public void run() {
@@ -29,16 +30,13 @@ public class Client extends Thread {
                     System.out.println(in.readLine());
                 }
 
-//                out.println("this is merely a test");
             } catch (IOException e) {
                 System.out.println(e);
                 e.printStackTrace();
             }
-
-            if (!raceEnded) {
-                System.out.println(getTimePassed());
-            } else {
-                System.out.println(getFinalTime());
+            if (raceEnded && !messageSent) {
+                out.println("FINISHED: " + getFinalTime());
+                messageSent = true;
             }
         }
     }
