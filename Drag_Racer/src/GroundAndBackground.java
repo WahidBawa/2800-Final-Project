@@ -14,6 +14,100 @@ import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 
 public class GroundAndBackground {
+    public static TransformGroup rotatingSpheres(int x, int z){
+        TransformGroup scene = new TransformGroup();
+        Sphere s = new Sphere(0.2f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY, 50);
+        s.setAppearance(setApp("gridBlue"));
+
+        Transform3D t3d = new Transform3D();
+        t3d.rotZ(Math.PI/2);
+        t3d.setTranslation(new Vector3f(x,-2.5f,z));
+
+        TransformGroup rotate = new TransformGroup();
+        rotate.addChild(s);
+        scene.addChild(sphereRotation(10000, rotate));
+        scene.setTransform(t3d);
+        scene.addChild(rotate);
+        return scene;
+    }
+    public static RotationInterpolator sphereRotation(int r_num, TransformGroup my_TG) {
+
+        my_TG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        Transform3D yAxis = new Transform3D();
+        yAxis.rotX(Math.PI / 2.0);                // define animation along orbit
+        yAxis.setTranslation(new Vector3f(3,0,0));
+        Alpha rotationAlpha = new Alpha(-1, Alpha.INCREASING_ENABLE |
+                Alpha.DECREASING_ENABLE, 0, 0, 5000, 2500, 200, 5000, 2500, 200);
+        RotationInterpolator rot_beh = new RotationInterpolator(
+                rotationAlpha, my_TG, yAxis, 3 * (float) Math.PI / 2, (float) Math.PI / 2);
+        BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
+        rot_beh.setSchedulingBounds(bounds);
+        return rot_beh;
+    }
+
+    public static TransformGroup FinishLine(){
+        //Create a transformgroup of the flag location
+        TransformGroup finishLine = new TransformGroup();
+        Transform3D t3d = new Transform3D();
+        t3d.setTranslation(new Vector3f(0,0,-30));
+
+        //Create the flag
+        finishLine.setTransform(t3d);
+        createPillars(finishLine);
+        checkerFlag(finishLine);
+
+        //Return to road
+        return finishLine;
+    }
+    private static void createPillars(TransformGroup scene){
+        //Create one pillar for the flag, this is copied with a different location following
+        TransformGroup transform = new TransformGroup();
+        Transform3D t3d = new Transform3D();
+        t3d.setTranslation(new Vector3f(1,0,0));
+        transform.setTransform(t3d);
+        Cylinder c1 = new Cylinder(0.1f, 3f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY, setApp("gridBlue"));
+        transform.addChild(c1);
+        scene.addChild(transform); //Attach to scene
+
+        //Second pillar
+        Cylinder c2 = new Cylinder(0.1f, 3f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY, setApp("gridBlue"));
+        t3d.setTranslation(new Vector3f(-1,0,0));
+        transform = new TransformGroup(t3d);
+        transform.addChild(c2);
+        scene.addChild(transform); //Attach to scene
+    }
+    private static void checkerFlag(TransformGroup scene){
+        TransformGroup flag = new TransformGroup();
+        Transform3D t3d = new Transform3D();
+        t3d.setTranslation(new Vector3f(0,1.23f,0));
+        flag.setTransform(t3d);
+
+        //Creates all the lines needed for the flag
+        float[] uv0 = {0f, 0f};
+        float[] uv1 = {1f, 0f};
+        float[] uv2 = {1f, 1f};
+        float[] uv3 = {0f, 1f};
+
+        //Setting the coords and the texture of the flag
+        QuadArray square = new QuadArray(4, QuadArray.COLOR_3 | QuadArray.COORDINATES | QuadArray.TEXTURE_COORDINATE_2);
+        square.setCoordinate(0, new Point3d(-1, -0.25, 0));
+        square.setTextureCoordinate(0, 0, uv0);
+        square.setCoordinate(1, new Point3d(1, -0.25, 0));
+        square.setTextureCoordinate(0, 1, uv1);
+        square.setCoordinate(2, new Point3d(1, 0.25, 0));
+        square.setTextureCoordinate(0, 2, uv2);
+        square.setCoordinate(3, new Point3d(-1, 0.25, 0));
+        square.setTextureCoordinate(0, 3, uv3);
+
+        //Set the app of the flag
+        Shape3D s = new Shape3D(square);
+        s.setAppearance(setApp("flag"));
+
+        //Attatch the flag to the scene
+        flag.addChild(s);
+        scene.addChild(flag);
+    }
+
     public static void Tree(TransformGroup objectTG, float x, float z) {
 
         TransformGroup transformGroup = new TransformGroup(); // we will rotate the loaded obj inside of this group
@@ -101,7 +195,18 @@ public class GroundAndBackground {
             scene_TG.addChild(sphere(8, 60, -10, -(i * 10)));
             Tree(scene_TG, -3, -(i * 10));
             Tree(scene_TG, 3, -(i * 10));
+            scene_TG.addChild(rotatingSpheres(0,-(i * 10) - 2));
+            scene_TG.addChild(rotatingSpheres(0,-(i * 10) + 2));
         }
+        //Create a curb behind the car to look nice
+        Transform3D t3d = new Transform3D();
+        t3d.rotZ(Math.PI/2);
+        t3d.setTranslation(new Vector3f(0,-0.1f,1f));
+        TransformGroup curb = new TransformGroup(t3d);
+        Cylinder c = new Cylinder(0.1f, 2f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY, setApp("concrete"));
+        curb.addChild(c);
+        scene_TG.addChild(curb);
+
         return scene_TG;
     }
 

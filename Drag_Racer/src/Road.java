@@ -264,6 +264,8 @@ public class Road {
         scene.addChild(sceneTG);                             // add TG to the scene BranchGroup
         sceneTG.addChild(GroundAndBackground.generateGround(4, 0.1001f));
         sceneTG.addChild(GroundAndBackground.generateCylinder(1, "Test"));
+        sceneTG.addChild(GroundAndBackground.FinishLine());
+        sceneTG.addChild(GroundAndBackground.rotatingSpheres(1,1));
 
         createLight(scene);
         wallsBarriersRoadLamps(sceneTG);
