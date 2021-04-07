@@ -268,6 +268,7 @@ public class Road {
         createLight(scene);
         wallsBarriersRoadLamps(sceneTG);
         scene.addChild(sceneCar);
+        scene.addChild(FinishLine.createFinishLine(0.1, new Vector3d(0, 0, -0)));
         scene.compile(); // optimize scene BG
 
         return scene;
