@@ -14,11 +14,14 @@ import java.util.Iterator;
 public class Car {
 
     private static final String snd_pt = "Car";
-    public static TransformGroup objectTG;
+    public static TransformGroup objectTG;  //car tf group
     private static SoundUtilityJOAL soundJOAL;
     private static TransformGroup carTF;
-    public static int previousKey= -1;
+    public static int previousKey= -1; //previous key input
 
+    /*
+    function used to load the car shape, similar to assignments
+     */
     private static BranchGroup loadShape() {
         int flags = ObjectFile.RESIZE | ObjectFile.TRIANGULATE | ObjectFile.STRIPIFY;
         ObjectFile f = new ObjectFile(flags, (float) (60 * Math.PI / 180.0));
@@ -38,6 +41,7 @@ public class Car {
         return s.getSceneGroup();
     }
 
+    //used to set material of the car
     public static Material setMaterialCar(Color3f clr) {
         //material from lab 6
         int SH = 10;               // 10
@@ -51,6 +55,7 @@ public class Car {
         return ma;
     }
 
+    //setting the appearance function
     private static Appearance setApp(Color3f clr) {
         Appearance app = new Appearance();
         app.setMaterial(setMaterialCar(clr));
@@ -60,20 +65,24 @@ public class Car {
         return app;
     }
 
+    /*
+    this function creates the car object and returns it in its own transform group
+     */
     public static BranchGroup carObject() {
         BranchGroup objectBG = new BranchGroup();
         objectTG = new TransformGroup();
-        objectTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        objectTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE); //set write capability
 
-        //adding the cow shape here
+        //adding the car shape here
         BranchGroup carBG = loadShape();
         Shape3D carShape = (Shape3D) carBG.getChild(0);
         carShape.setUserData(1);
-        carShape.setAppearance(setApp(Commons.Red));
+        carShape.setAppearance(setApp(Commons.Red));    //set appearance of car
         TransformGroup objectCAR = new TransformGroup();
 
-        objectCAR.addChild(carBG);
+        objectCAR.addChild(carBG);  //Transform group that now contains car object
 
+        //car spawns tail up, the following are transformations for getting the car upright
         Transform3D rotator = new Transform3D();
         Transform3D rotator2 = new Transform3D();
         Transform3D scaler = new Transform3D();
@@ -86,13 +95,14 @@ public class Car {
         trfm.mul(scaler);
         trfm.mul(rotator2);
 
-        objectCAR.setTransform(trfm);
+        objectCAR.setTransform(trfm);   //set transformations
         carTF = objectCAR;
 
-        objectTG.setUserData(1);
+        objectTG.setUserData(1);    //setting user data for car, this is important in collisions
 
-        objectTG.addChild(objectCAR);
+        objectTG.addChild(objectCAR); //adding to the returned branch group
 
+        //setting the viewing platform
         ViewingPlatform ourView = Commons.getSimpleU().getViewingPlatform();
         BehaviorArrowKey myViewRotationbehavior = new BehaviorArrowKey(ourView, objectTG);
         myViewRotationbehavior.setSchedulingBounds(new BoundingSphere());
@@ -120,14 +130,16 @@ public class Car {
         private boolean canLPlay = true;
 
         public BehaviorArrowKey(ViewingPlatform targetVP, TransformGroup chasedTG) {
-            navigatorTG = chasedTG;
+            navigatorTG = chasedTG; //initilize the car transformGroup refrence, this is modified for navigation
             targetVP.getViewPlatformTransform();
             angle = 0;
             x = 0;
             y = 0;
             z = 0;
         }
-
+        /*
+        create an empty matrix! super important for keeping the car straight
+         */
         public void initialize() {
 
             wEnter = new WakeupOnAWTEvent(KeyEvent.KEY_PRESSED);
@@ -148,9 +160,7 @@ public class Car {
             Transform3D navigatorTF = new Transform3D();   // get Transform3D from 'navigatorTG'
             navigatorTG.getTransform(navigatorTF);
             Vector3d vct = new Vector3d();
-            navigatorTF.get(vct);
-
-            // soundJOAL.setPos(snd_pt, viewposi.x,  viewposi.y, viewposi.z); //get the xyz of the movement vector and set the sound location to that vector
+            navigatorTF.get(vct); //get the point of the transform group
 
 
             WakeupOnAWTEvent event;
@@ -171,6 +181,9 @@ public class Car {
             wakeupOn(wEnter);                              // decide when behavior becomes live
         }
 
+        /*
+        matrix modes used for turning and translations from key behaviour, mode 1 used heavily
+         */
         private Matrix3f coMatrix(int mode, float angle) {
             Matrix3f tempMat = new Matrix3f();
             switch (mode) {
@@ -212,18 +225,23 @@ public class Car {
             return tempMat;
         }
 
+        //set the rotation of the car using matrix multiplication
         private Transform3D setRotation3D(TransformGroup Trans, float angle, Matrix3f rotMat, int mode) { // to set the position after rotation
             Transform3D rt3d = new Transform3D();
             Trans.getTransform(rt3d);
             rotMat.transpose();
             rotMat.invert();
-            rotMat.mul(rotMat, coMatrix(mode, angle));
+            rotMat.mul(rotMat, coMatrix(mode, angle)); //rotate car based on angle and current rotation
             rt3d.setRotation(rotMat);
             Trans.setTransform(rt3d);
 
             return rt3d;
         }
 
+        /*
+        set the new position of the car, this function can be thought of as the calculation that find the next point the car must move
+        based on key input AND current heading!
+         */
         public static Transform3D setPosition3D(TransformGroup Trans, Point3f point) { // to set the position after movement
             Transform3D t3d = new Transform3D();
             navigatorTG.getTransform(t3d);
@@ -233,6 +251,7 @@ public class Car {
             return t3d;
         }
 
+        //key proccessing
         private void ProcessKeyEvent(AWTEvent[] events) {
             for (AWTEvent event : events) { // iterate through events
                 KeyEvent keyEvent = (KeyEvent) event; // set key event
@@ -240,6 +259,14 @@ public class Car {
                     Transform3D transform1 = new Transform3D();
                     navigatorTG.getTransform(transform1);
 
+                    /*
+                    These if statments prevent the car from traveling while in collision
+                    here are the cases:
+                    1:the car has hit a wall and the car was traveling forward, then obviously we cannot go forward anymore and we restrict the translation otherwise
+                    2:the car is not in collision and can travel forward freely
+
+                    Note each key behaviour has a similar if else
+                     */
                     if ((keyEvent.getKeyCode() == KeyEvent.VK_UP && CrashingBoundaries.inCollision && previousKey!=KeyEvent.VK_UP) || (keyEvent.getKeyCode() == KeyEvent.VK_UP && !CrashingBoundaries.inCollision)) { // check if the key you've pressed is the target key
                         previousKey= KeyEvent.VK_UP;
 
@@ -257,10 +284,10 @@ public class Car {
                             viewposiPrevious.setZ(viewposi.getZ());
                         }
 
-
+                        //set the view position
                         viewposi.x = viewposi.x - 3.0f * 0.02f * (float) Math.sin(angle);
                         viewposi.z = viewposi.z - 3.0f * 0.02f * (float) Math.cos(angle);
-                        setPosition3D(navigatorTG, viewposi);
+                        setPosition3D(navigatorTG, viewposi); //set the translation of the car
 
 
                     }
@@ -278,8 +305,9 @@ public class Car {
                         canUpPlay = true;
                         canRPlay = true;
 
+                        //rotate car angle left by 0.1
                         angle += 0.1;
-                        setRotation3D(navigatorTG, 0.1f, comMat, 1);
+                        setRotation3D(navigatorTG, 0.1f, comMat, 1); //set the rotation of the car
 
                     }
 
@@ -296,8 +324,9 @@ public class Car {
                         canUpPlay = true;
                         canLPlay = true;
 
+                        //rotate car angle right by 0.1
                         angle -= 0.1;
-                        setRotation3D(navigatorTG, -0.1f, comMat, 1);
+                        setRotation3D(navigatorTG, -0.1f, comMat, 1); //set the rotation of the car
                     }
 
 
@@ -316,7 +345,7 @@ public class Car {
 
                         viewposi.x = viewposi.x + 1.0f * 0.02f * (float) Math.sin(angle) * 3f;
                         viewposi.z = viewposi.z + 1.0f * 0.02f * (float) Math.cos(angle) * 3f;
-                        setPosition3D(navigatorTG, viewposi);
+                        setPosition3D(navigatorTG, viewposi); //set position of the car
                     }
                 }
 

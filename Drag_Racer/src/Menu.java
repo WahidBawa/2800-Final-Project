@@ -5,19 +5,19 @@ import java.awt.event.ActionListener;
 
 public class Menu extends JFrame implements ActionListener {
 
-    private JFrame frame; //frame
-    private JLabel titleLabel; //title label
-    private JLabel player1L;
-    private JLabel player1LC;
-    private JLabel player2L;
-    private JLabel player2LC;
-    private JLabel player1LT;
-    private JLabel player2LT;
-    private JLabel player1LTC;
-    private JLabel player2LTC;
-    private JLabel outLabel;
-    private JButton buttonStart; //start button
-    private JButton buttonExit; //exit button
+    private static JFrame frame; //frame
+    private static JLabel titleLabel; //title label
+    private static JLabel player1L;
+    private static JLabel player1LC;
+    private static JLabel player2L;
+    private static JLabel player2LC;
+    private static JLabel player1LT;
+    private static JLabel player2LT;
+    private static JLabel player1LTC;
+    private static JLabel player2LTC;
+    private static JLabel outLabel;
+    private static JButton buttonStart; //start button
+    private static JButton buttonExit; //exit button
 
 
     public Menu() {
@@ -36,42 +36,42 @@ public class Menu extends JFrame implements ActionListener {
         titleLabel.setBounds(50, 50, 350,50);
 
         //label for connection of p1
-        player1L = new JLabel("Player 1 connected:"); //create label
-        player1L.setFont(new Font("SansSerif",Font.BOLD, 12));
+        player1L = new JLabel("Player 1 data received:"); //create label
+        player1L.setFont(new Font("SansSerif",Font.BOLD, 10));
         player1L.setIconTextGap(30); //sets the gap of image from text
         player1L.setHorizontalTextPosition(JLabel.RIGHT);
         player1L.setHorizontalAlignment(JLabel.CENTER);
         player1L.setVerticalAlignment(JLabel.TOP);
-        player1L.setBounds(60, 140, 120,30);
+        player1L.setBounds(20, 140, 120,30);
 
         //p1 connection status
-        player1LC = new JLabel("true"); //create label
-        player1LC.setForeground(Color.green);
-        player1LC.setFont(new Font("SansSerif",Font.BOLD, 12));
+        player1LC = new JLabel("null"); //create label
+        player1LC.setForeground(Color.red);
+        player1LC.setFont(new Font("SansSerif",Font.BOLD, 10));
         player1LC.setIconTextGap(30); //sets the gap of image from text
         player1LC.setHorizontalTextPosition(JLabel.RIGHT);
         player1LC.setHorizontalAlignment(JLabel.CENTER);
         player1LC.setVerticalAlignment(JLabel.TOP);
-        player1LC.setBounds(160, 140, 80,30);
+        player1LC.setBounds(140, 140, 50,30);
 
         //label for connection of p2
-        player2L = new JLabel("Player 2 connected:"); //create label
-        player2L.setFont(new Font("SansSerif",Font.BOLD, 12));
+        player2L = new JLabel("Player 2 data received:"); //create label
+        player2L.setFont(new Font("SansSerif",Font.BOLD, 10));
         player2L.setIconTextGap(30); //sets the gap of image from text
         player2L.setHorizontalTextPosition(JLabel.RIGHT);
         player2L.setHorizontalAlignment(JLabel.CENTER);
         player2L.setVerticalAlignment(JLabel.TOP);
-        player2L.setBounds(260, 140, 120,30);
+        player2L.setBounds(220, 140, 120,30);
 
         //p2 connection status
-        player2LC = new JLabel("true"); //create label
-        player2LC.setForeground(Color.green);
-        player2LC.setFont(new Font("SansSerif",Font.BOLD, 12));
+        player2LC = new JLabel("null"); //create label
+        player2LC.setForeground(Color.red);
+        player2LC.setFont(new Font("SansSerif",Font.BOLD, 10));
         player2LC.setIconTextGap(30); //sets the gap of image from text
         player2LC.setHorizontalTextPosition(JLabel.RIGHT);
         player2LC.setHorizontalAlignment(JLabel.CENTER);
         player2LC.setVerticalAlignment(JLabel.TOP);
-        player2LC.setBounds(360, 140, 80,30);
+        player2LC.setBounds(340, 140, 50,30);
 
         //label for time
         player1LT = new JLabel("Player 1 time: "); //create label
@@ -162,6 +162,20 @@ public class Menu extends JFrame implements ActionListener {
 
     }
 
+    public static void updateTimes(int PlayerID, String time){
+        if (PlayerID==1){
+            player1LC.setText("true");
+            player1LC.setForeground(Color.green);
+            player1LTC.setText(time);
+        }
+        else{
+            player2LC.setText("true");
+            player2LC.setForeground(Color.green);
+            player2LTC.setText(time);
+        }
+
+    }
+
     public static void main(String[] args) {
         Menu frame = new Menu();
     }
@@ -170,6 +184,7 @@ public class Menu extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == buttonStart) {
             System.out.println("Game started! please wait while the game loads");
+            //buttonStart.setVisible(false);
             Road.main(null);
         }
         if (e.getSource() == buttonExit) {
