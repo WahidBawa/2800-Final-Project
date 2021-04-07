@@ -49,7 +49,7 @@ public class GroundAndBackground {
         //Create a transformgroup of the flag location
         TransformGroup finishLine = new TransformGroup();
         Transform3D t3d = new Transform3D();
-        t3d.setTranslation(new Vector3f(0,0,-30));
+        t3d.setTranslation(new Vector3f(0,0,-30.2f));
 
         //Create the flag
         finishLine.setTransform(t3d);

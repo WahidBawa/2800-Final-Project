@@ -252,11 +252,14 @@ public class Road {
 
         scene.addChild(xyzAxis(Commons.Blue, 1));       //xyz axis added
         TransformGroup sceneTG = new TransformGroup();       // create a TransformGroup (TG)
+        BranchGroup finishLine = new BranchGroup(); //adding finish line to this group nulls its collision detection with walls
+        BranchGroup finishLine2 = new BranchGroup(); //adding finish line to this group nulls its collision detection with walls
         scene.addChild(sceneTG);                             // add TG to the scene BranchGroup
         sceneTG.addChild(GroundAndBackground.generateGround(4, 0.1001f));
         sceneTG.addChild(GroundAndBackground.generateCylinder(1, "Test"));
-        sceneTG.addChild(GroundAndBackground.FinishLine());
+        sceneTG.addChild(GroundAndBackground.FinishLine());;
         sceneTG.addChild(GroundAndBackground.rotatingSpheres(1,1));
+        scene.addChild(finishLine2);
 
         createLight(scene);
         wallsBarriersRoadLamps(sceneTG);

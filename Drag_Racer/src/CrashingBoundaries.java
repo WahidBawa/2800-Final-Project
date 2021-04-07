@@ -30,8 +30,8 @@ public class CrashingBoundaries extends Behavior {
         inCollision = !inCollision; // collision has taken place
 
         if (inCollision) { // change color to highlight 'shape'
-                Car.BehaviorArrowKey.setPosition3D(Car.BehaviorArrowKey.navigatorTG, Car.BehaviorArrowKey.viewposiPrevious);
-                isInCollisionRecently= !isInCollisionRecently;
+                //Car.BehaviorArrowKey.setPosition3D(Car.BehaviorArrowKey.navigatorTG, Car.BehaviorArrowKey.viewposiPrevious);
+                //isInCollisionRecently= !isInCollisionRecently;
             System.out.println("Hit boundry");
             wakeupOn(wExit); // keep the color until no collision
         } else { // change color back to its original
