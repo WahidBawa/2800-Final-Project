@@ -15,10 +15,11 @@ public class StreetLights {
         ColoringAttributes colorCylinder = new ColoringAttributes(Commons.Grey, ColoringAttributes.FASTEST);
         app.setColoringAttributes(colorCylinder); //after setting color we set the appearance
         TransformGroup cylinderShape = new TransformGroup();
+        app.setMaterial(Road.setMaterialSphere(Commons.Grey));
         cylinderShape.addChild(new Cylinder(0.04f, 1f, app));
 
         Transform3D translator = new Transform3D();
-        translator.setTranslation(new Vector3f(0, 1.0f, 0)); //this vector will place the cylinder above y=0
+        translator.setTranslation(new Vector3f(0, 0.8f, 0)); //this vector will place the cylinder above y=0
         Transform3D cylinderMatrix = new Transform3D(); //this is the matrix used to move the cylinder
         cylinderMatrix.mul(translator); //translating the cylinder
         cylinderShape.setTransform(cylinderMatrix);

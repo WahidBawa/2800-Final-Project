@@ -12,11 +12,11 @@ public class Camera {
     static final int width = 600;                            // size of each Canvas3D
     static final int height = 600;
     private static final long serialVersionUID = 1L;
-    SimpleUniverse su;
     private final Vector3f location = new Vector3f(0, 1, 0);
     private final ViewingPlatform vp;
     private final Viewer viewer;
     private final Canvas3D canvas3D = new Canvas3D(SimpleUniverse.getPreferredConfiguration());
+    SimpleUniverse su;
 
     public Camera(Point3d eye) {
         // a Canvas3D can only be attached to a single Viewer

@@ -240,7 +240,7 @@ public class Road {
         for (int i = 0; i < 2; i++)
             sceneTG.addChild(createColumn(0.1, pos[i], -330.0));
 
-        sceneTG.addChild(createBox());
+        //sceneTG.addChild(createBox());
         sceneTG.addChild(createRoad());
         sceneTG.addChild(StreetLights.createLamps());
     }
@@ -270,18 +270,22 @@ public class Road {
         createLight(scene);
         wallsBarriersRoadLamps(sceneTG);
         scene.addChild(sceneCar);
+        scene.addChild(FinishLine.createFinishLine(0.1, new Vector3d(0, 0, -0)));
         scene.compile(); // optimize scene BG
 
         return scene;
     }
 
     public static void main(String[] args) {
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 Commons.setEye(new Point3d(0, 0.5f, 3));
                 new Commons.MyGUI(createScene(), "Drag Racing Game");
             }
         });
+
+
     }
 
 }

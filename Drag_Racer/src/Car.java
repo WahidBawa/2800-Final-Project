@@ -13,10 +13,11 @@ import java.util.Iterator;
 
 public class Car {
 
+    private static final String snd_pt = "Car";
     public static TransformGroup objectTG;
     private static SoundUtilityJOAL soundJOAL;
-    private static final String snd_pt = "Car";
     private static TransformGroup carTF;
+    public static int previousKey= -1;
 
     private static BranchGroup loadShape() {
         int flags = ObjectFile.RESIZE | ObjectFile.TRIANGULATE | ObjectFile.STRIPIFY;
@@ -103,14 +104,15 @@ public class Car {
     }
 
     public static class BehaviorArrowKey extends Behavior {
-        Point3f viewposi = new Point3f(0.0f, 0.0f, 0.0f);
-        private final TransformGroup navigatorTG;
-        private WakeupOnAWTEvent wEnter;
-        private float angle;
+        public static TransformGroup navigatorTG;
         private final float x;
         private final float y;
         private final float z;
         private final Matrix3f comMat = new Matrix3f();
+        public static Point3f viewposi = new Point3f(0.0f, 0.0f, 0.0f);
+        public static Point3f viewposiPrevious = new Point3f(0.0f, 0.0f, 0.0f);
+        private WakeupOnAWTEvent wEnter;
+        private float angle;
         //        private final WakeupCondition wakeupCondition;
         private boolean canUpPlay = true;    //these variables prevent sounds from being played multiple times
         private boolean canDownPlay = true;
@@ -222,7 +224,7 @@ public class Car {
             return rt3d;
         }
 
-        private Transform3D setPosition3D(TransformGroup Trans, Point3f point) { // to set the position after movement
+        public static Transform3D setPosition3D(TransformGroup Trans, Point3f point) { // to set the position after movement
             Transform3D t3d = new Transform3D();
             navigatorTG.getTransform(t3d);
             t3d.setTranslation(new Vector3d(point));
@@ -238,7 +240,8 @@ public class Car {
                     Transform3D transform1 = new Transform3D();
                     navigatorTG.getTransform(transform1);
 
-                    if (keyEvent.getKeyCode() == KeyEvent.VK_UP) { // check if the key you've pressed is the target key
+                    if ((keyEvent.getKeyCode() == KeyEvent.VK_UP && CrashingBoundaries.inCollision && previousKey!=KeyEvent.VK_UP) || (keyEvent.getKeyCode() == KeyEvent.VK_UP && !CrashingBoundaries.inCollision)) { // check if the key you've pressed is the target key
+                        previousKey= KeyEvent.VK_UP;
 
                         if (canUpPlay) {
                             Sounds.stopSounds(0);  //stop all sounds to avoid overlap
@@ -249,6 +252,12 @@ public class Car {
                         canRPlay = true;
                         canLPlay = true;
 
+                        if (!CrashingBoundaries.isInCollisionRecently) {
+                            viewposiPrevious.setX(viewposi.getX());
+                            viewposiPrevious.setZ(viewposi.getZ());
+                        }
+
+
                         viewposi.x = viewposi.x - 3.0f * 0.02f * (float) Math.sin(angle);
                         viewposi.z = viewposi.z - 3.0f * 0.02f * (float) Math.cos(angle);
                         setPosition3D(navigatorTG, viewposi);
@@ -257,6 +266,8 @@ public class Car {
                     }
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT) {
+
+                        previousKey= KeyEvent.VK_LEFT;
 
                         if (canLPlay) {
                             Sounds.stopSounds(1);  //stop all sounds to avoid overlap
@@ -274,6 +285,7 @@ public class Car {
 
                     if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT) {
 
+                        previousKey= KeyEvent.VK_RIGHT;
 
                         if (canRPlay) {
                             Sounds.stopSounds(1);  //stop all sounds to avoid overlap
@@ -288,8 +300,10 @@ public class Car {
                         setRotation3D(navigatorTG, -0.1f, comMat, 1);
                     }
 
-                    if (keyEvent.getKeyCode() == KeyEvent.VK_DOWN) { // check if the key you've pressed is the target key
 
+                    if ((keyEvent.getKeyCode() == KeyEvent.VK_DOWN && CrashingBoundaries.inCollision && previousKey!=KeyEvent.VK_DOWN) || (keyEvent.getKeyCode() == KeyEvent.VK_DOWN && !CrashingBoundaries.inCollision)) { // check if the key you've pressed is the target key
+
+                        previousKey= KeyEvent.VK_DOWN;
 
                         if (canDownPlay) {
                             Sounds.stopSounds(0);  //stop all sounds to avoid overlap
@@ -304,8 +318,6 @@ public class Car {
                         viewposi.z = viewposi.z + 1.0f * 0.02f * (float) Math.cos(angle) * 3f;
                         setPosition3D(navigatorTG, viewposi);
                     }
-
-
                 }
 
             }

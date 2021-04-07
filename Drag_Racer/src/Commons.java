@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 public class Commons extends JPanel implements MouseListener {
     public final static Color3f Red = new Color3f(1.0f, 0.0f, 0.0f);
@@ -30,6 +31,7 @@ public class Commons extends JPanel implements MouseListener {
     public static Camera cam;
     public static MyMouseListener mouseListener;
     public static PickTool pickTool;
+    public static Client client;
     private static SimpleUniverse su = null;
     private static Canvas3D canvas_3D;
     private static JFrame frame;
@@ -51,6 +53,14 @@ public class Commons extends JPanel implements MouseListener {
         add("Center", canvas_3D);
         frame.setSize(600, 600);                             // set the size of the JFrame
         frame.setVisible(true);
+
+        try {
+            client = new Client();
+            client.start();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /* a function to create a rotation behavior and refer it to 'my_TG' */

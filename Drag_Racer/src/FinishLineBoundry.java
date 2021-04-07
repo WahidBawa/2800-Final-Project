@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 /* This behavior of collision detection highlights the
     object when it is in a state of collision. */
-public class CrashingBoundaries extends Behavior {
+public class FinishLineBoundry extends Behavior {
     private final Shape3D shape;
     private final Texture shapeTexture;
     private final Appearance shapeAppearance;
@@ -13,7 +13,7 @@ public class CrashingBoundaries extends Behavior {
     private WakeupOnCollisionEntry wEnter;
     private WakeupOnCollisionExit wExit;
 
-    public CrashingBoundaries(Shape3D s) {
+    public FinishLineBoundry(Shape3D s) {
         shape = s; // save the original color of 'shape"
         shapeAppearance = shape.getAppearance();
         shapeTexture = shapeAppearance.getTexture();
@@ -33,15 +33,12 @@ public class CrashingBoundaries extends Behavior {
 
         if (inCollision) { // change color to highlight 'shape'
             try { //Strange error where it thinks appearance wasnt set
-                shapeAppearance.setTexture(grid);
-//                Car.BehaviorArrowKey.setPosition3D(Car.BehaviorArrowKey.navigatorTG, Car.BehaviorArrowKey.viewposiPrevious);
-//                isInCollisionRecently= !isInCollisionRecently;
+               System.out.println("WE HIT THIS HOE!!!");
             } catch (CapabilityNotSetException e) {
             }
             wakeupOn(wExit); // keep the color until no collision
         } else { // change color back to its original
             try {//Strange error where it thinks appearance wasnt set
-                shapeAppearance.setTexture(shapeTexture);
 
             } catch (CapabilityNotSetException e) {
             }
