@@ -46,10 +46,6 @@ public class PlayerServerHandler extends Thread {
         }
     }
 
-    /*
-     * Add this player to FSFServer array, get an ID, then start processing
-     * client-side input
-     */
     public void run() {
         playerID = server.addPlayer(this);
 
@@ -68,71 +64,8 @@ public class PlayerServerHandler extends Thread {
                 e.printStackTrace();
             }
         }
-//		if (playerID != -1) {                 // -1 means adding the player was rejected
-//			sendMessage("ok " + playerID);
-//			System.out.println("ok " + playerID);         // tell player his/her playerID
-//			server.tellOther(playerID, "added " + playerID);
-//
-//			processPlayerInput();
-//
-//			server.removePlayer(playerID);               // remove player from server data
-//			server.tellOther(playerID, "removed " + playerID);              // tell others
-//		} else
-//			sendMessage("full");                                           // game is full
-//
-//		try {                                                  // close socket from player
-//			clientSock.close();
-//			System.out.println("Player " + playerID + " connection closed\n");
-//		} catch (Exception e) {
-//			System.out.println(e);
-//		}
     }
 
-    /* Stop when the input stream closes (is null) or "disconnect" is sent.
-     * Otherwise pass the input to doRequest().
-     */
-//	private void processPlayerInput() {
-//		String line;
-//		boolean done = false;
-//		try {
-//			while (!done) {
-//				if ((line = in.readLine()) == null)
-//					done = true;
-//				else {
-//					if (line.trim().equals("disconnect"))
-//						done = true;
-//					else
-//						doRequest(line);
-//				}
-//			}
-//		} catch (IOException e) {
-//			System.out.println("Player " + playerID + " closed the connection");
-//		}
-//	}
-
-    /*The input line can be : try <posn> -- try to occupy position pos (pos == 0-63)
-     *
-     * No checking of posn done here; we assume the client has checked it. No
-     * checking of turn order here; we assume the client is doing it
-     */
-//	private void doRequest(String line) {
-//		if (line.startsWith("try")) {
-//			try {
-//				int posn = Integer.parseInt(line.substring(4).trim());
-//				// System.out.println("Player " + playerID + " wants to occupy position " +
-//				// posn);
-//
-//				if (server.enoughPlayers())
-//					server.tellOther(playerID, "otherTurn " + playerID + " " + posn); // pass turn to others
-//				else
-//					sendMessage("tooFewPlayers");
-//			} catch (NumberFormatException e) {
-//				System.out.println(e);
-//			}
-//		}
-//	}
-
-    /* called by handler and top-level server */
     synchronized public void sendMessage(String msg) {
         try {
             out.println(msg);

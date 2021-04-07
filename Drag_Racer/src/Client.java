@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class Client extends Thread {
-    private static final int PORT = 4321;          // server details
+    private static final int PORT = 4321;
     private static final String HOST = "localhost";
     long startTime, endTime;
     int id;
@@ -15,11 +15,8 @@ public class Client extends Thread {
     private boolean counting, raceEnded, messageSent, idReceived;
 
     public Client() throws IOException {
-        counting = false;
+        counting = raceEnded = messageSent = idReceived = false;
         startTime = endTime = 0;
-        raceEnded = false;
-        messageSent = false;
-        idReceived = false;
     }
 
     public void run() {
