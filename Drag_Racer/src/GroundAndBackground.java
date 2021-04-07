@@ -162,7 +162,7 @@ public class GroundAndBackground {
         Transform3D transform3D = new Transform3D();
         transform3D.setTranslation(new Vector3f(0, 0.3f, 0));
         TransformGroup botBase = new TransformGroup(transform3D);
-        transform3D.setTranslation(new Vector3f(0, -0.2f, 0));
+        transform3D.setTranslation(new Vector3f(0, -0.3f, 0));
         TransformGroup topBase = new TransformGroup(transform3D);
 
         //Create the object and rotate

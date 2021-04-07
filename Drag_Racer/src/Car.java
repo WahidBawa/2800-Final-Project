@@ -40,12 +40,12 @@ public class Car {
 
     public static Material setMaterialCar(Color3f clr) {
         //material from lab 6
-        int SH = 2;               // 10
+        int SH = 10;               // 10
         Material ma = new Material();
-        ma.setAmbientColor(clr);
-        ma.setEmissiveColor(clr);
+        ma.setAmbientColor(Commons.Grey);
+        ma.setEmissiveColor(new Color3f(0,0,0));
         ma.setDiffuseColor(clr);
-        ma.setSpecularColor(clr);
+        ma.setSpecularColor(new Color3f(1f, 1f, 1f));
         ma.setShininess(SH);
         ma.setLightingEnable(true);
         return ma;
@@ -53,7 +53,7 @@ public class Car {
 
     private static Appearance setApp(Color3f clr) {
         Appearance app = new Appearance();
-        app.setMaterial(setMaterialCar(Commons.Grey));
+        app.setMaterial(setMaterialCar(clr));
         ColoringAttributes colorAtt = new ColoringAttributes();
         colorAtt.setColor(clr);
         app.setColoringAttributes(colorAtt);
@@ -69,7 +69,7 @@ public class Car {
         BranchGroup carBG = loadShape();
         Shape3D carShape = (Shape3D) carBG.getChild(0);
         carShape.setUserData(1);
-        carShape.setAppearance(setApp(Commons.Grey));
+        carShape.setAppearance(setApp(Commons.Red));
         TransformGroup objectCAR = new TransformGroup();
 
         objectCAR.addChild(carBG);

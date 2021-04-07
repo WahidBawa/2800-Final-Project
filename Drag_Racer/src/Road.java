@@ -1,6 +1,8 @@
 import org.jdesktop.j3d.examples.collision.Box;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.geometry.ColorCube;
+import org.jogamp.java3d.utils.geometry.Cylinder;
+import org.jogamp.java3d.utils.geometry.Primitive;
 import org.jogamp.java3d.utils.geometry.Sphere;
 import org.jogamp.java3d.utils.image.TextureLoader;
 import org.jogamp.java3d.utils.picking.PickTool;
@@ -64,25 +66,14 @@ public class Road {
     }
 
     private static TransformGroup createColumn(double scale, Vector3d pos, double zSize) {
-        Transform3D transM = new Transform3D();
-        transM.set(scale, pos);  // Create base TG with 'scale' and 'position'
-        Transform3D transT = new Transform3D();
-        transT.setTranslation(new Vector3f(0.0f, 0.0f, -50.0f));
-
         Transform3D trfm = new Transform3D();
-        trfm.mul(transM);
-        trfm.mul(transT);
+        trfm.rotX(Math.PI/2);
+        trfm.setTranslation(pos);
 
-        TransformGroup baseTG = new TransformGroup();
-        baseTG.setTransform(trfm);
+        TransformGroup baseTG = new TransformGroup(trfm);
 
-
-        Shape3D shape = new Box(0.5, 2.0, -300.0);
+        Primitive shape = new Cylinder(0.1f, -30.0f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY, GroundAndBackground.setApp("concrete"));
         baseTG.addChild(shape); // Create a column as a box and add to 'baseTG'
-
-        Appearance app = shape.getAppearance();
-        app.setCapability(Appearance.ALLOW_TEXTURE_WRITE);
-        app.setTexture(GroundAndBackground.texturedApp("gridBlue"));
 
         CrashingBoundaries cd = new CrashingBoundaries(shape);
         cd.setSchedulingBounds(new BoundingSphere(pt_zero, 10d)); // detect column's collision
@@ -143,11 +134,11 @@ public class Road {
         Appearance app = new Appearance(); // create new appearance
         app.setCapability(Appearance.ALLOW_COLORING_ATTRIBUTES_WRITE); // set transparency attributes to write
         colorCube.setAppearance(app); // set colorCube appearance
-        CrashingBoundaries tcdc = new CrashingBoundaries(colorCube); // create a Transparent collisionn detection for columns
-        tcdc.setSchedulingBounds(new BoundingSphere(pt_zero, 10d)); // set scheduling bounds with bounding sphere using pt_zero and radius of 10d
+        //CrashingBoundaries tcdc = new CrashingBoundaries(colorCube); // create a Transparent collisionn detection for columns
+        //tcdc.setSchedulingBounds(new BoundingSphere(pt_zero, 10d)); // set scheduling bounds with bounding sphere using pt_zero and radius of 10d
         // add colorCube and tcdc to transCube
         transCube.addChild(colorCube);
-        transCube.addChild(tcdc);
+        //transCube.addChild(tcdc);
         transfmTG[0].addChild(transCube);            // add a unit cube to 3rd TG
 
         Transform3D yAxis1 = new Transform3D();
@@ -235,8 +226,8 @@ public class Road {
     This function creates the side walls for the project
      */
     private static void wallsBarriersRoadLamps(TransformGroup sceneTG) {
-        Vector3d[] pos = {new Vector3d(1, 0, -10),
-                new Vector3d(-1, 0, -10)};
+        Vector3d[] pos = {new Vector3d(1, 0, -15),
+                new Vector3d(-1, 0, -15)};
         for (int i = 0; i < 2; i++)
             sceneTG.addChild(createColumn(0.1, pos[i], -330.0));
 

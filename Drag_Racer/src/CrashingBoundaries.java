@@ -1,22 +1,20 @@
 import org.jogamp.java3d.*;
+import org.jogamp.java3d.utils.geometry.Cylinder;
+import org.jogamp.java3d.utils.geometry.Primitive;
 
 import java.util.Iterator;
 
 /* This behavior of collision detection highlights the
     object when it is in a state of collision. */
 public class CrashingBoundaries extends Behavior {
-    private final Shape3D shape;
-    private final Texture shapeTexture;
-    private final Appearance shapeAppearance;
+    private final Primitive shape;
     public static boolean isInCollisionRecently;
     public static boolean inCollision;
     private WakeupOnCollisionEntry wEnter;
     private WakeupOnCollisionExit wExit;
 
-    public CrashingBoundaries(Shape3D s) {
+    public CrashingBoundaries(Primitive s) {
         shape = s; // save the original color of 'shape"
-        shapeAppearance = shape.getAppearance();
-        shapeTexture = shapeAppearance.getTexture();
         inCollision = false;
         isInCollisionRecently= false;
     }
@@ -32,19 +30,11 @@ public class CrashingBoundaries extends Behavior {
         inCollision = !inCollision; // collision has taken place
 
         if (inCollision) { // change color to highlight 'shape'
-            try { //Strange error where it thinks appearance wasnt set
-                shapeAppearance.setTexture(grid);
-//                Car.BehaviorArrowKey.setPosition3D(Car.BehaviorArrowKey.navigatorTG, Car.BehaviorArrowKey.viewposiPrevious);
-//                isInCollisionRecently= !isInCollisionRecently;
-            } catch (CapabilityNotSetException e) {
-            }
+                Car.BehaviorArrowKey.setPosition3D(Car.BehaviorArrowKey.navigatorTG, Car.BehaviorArrowKey.viewposiPrevious);
+                isInCollisionRecently= !isInCollisionRecently;
+            System.out.println("Hit boundry");
             wakeupOn(wExit); // keep the color until no collision
         } else { // change color back to its original
-            try {//Strange error where it thinks appearance wasnt set
-                shapeAppearance.setTexture(shapeTexture);
-
-            } catch (CapabilityNotSetException e) {
-            }
             wakeupOn(wEnter); // wait for collision happens
         }
     }

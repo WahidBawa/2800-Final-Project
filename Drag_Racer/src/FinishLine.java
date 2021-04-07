@@ -1,5 +1,6 @@
 import org.jdesktop.j3d.examples.collision.Box;
 import org.jogamp.java3d.*;
+import org.jogamp.java3d.utils.geometry.Primitive;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 import org.jogamp.vecmath.Vector3f;
@@ -22,12 +23,17 @@ public class FinishLine {
         baseTG.setTransform(trfm);
 
 
-        Shape3D shape = new Box(14.0, 2.0, 0.5);
+        Shape3D shape = new Box(14.0, 0.01, 0.1);
         baseTG.addChild(shape); // Create a column as a box and add to 'baseTG'
 
-        Appearance app = shape.getAppearance();
+        Appearance app = GroundAndBackground.setApp("flagC");
+        TransparencyAttributes tat = new TransparencyAttributes();
+        tat.setTransparency(1);
+        tat.setTransparencyMode(TransparencyAttributes.FASTEST);
+        app.setTransparencyAttributes(tat);
         app.setCapability(Appearance.ALLOW_TEXTURE_WRITE);
-        app.setTexture(GroundAndBackground.texturedApp("flagC"));
+
+        shape.setAppearance(app);
 
         FinishLineBoundry cd = new FinishLineBoundry(shape);
         cd.setSchedulingBounds(new BoundingSphere(pt_zero, 10d)); // detect column's collision
