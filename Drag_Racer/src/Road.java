@@ -1,4 +1,3 @@
-import org.jdesktop.j3d.examples.collision.Box;
 import org.jogamp.java3d.*;
 import org.jogamp.java3d.utils.geometry.ColorCube;
 import org.jogamp.java3d.utils.geometry.Cylinder;
@@ -67,7 +66,7 @@ public class Road {
 
     private static TransformGroup createColumn(double scale, Vector3d pos, double zSize) {
         Transform3D trfm = new Transform3D();
-        trfm.rotX(Math.PI/2);
+        trfm.rotX(Math.PI / 2);
         trfm.setTranslation(pos);
 
         TransformGroup baseTG = new TransformGroup(trfm);
@@ -257,8 +256,8 @@ public class Road {
         scene.addChild(sceneTG);                             // add TG to the scene BranchGroup
         sceneTG.addChild(GroundAndBackground.generateGround(4, 0.1001f));
         sceneTG.addChild(GroundAndBackground.generateCylinder(1, "Test"));
-        sceneTG.addChild(GroundAndBackground.FinishLine());;
-        sceneTG.addChild(GroundAndBackground.rotatingSpheres(1,1));
+        sceneTG.addChild(GroundAndBackground.FinishLine());
+        sceneTG.addChild(GroundAndBackground.rotatingSpheres(1, 1));
         scene.addChild(finishLine2);
 
         createLight(scene);

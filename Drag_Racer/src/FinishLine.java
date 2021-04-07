@@ -1,6 +1,5 @@
 import org.jdesktop.j3d.examples.collision.Box;
 import org.jogamp.java3d.*;
-import org.jogamp.java3d.utils.geometry.Primitive;
 import org.jogamp.vecmath.Point3d;
 import org.jogamp.vecmath.Vector3d;
 import org.jogamp.vecmath.Vector3f;
