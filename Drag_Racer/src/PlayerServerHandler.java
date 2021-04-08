@@ -39,9 +39,8 @@ public class PlayerServerHandler extends Thread {
                         server.tellOther(playerID, "TIME:" + playerID + ":" + str.split(" ")[1]); // send a message to the other client so that it can update
                     }
 
-                    if (in.readLine() == null) {
-                        server.removePlayer(playerID);
-                        System.out.println(playerID + " has disconnected");
+                    if (in.readLine() == null) { // this will check if the client is disconnected
+                        server.removePlayer(playerID); // remove it if it is
                     }
                 }
 
