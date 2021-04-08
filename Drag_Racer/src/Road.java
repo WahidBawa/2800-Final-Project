@@ -1,5 +1,4 @@
 import org.jogamp.java3d.*;
-import org.jogamp.java3d.utils.geometry.ColorCube;
 import org.jogamp.java3d.utils.geometry.Cylinder;
 import org.jogamp.java3d.utils.geometry.Primitive;
 import org.jogamp.java3d.utils.geometry.Sphere;

@@ -10,8 +10,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class MyMouseListener implements MouseListener {
-    private Canvas3D canvas_3D;
-    private PickTool pickTool;
+    private final Canvas3D canvas_3D;
+    private final PickTool pickTool;
 
     public MyMouseListener(Canvas3D canvas_3D, PickTool pickTool) {
         this.canvas_3D = canvas_3D;
