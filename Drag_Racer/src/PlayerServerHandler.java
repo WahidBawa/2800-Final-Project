@@ -33,15 +33,15 @@ public class PlayerServerHandler extends Thread {
 
         while (true) {
             try {
-                if (in.ready()) { // if there is something to be read
-                    String str = in.readLine(); // this will read in the message
+                String str = in.readLine(); // this will read in the message
+                if (str != null) { // if there is something to be read
                     if (str.startsWith("FINISHED: ")) { // if the client is reporting that it finished the race
                         server.tellOther(playerID, "TIME:" + playerID + ":" + str.split(" ")[1]); // send a message to the other client so that it can update
                     }
+                }
 
-                    if (in.readLine() == null) { // this will check if the client is disconnected
-                        server.removePlayer(playerID); // remove it if it is
-                    }
+                if (str == null) { // this will check if the client is disconnected
+                    server.removePlayer(playerID); // remove it if it is
                 }
 
             } catch (IOException e) {
