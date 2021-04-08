@@ -38,8 +38,16 @@ public class PlayerServerHandler extends Thread {
                     if (str.startsWith("FINISHED: ")) { // if the client is reporting that it finished the race
                         server.tellOther(playerID, "TIME:" + playerID + ":" + str.split(" ")[1]); // send a message to the other client so that it can update
                     }
+
+                    if (in.readLine() == null) {
+                        server.removePlayer(playerID);
+                        System.out.println(playerID + " has disconnected");
+                    }
                 }
+
             } catch (IOException e) {
+                System.out.println(e);
+                System.out.println("Error");
                 e.printStackTrace();
             }
         }

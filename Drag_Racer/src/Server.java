@@ -50,6 +50,11 @@ public class Server {
         return -1; // means we have enough players already
     }
 
+    synchronized public void removePlayer(int playerID) {
+        handlers[playerID - 1] = null;      // no checking done of player value
+        numPlayers--;
+    }
+
     synchronized public void tellOther(int playerID, String msg) { // this function will relay a message from one client to the other
         int otherID = ((playerID == PLAYER1) ? PLAYER2 : PLAYER1);
         if (handlers[otherID - 1] != null) // index is ID-1
