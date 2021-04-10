@@ -26,35 +26,6 @@ public class Road {
         bg.addChild(ambientLight); // add child to branch group with ambient light
     }
 
-    public static Shape3D xyzAxis(Color3f yColor, float length) {
-
-        //The xyz will be created by 3 seperate but connected lines using a line array
-        int[] strip = {2, 2, 2}; //declaring 3 strips, each made up of 1 line
-        Point3f[] coords = new Point3f[6]; //6 coordinates all together
-        LineStripArray lsa = new LineStripArray(6, LineStripArray.COLOR_3 | GeometryArray.COORDINATES, strip);
-        //Z
-        coords[0] = new Point3f(0.0f, 0.0f, length);
-        coords[1] = new Point3f(0.0f, 0.0f, 0.0f); //note each line must start at origin
-        //Y
-        coords[2] = new Point3f(0.0f, length, 0.0f);
-        coords[3] = new Point3f(0.0f, 0.0f, 0.0f);
-        //X
-        coords[4] = new Point3f(length, 0.0f, 0.0f);
-        coords[5] = new Point3f(0.0f, 0.0f, 0.0f);
-
-        lsa.setCoordinates(0, coords);
-        for (int i = 0; i < 2; i++) {
-            //color for z axis red
-            lsa.setColor(i, Commons.Red);
-            //Color for y axis is Colorf ycolor
-            lsa.setColor(i + 2, yColor);
-            //color for x axis green
-            lsa.setColor(i + 4, Commons.Green);
-        }
-
-        return new Shape3D(lsa);
-    }
-
     private static TransformGroup createColumn(double scale, Vector3d pos, double zSize) {
         Transform3D trfm = new Transform3D();
         trfm.rotX(Math.PI / 2);
@@ -181,7 +152,6 @@ public class Road {
         BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), Double.MAX_VALUE);
         scene.addChild(createBkground(Commons.Grey, bounds)); //add background
 
-        scene.addChild(xyzAxis(Commons.Blue, 1));       //xyz axis added
         TransformGroup sceneTG = new TransformGroup();       // create a TransformGroup (TG)
         BranchGroup finishLine = new BranchGroup(); //adding finish line to this group nulls its collision detection with walls
         BranchGroup finishLine2 = new BranchGroup(); //adding finish line to this group nulls its collision detection with walls

@@ -46,6 +46,7 @@ public class Client extends Thread {
                 out.println("FINISHED: " + getFinalTime()); // send the time that you achieved to the playerserverhandler
                 messageSent = true; // sent the message
                 Menu.updateTimes(id, Double.toString(getFinalTime())); // updates the menu locally to show your time
+                Menu.kill(); // kill the program
             }
         }
     }

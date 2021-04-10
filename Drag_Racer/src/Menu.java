@@ -186,18 +186,20 @@ public class Menu extends JFrame implements ActionListener {
                 outLabel.setText("Player 2 Wins");
             }
             outLabel.setForeground(Color.yellow);
-
-            // stop all sounds
-            Sounds.soundJOAL.stop("CarBrake");
-            Sounds.soundJOAL.stop("CarDriving");
-            Sounds.soundJOAL.stop("CarEngineStart");
-            Sounds.soundJOAL.stop("CarTurn");
-            Sounds.soundJOAL.stop("Horn");
-
-            // dispose of the actual frame for the game
-            Commons.frame.dispose();
         }
 
+    }
+
+    public static void kill() {
+        // stop all sounds
+        Sounds.soundJOAL.stop("CarBrake");
+        Sounds.soundJOAL.stop("CarDriving");
+        Sounds.soundJOAL.stop("CarEngineStart");
+        Sounds.soundJOAL.stop("CarTurn");
+        Sounds.soundJOAL.stop("Horn");
+
+        // dispose of the actual frame for the game
+        Commons.frame.dispose();
     }
 
     public static void main(String[] args) {
